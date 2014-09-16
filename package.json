@@ -1,0 +1,29 @@
+{
+  "name": "msys-rest-sdk",
+  "version": "0.0.0",
+  "description": "A Node.js wrapper for interfacing with Message Systems APIs",
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MessageSystems/node-sdk.git"
+  },
+  "author": "Message Systems, Inc.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MessageSystems/node-sdk/issues"
+  },
+  "homepage": "https://github.com/MessageSystems/node-sdk",
+  "devDependencies": {
+    "jshint-stylish": "0.4.0",
+    "time-grunt": "1.0.0",
+    "grunt": "0.4.5",
+    "grunt-contrib-jshint": "0.10.0",
+    "matchdep": "0.3.0"
+  },
+  "dependencies": {
+    "request": "2.42.0"
+  }
+}
