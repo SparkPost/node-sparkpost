@@ -1,7 +1,9 @@
 "use strict";
 
+var Transmission = require('./lib/transmission')
+
 module.exports = function(config) {
   return {
-    transmission: require('./lib/transmission')()
+    transmission: new Transmission()
   };
 };
