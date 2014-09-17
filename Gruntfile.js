@@ -8,8 +8,13 @@ module.exports = function(grunt) {
   // Pretty timing on grunt commands
   gruntTimer(grunt);
 
+  var config = {
+    binPath: './node_modules/.bin'
+  }
   // Configure existing grunt tasks and create custom ones
   grunt.initConfig({
+    config: config,
+
     jshint: {
       files: [
         'index.js',
@@ -20,6 +25,16 @@ module.exports = function(grunt) {
         reporter: require('jshint-stylish'),
         jshintrc: './.jshintrc'
       }
+    },
+
+    shell: {
+      test: {
+        command : '<%= config.binPath %>/istanbul cover --report lcov --dir test/reports/ <%= config.binPath %>/_mocha test/spec -- --reporter xunit-file',
+        options : {
+          stdout : true,
+          failOnError : true
+        }
+      }
     }
   });
 
@@ -27,7 +42,10 @@ module.exports = function(grunt) {
   grunt.registerTask('lint', [ 'jshint' ]);
 
   // grunt test - runs linting and then our unit tests
-  grunt.registerTask('test', [ 'lint' ])
+  grunt.registerTask('test', [
+    'lint',
+    'shell:test'
+  ]);
 
   // register default grunt command as grunt test
   grunt.registerTask('default', [ 'test' ]);
