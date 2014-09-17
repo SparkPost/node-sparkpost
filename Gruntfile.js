@@ -14,7 +14,8 @@ module.exports = function(grunt) {
       files: ['index.js', 'lib/{,*/}*.js', 'examples/{,*/}*.js'],
       options: {
         reporter: require('jshint-stylish'),
-        node: true
+        node: true,
+        laxcomma: true
       }
     }
   });
