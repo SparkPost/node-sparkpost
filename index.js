@@ -1,6 +1,6 @@
 "use strict";
 
-var Transmission = require('./lib/transmission')
+var Transmission = require('./lib/transmission');
 
 module.exports = function(config) {
   return {
