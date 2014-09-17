@@ -1,0 +1,19 @@
+{
+  "node"               : true,
+  "es3"                : true,
+  "strict"             : true,
+  "curly"              : true,
+  "eqeqeq"             : true,
+  "immed"              : true,
+  "indent"             : 2,
+  "newcap"             : true,
+  "noarg"              : true,
+  "quotmark"           : true,
+  "undef"              : true,
+  "unused"             : true,
+  "asi"                : false,
+  "boss"               : false,
+  "debug"              : false,
+  "laxcomma"           : true,
+  "maxcomplexity"      : 5
+}

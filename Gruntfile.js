@@ -11,11 +11,14 @@ module.exports = function(grunt) {
   // Configure existing grunt tasks and create custom ones
   grunt.initConfig({
     jshint: {
-      files: ['index.js', 'lib/{,*/}*.js', 'examples/{,*/}*.js'],
+      files: [
+        'index.js',
+        'lib/{,*/}*.js',
+        'examples/{,*/}*.js'
+      ],
       options: {
         reporter: require('jshint-stylish'),
-        node: true,
-        laxcomma: true
+        jshintrc: './.jshintrc'
       }
     }
   });
