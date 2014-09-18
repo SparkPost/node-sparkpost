@@ -1,7 +1,7 @@
 var chai = require('chai')
   , expect = chai.expect;
 
-describe('This is a test', function() {
+describe('Transmissions library', function() {
   var transmission = require('../../lib/transmission');
 
 
@@ -27,6 +27,13 @@ describe('This is a test', function() {
     expect(sdk.model.recipients).to.be.undefined;
     expect(sdk.model.list_name).to.be.undefined;
     expect(sdk.model.content.template_id).to.be.undefined;
+  });
+
+  it('should set defaults for global transmission options', function() {
+    var sdk = new transmission();
+    expect(sdk.model.open_tracking).to.be.true;
+    expect(sdk.model.click_tracking).to.be.true;
+    expect(sdk.model.use_draft_template).to.be.false;
   });
 
   it('should allow to set campaign by convenience method', function() {
@@ -105,6 +112,42 @@ describe('This is a test', function() {
     var sdk = new transmission();
     sdk.useStoredTemplate('template ID');
     expect(sdk.model.content.template_id).to.equal('template ID');
+  });
+
+  it('should allow enabling open tracking by convenience method', function() {
+    var sdk = new transmission();
+    sdk.enableOpenTracking();
+    expect(sdk.model.open_tracking).to.be.true;
+  });
+
+  it('should allow disabling open tracking by convenience method', function() {
+    var sdk = new transmission();
+    sdk.disableOpenTracking();
+    expect(sdk.model.open_tracking).to.be.false;
+  });
+
+  it('should allow enabling click tracking by convenience method', function() {
+    var sdk = new transmission();
+    sdk.enableClickTracking();
+    expect(sdk.model.click_tracking).to.be.true;
+  });
+
+  it('should allow disabling click tracking by convenience method', function() {
+    var sdk = new transmission();
+    sdk.disableClickTracking();
+    expect(sdk.model.click_tracking).to.be.false;
+  });
+
+  it('should allow using a draft version of a stored template by convenience method', function() {
+    var sdk = new transmission();
+    sdk.useDraftTemplate();
+    expect(sdk.model.use_draft_template).to.be.true;
+  });
+
+  it('should allow using a published version of a stored template by convenience method', function() {
+    var sdk = new transmission();
+    sdk.usePublishedTemplate();
+    expect(sdk.model.use_draft_template).to.be.false;
   });
 
   it('should allow for chaining of convenience methods', function() {
