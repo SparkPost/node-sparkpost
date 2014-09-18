@@ -89,6 +89,24 @@ describe('This is a test', function() {
     expect(sdk.model.content.text).to.equal('text part');
   });
 
+  it('should allow to set recipients by convenience method', function() {
+    var sdk = new transmission();
+    sdk.setRecipients('recipients');
+    expect(sdk.model.recipients).to.equal('recipients');
+  });
+
+  it('should allow to set recipient list by convenience method', function() {
+    var sdk = new transmission();
+    sdk.useRecipientList('recipient list');
+    expect(sdk.model.list_name).to.equal('recipient list');
+  });
+
+  it('should allow to set stored template by convenience method', function() {
+    var sdk = new transmission();
+    sdk.useStoredTemplate('template ID');
+    expect(sdk.model.content.template_id).to.equal('template ID');
+  });
+
   it('should allow for chaining of convenience methods', function() {
     var sdk = new transmission();
     sdk.setCampaign('camp').setContentHeaders('foo').setRfc822Content('bar');
@@ -96,5 +114,4 @@ describe('This is a test', function() {
     expect(sdk.model.content.email_rfc822).to.equal('bar');
     expect(sdk.model.content.headers).to.equal('foo');
   });
-
 });
