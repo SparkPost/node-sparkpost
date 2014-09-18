@@ -26,7 +26,8 @@
     "mocha": "^1.21.4",
     "istanbul": "^0.3.2",
     "grunt-shell": "^1.1.1",
-    "chai": "^1.9.1"
+    "chai": "^1.9.1",
+    "proxyquire": "^1.0.1"
   },
   "dependencies": {
     "request": "2.42.0"
