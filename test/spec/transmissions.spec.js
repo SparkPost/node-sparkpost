@@ -174,9 +174,25 @@ describe('Transmissions Library', function() {
       sdk = new transmission();
     });
 
+    it('should handle being wrapped by find appropriately', function() {
+      sdk.all(function(err, res) {
+        expect(err).to.be.null;
+        expect(res).to.match(/success/);
+      });
+      MockRequest.restore();
+    });
+
+    it('should handle being wrapped by all appropriately', function() {
+      sdk.find(10, function(err, res) {
+        expect(err).to.be.null;
+        expect(res).to.match(/success/);
+      });
+      MockRequest.restore();
+    });
+
     it('should return an error', function(done) {
       MockRequest.error = 'test';
-      sdk.fetch(10, function(resp) {
+      sdk.find(10, function(resp) {
         expect(resp).to.match(/Unable to contact Transmissions API: test/);
         done();
       });
@@ -185,7 +201,7 @@ describe('Transmissions Library', function() {
 
     it('should return an error if the status code is 404', function(done) {
       MockRequest.response = 404;
-      sdk.fetch(10, function(resp) {
+      sdk.find(10, function(resp) {
         expect(resp).to.match(/The specified Transmission ID does not exist/);
         done();
       });
@@ -194,7 +210,7 @@ describe('Transmissions Library', function() {
 
     it('should return an error if the status code is anything other than 200', function(done) {
       MockRequest.response = 500;
-      sdk.fetch(10, function(resp) {
+      sdk.find(10, function(resp) {
         expect(resp).to.match(/Received bad response from Transmission API: 500/);
         done();
       });
@@ -202,7 +218,7 @@ describe('Transmissions Library', function() {
     });
 
     it('should return a body on success', function(done) {
-      sdk.fetch(10, function(err, body) {
+      sdk.find(10, function(err, body) {
         expect(err).to.be.null;
         expect(body).to.match(/success/);
         done();
