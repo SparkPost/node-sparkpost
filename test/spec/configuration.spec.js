@@ -1,7 +1,7 @@
 var chai = require('chai')
   , expect = chai.expect;
 
-describe('Configuration library', function() {
+describe('Configuration Library', function() {
   var configuration = require('../../lib/configuration');
 
   it('should throw an error if an API key is not provided', function() {
