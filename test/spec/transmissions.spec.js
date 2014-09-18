@@ -26,7 +26,7 @@ describe('Transmissions Library', function() {
       expect(sdk.model.content.text).to.be.undefined;
       expect(sdk.model.content.email_rfc822).to.be.undefined;
       expect(sdk.model.content.headers).to.be.undefined;
-      expect(sdk.model.recipients).to.be.undefined;
+      expect(sdk.model.recipients).to.deep.equal([]);
       expect(sdk.model.list_name).to.be.undefined;
       expect(sdk.model.content.template_id).to.be.undefined;
     });
@@ -100,10 +100,10 @@ describe('Transmissions Library', function() {
       expect(sdk.model.content.text).to.equal('text part');
     });
 
-    it('should allow to set recipients by convenience method', function() {
+    it('should allow to set recipient by convenience method', function() {
       var sdk = new transmission();
-      sdk.setRecipients('recipients');
-      expect(sdk.model.recipients).to.equal('recipients');
+      sdk.setRecipient('recipients').setRecipient('test');
+      expect(sdk.model.recipients).to.deep.equal(['recipients', 'test']);
     });
 
     it('should allow to set recipient list by convenience method', function() {
