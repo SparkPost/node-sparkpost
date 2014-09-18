@@ -163,7 +163,7 @@ describe('Transmissions Library', function() {
     });
   });
 
-  describe('Fetch', function() {
+  describe('API Interaction', function() {
     var transmission
     , sdk;
 
@@ -174,38 +174,69 @@ describe('Transmissions Library', function() {
       sdk = new transmission();
     });
 
-    it('should return an error', function(done) {
-      MockRequest.error = 'test';
-      sdk.fetch(10, function(resp) {
-        expect(resp).to.match(/Unable to contact Transmissions API: test/);
-        done();
+    describe('Fetch', function() {
+      it('should return an error', function(done) {
+        MockRequest.error = 'test';
+        sdk.fetch(10, function(resp) {
+          expect(resp).to.match(/Unable to contact Transmissions API: test/);
+          done();
+        });
+        MockRequest.restore();
       });
-      MockRequest.restore();
+
+      it('should return an error if the status code is 404', function(done) {
+        MockRequest.response.statusCode = 404;
+        sdk.fetch(10, function(resp) {
+          expect(resp).to.match(/The specified Transmission ID does not exist/);
+          done();
+        });
+        MockRequest.restore();
+      });
+
+      it('should return an error if the status code is anything other than 200', function(done) {
+        MockRequest.response.statusCode = 500;
+        sdk.fetch(10, function(resp) {
+          expect(resp).to.match(/Received bad response from Transmission API: 500/);
+          done();
+        });
+        MockRequest.restore();
+      });
+
+      it('should return a body on success', function(done) {
+        sdk.fetch(10, function(err, body) {
+          expect(err).to.be.null;
+          expect(body.results).to.match(/success/);
+          done();
+        });
+      });
     });
 
-    it('should return an error if the status code is 404', function(done) {
-      MockRequest.response = 404;
-      sdk.fetch(10, function(resp) {
-        expect(resp).to.match(/The specified Transmission ID does not exist/);
-        done();
+    describe('Send', function() {
+      it('should return an error', function(done) {
+        MockRequest.error = 'test';
+        sdk.send(function(resp) {
+          expect(resp).to.match(/test/);
+          done();
+        });
+        MockRequest.restore();
       });
-      MockRequest.restore();
-    });
 
-    it('should return an error if the status code is anything other than 200', function(done) {
-      MockRequest.response = 500;
-      sdk.fetch(10, function(resp) {
-        expect(resp).to.match(/Received bad response from Transmission API: 500/);
-        done();
+      it('should return an error if the status code is anything other than 200', function(done) {
+        MockRequest.response.statusCode = 500;
+        MockRequest.response.body.errors[0] = 'first error';
+        sdk.send(function(resp) {
+          expect(resp[0]).to.equal('first error');
+          done();
+        });
+        MockRequest.restore();
       });
-      MockRequest.restore();
-    });
 
-    it('should return a body on success', function(done) {
-      sdk.fetch(10, function(err, body) {
-        expect(err).to.be.null;
-        expect(body).to.match(/success/);
-        done();
+      it('should return a body on success', function(done) {
+        sdk.send(function(err, body) {
+          expect(err).to.be.null;
+          expect(body.results).to.match(/success/);
+          done();
+        });
       });
     });
   });
