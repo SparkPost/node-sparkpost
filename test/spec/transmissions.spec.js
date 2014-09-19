@@ -26,8 +26,7 @@ describe('Transmissions Library', function() {
       expect(sdk.model.content.text).to.be.undefined;
       expect(sdk.model.content.email_rfc822).to.be.undefined;
       expect(sdk.model.content.headers).to.be.undefined;
-      expect(sdk.model.recipients).to.deep.equal([]);
-      expect(sdk.model.list_name).to.be.undefined;
+      expect(sdk.model.recipients).to.be.an('array');
       expect(sdk.model.content.template_id).to.be.undefined;
     });
 
@@ -37,6 +36,28 @@ describe('Transmissions Library', function() {
       expect(sdk.model.options.click_tracking).to.be.true;
       expect(sdk.model.content.use_draft_template).to.be.false;
     });
+
+    it('should allow overriding defaults', function() {
+      var sdk = new transmission({
+        openTracking: false,
+        clickTracking: false,
+        useDraftTemplate: true,
+        recipients: [
+          {test: 'test'}
+        ]
+      });
+
+      expect(sdk.model.options.open_tracking).to.be.false;
+      expect(sdk.model.options.click_tracking).to.be.false;
+      expect(sdk.model.content.use_draft_template).to.be.true;
+      expect(sdk.model.recipients).to.deep.equal([{test: 'test'}]);
+    });
+
+    it('should set recipients to object if you pass in recipientList', function() {
+      var sdk = new transmission({ recipientList: 'foo'});
+      expect(sdk.model.recipients).to.deep.equal({list_name: 'foo'});
+    });
+
   });
 
   describe('Convenience Methods', function() {
@@ -106,10 +127,22 @@ describe('Transmissions Library', function() {
       expect(sdk.model.recipients).to.deep.equal(['recipients', 'test']);
     });
 
+    it('should allow you to set recipients after a list was passed in', function() {
+      var sdk = new transmission({ recipientList: 'foo'});
+      sdk.setRecipient('test');
+      expect(sdk.model.recipients).to.deep.equal(['test']);
+    });
+
+    it('should allow you to set recipients after a list was set', function() {
+      var sdk = new transmission();
+      sdk.useRecipientList('listname').setRecipient('test');
+      expect(sdk.model.recipients).to.deep.equal(['test']);
+    });
+
     it('should allow to set recipient list by convenience method', function() {
       var sdk = new transmission();
       sdk.useRecipientList('recipient list');
-      expect(sdk.model.list_name).to.equal('recipient list');
+      expect(sdk.model.recipients.list_name).to.equal('recipient list');
     });
 
     it('should allow to set stored template by convenience method', function() {

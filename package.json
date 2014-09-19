@@ -30,6 +30,7 @@
     "xunit-file": "0.0.5"
   },
   "dependencies": {
-    "request": "2.42.0"
+    "request": "2.42.0",
+    "lodash": "2.4.1"
   }
 }

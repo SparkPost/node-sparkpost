@@ -8,14 +8,8 @@ var key = 'YOURAPIKEY'
 transmission
   .setReturnPath('return@example.com')
   .setFrom('From Envelope <from@example.com>')
-  .setRecipient({
-      'address': {
-        'email': 'john.doe@sample.com'
-      }
-  })
-  .setSubject('Example Email')
-  .setHTMLContent('<p>Hello World!</p>')
-  .setTextContent('Hello World!')
+  .useRecipientList('Example List')
+  .useStoredTemplate('my-template')
   .send(function(err, res) {
     if (err) {
       console.log(err);
