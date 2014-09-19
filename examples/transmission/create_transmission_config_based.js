@@ -2,7 +2,7 @@
 
 var key = 'YOURAPIKEY'
   , host = 'YOURHOST'
-  , SDK = require('../index')({ key: key, host: host })
+  , SDK = require('../index')({ key: key, host: host });
 
 var transmission = new SDK.transmission({
   returnPath: 'return@example.com',
