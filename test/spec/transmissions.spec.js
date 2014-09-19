@@ -226,8 +226,9 @@ describe('Transmissions Library', function() {
 
       it('should return an error', function(done) {
         MockRequest.error = 'test';
-        sdk.find(10, function(resp) {
-          expect(resp).to.match(/Unable to contact Transmissions API: test/);
+        sdk.find(10, function(err, res) {
+          expect(err).to.match(/Unable to contact Transmissions API: test/);
+          expect(res).to.be.undefined;
           done();
         });
         MockRequest.restore();
@@ -235,8 +236,9 @@ describe('Transmissions Library', function() {
 
       it('should return an error if the status code is 404', function(done) {
         MockRequest.response.statusCode = 404;
-        sdk.find(10, function(resp) {
-          expect(resp).to.match(/The specified Transmission ID does not exist/);
+        sdk.find(10, function(err, res) {
+          expect(err).to.match(/The specified Transmission ID does not exist/);
+          expect(res).to.be.undefined;
           done();
         });
         MockRequest.restore();
@@ -244,17 +246,18 @@ describe('Transmissions Library', function() {
 
       it('should return an error if the status code is anything other than 200', function(done) {
         MockRequest.response.statusCode = 500;
-        sdk.find(10, function(resp) {
-          expect(resp).to.match(/Received bad response from Transmission API: 500/);
+        sdk.find(10, function(err, res) {
+          expect(err).to.match(/Received bad response from Transmission API: 500/);
+          expect(res).to.be.undefined;
           done();
         });
         MockRequest.restore();
       });
 
       it('should return a body on success', function(done) {
-        sdk.find(10, function(err, body) {
+        sdk.find(10, function(err, res) {
           expect(err).to.be.null;
-          expect(body.results).to.match(/success/);
+          expect(res.results).to.match(/success/);
           done();
         });
       });
@@ -263,8 +266,9 @@ describe('Transmissions Library', function() {
     describe('Send', function() {
       it('should return an error', function(done) {
         MockRequest.error = 'test';
-        sdk.send(function(resp) {
-          expect(resp).to.match(/test/);
+        sdk.send(function(err, res) {
+          expect(err).to.match(/test/);
+          expect(res).to.be.undefined;
           done();
         });
         MockRequest.restore();
@@ -273,17 +277,18 @@ describe('Transmissions Library', function() {
       it('should return an error if the status code is anything other than 200', function(done) {
         MockRequest.response.statusCode = 500;
         MockRequest.response.body.errors[0] = 'first error';
-        sdk.send(function(resp) {
-          expect(resp[0]).to.equal('first error');
+        sdk.send(function(err, res) {
+          expect(err[0]).to.equal('first error');
+          expect(res).to.be.undefined;
           done();
         });
         MockRequest.restore();
       });
 
       it('should return a body on success', function(done) {
-        sdk.send(function(err, body) {
+        sdk.send(function(err, res) {
           expect(err).to.be.null;
-          expect(body.results).to.match(/success/);
+          expect(res.results).to.match(/success/);
           done();
         });
       });
