@@ -1,7 +1,11 @@
 var chai = require('chai')
   , expect = chai.expect
   , proxyquire = require('proxyquire')
+  , sinon = require('sinon')
+  , sinonChai = require('sinon-chai')
   , MockRequest = require('../mocks/request.js');
+
+chai.use(sinonChai);
 
 describe('Transmissions Library', function() {
   var transmission = require('../../lib/transmission');
@@ -261,9 +265,28 @@ describe('Transmissions Library', function() {
           done();
         });
       });
+
+      it('should construct a URL appropriately based on global configuration', function(done) {
+        var fetchSpy = sinon.spy(MockRequest, 'get');
+        sdk.options = {key: '123', host: 'example.com', schema: 'http', baseUrl: '/api/v1/transmission'};
+        sdk.all(function(err, res) {
+          expect(fetchSpy.args[0][0].url).to.equal('http://example.com/api/v1/transmission');
+          done();
+        });
+      });
     });
 
     describe('Send', function() {
+
+      it('should construct a URL appropriately based on global configuration', function(done) {
+        var sendSpy = sinon.spy(MockRequest, 'post');
+        sdk.options = {key: '123', host: 'example.com', schema: 'http', baseUrl: '/api/v1/transmission'};
+        sdk.send(function(err, res) {
+          expect(sendSpy.args[0][0].url).to.equal('http://example.com/api/v1/transmission');
+          done();
+        });
+      });
+
       it('should return an error', function(done) {
         MockRequest.error = 'test';
         sdk.send(function(err, res) {

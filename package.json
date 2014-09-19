@@ -26,6 +26,8 @@
     "matchdep": "0.3.0",
     "mocha": "1.21.4",
     "proxyquire": "1.0.1",
+    "sinon": "1.10.3",
+    "sinon-chai": "2.5.0",
     "time-grunt": "1.0.0",
     "xunit-file": "0.0.5"
   },
