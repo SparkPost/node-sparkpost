@@ -162,37 +162,37 @@ describe('Transmissions Library', function() {
     it('should allow enabling open tracking by convenience method', function() {
       var sdk = new transmission();
       sdk.enableOpenTracking();
-      expect(sdk.model.open_tracking).to.be.true;
+      expect(sdk.model.options.open_tracking).to.be.true;
     });
 
     it('should allow disabling open tracking by convenience method', function() {
       var sdk = new transmission();
       sdk.disableOpenTracking();
-      expect(sdk.model.open_tracking).to.be.false;
+      expect(sdk.model.options.open_tracking).to.be.false;
     });
 
     it('should allow enabling click tracking by convenience method', function() {
       var sdk = new transmission();
       sdk.enableClickTracking();
-      expect(sdk.model.click_tracking).to.be.true;
+      expect(sdk.model.options.click_tracking).to.be.true;
     });
 
     it('should allow disabling click tracking by convenience method', function() {
       var sdk = new transmission();
       sdk.disableClickTracking();
-      expect(sdk.model.click_tracking).to.be.false;
+      expect(sdk.model.options.click_tracking).to.be.false;
     });
 
     it('should allow using a draft version of a stored template by convenience method', function() {
       var sdk = new transmission();
       sdk.useDraftTemplate();
-      expect(sdk.model.use_draft_template).to.be.true;
+      expect(sdk.model.content.use_draft_template).to.be.true;
     });
 
     it('should allow using a published version of a stored template by convenience method', function() {
       var sdk = new transmission();
       sdk.usePublishedTemplate();
-      expect(sdk.model.use_draft_template).to.be.false;
+      expect(sdk.model.content.use_draft_template).to.be.false;
     });
   });
 
