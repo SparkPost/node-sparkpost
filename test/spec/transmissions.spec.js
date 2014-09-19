@@ -33,9 +33,9 @@ describe('Transmissions Library', function() {
 
     it('should set defaults for global transmission options', function() {
       var sdk = new transmission();
-      expect(sdk.model.open_tracking).to.be.true;
-      expect(sdk.model.click_tracking).to.be.true;
-      expect(sdk.model.use_draft_template).to.be.false;
+      expect(sdk.model.options.open_tracking).to.be.true;
+      expect(sdk.model.options.click_tracking).to.be.true;
+      expect(sdk.model.content.use_draft_template).to.be.false;
     });
   });
 
