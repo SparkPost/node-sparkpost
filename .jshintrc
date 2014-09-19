@@ -15,5 +15,5 @@
   "boss"               : false,
   "debug"              : false,
   "laxcomma"           : true,
-  "maxcomplexity"      : 5
+  "maxcomplexity"      : 6
 }
