@@ -15,6 +15,6 @@ transmission
       console.log(err);
     } else {
       console.log(res);
-      console.log('Congrats you can use our sdk!');
+      console.log('Congrats you can use our SDK!');
     }
   });
