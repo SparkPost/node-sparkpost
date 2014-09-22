@@ -127,19 +127,19 @@ describe('Transmissions Library', function() {
 
     it('should allow to set recipient by convenience method', function() {
       var transmission = new TransmissionLib();
-      transmission.setRecipient('recipients').setRecipient('test');
+      transmission.addRecipient('recipients').addRecipient('test');
       expect(transmission.model.recipients).to.deep.equal(['recipients', 'test']);
     });
 
     it('should allow you to set recipients after a list was passed in', function() {
       var transmission = new TransmissionLib({ recipientList: 'foo'});
-      transmission.setRecipient('test');
+      transmission.addRecipient('test');
       expect(transmission.model.recipients).to.deep.equal(['test']);
     });
 
     it('should allow you to set recipients after a list was set', function() {
       var transmission = new TransmissionLib();
-      transmission.useRecipientList('listname').setRecipient('test');
+      transmission.useRecipientList('listname').addRecipient('test');
       expect(transmission.model.recipients).to.deep.equal(['test']);
     });
 
@@ -147,6 +147,27 @@ describe('Transmissions Library', function() {
       var transmission = new TransmissionLib();
       transmission.useRecipientList('recipient list');
       expect(transmission.model.recipients.list_name).to.equal('recipient list');
+    });
+
+    it('should allow you to set multiple recipients at one time by convenience method', function() {
+      var transmission = new TransmissionLib();
+      transmission.addRecipients([{foo: 'bar'}, {bat: 'baz'}]);
+      expect(transmission.model.recipients).to.deep.equal([{foo: 'bar'}, {bat: 'baz'}]);
+    });
+
+    it('should allow you to set multiple recipients after a list was set', function() {
+      var transmission = new TransmissionLib();
+      transmission.useRecipientList('my-list');
+      transmission.addRecipients([{foo: 'bar'}, {bat: 'baz'}]);
+      expect(transmission.model.recipients).to.deep.equal([{foo: 'bar'}, {bat: 'baz'}]);
+    });
+
+    it('should allow you to set a recipient list after adding multiple recipients', function() {
+      var transmission = new TransmissionLib();
+      transmission.addRecipients([{foo: 'bar'}, {bat: 'baz'}]);
+      transmission.useRecipientList('my-list');
+      expect(transmission.model.recipients).to.be.an.object;
+      expect(transmission.model.recipients.list_name).to.equal('my-list');
     });
 
     it('should allow to set stored template by convenience method', function() {
