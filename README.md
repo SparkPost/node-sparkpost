@@ -37,8 +37,25 @@ transmission.setCampaign('FirstMailing')
               }
             });
 ```
+
+## Tips and Gotchas
+### General
+* You _must_ provide at least an API key when instantiating the SDK - `{ key: '1234567' }`
+* The SDK's features are namespaced under the various APIs.
+* There are two ways to provide values to each namespace of the SDK:
+    - On instantiation, you pass in a well-formed object (See examples).
+    - You use the helper methods to incrementially create a well-formed object. These helper methods are chainable (See examples).
+
+### Transmissions
+* If you specify a stored recipient list and inline recipients in a Transmission, the stored recipient list will override the inline recipients.
+* If you specify HTML and/or Plain Text content and then provide RFC-822 encoded content, you will recieve and error. RFC-822 content is not valid with any other content type.
+* If you specify a stored template and provide inline content, you will receive an error.
+* By default, open and click tracking are enabled for a transmission.
+* By default, a transmission will use the published version of a stored template.
+
 ## More Information
-Links to documentation/customer support site, FAQs, etc.
+* REST API Documentation - <http://docs.thecloudplaceholderapiv1.apiary.io/>
+* Other pertinent links
 
 ## Development
 
