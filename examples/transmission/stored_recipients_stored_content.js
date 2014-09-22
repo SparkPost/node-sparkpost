@@ -1,8 +1,7 @@
 'use strict';
 
 var key = 'YOURAPIKEY'
-  , host = 'YOURHOST'
-  , SDK = require('../../index')({ key: key, host: host })
+  , SDK = require('../../index')({ key: key })
   , transmission = new SDK.transmission();
 
 transmission

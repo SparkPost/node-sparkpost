@@ -20,6 +20,7 @@ var transmission = new sparkpost.transmission();
 
 // Add some template data to your email
 transmission.setCampaign('first-mailing')
+            .setReturnPath('bounces@sparkpost.com')
             .setFrom('you@your-company.com')
             .setSubject('First SDK Mailing')
             .setHTMLContent('<html><body><h1>Congratulations, {{name}}!</h1><p>You just sent your very first mailing!</p></body></html>')
