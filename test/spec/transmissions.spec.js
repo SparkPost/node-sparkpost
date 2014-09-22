@@ -268,7 +268,7 @@ describe('Transmissions Library', function() {
 
       it('should construct a URL appropriately based on global configuration', function(done) {
         var fetchSpy = sinon.spy(MockRequest, 'get');
-        sdk.options = {key: '123', host: 'example.com', schema: 'http', baseUrl: '/api/v1/transmission'};
+        sdk.options = {key: '123', host: 'example.com', protocol: 'http', baseUrl: '/api/v1/transmission'};
         sdk.all(function(err, res) {
           expect(fetchSpy.args[0][0].url).to.equal('http://example.com/api/v1/transmission');
           done();
@@ -280,7 +280,7 @@ describe('Transmissions Library', function() {
 
       it('should construct a URL appropriately based on global configuration', function(done) {
         var sendSpy = sinon.spy(MockRequest, 'post');
-        sdk.options = {key: '123', host: 'example.com', schema: 'http', baseUrl: '/api/v1/transmission'};
+        sdk.options = {key: '123', host: 'example.com', protocol: 'http', baseUrl: '/api/v1/transmission'};
         sdk.send(function(err, res) {
           expect(sendSpy.args[0][0].url).to.equal('http://example.com/api/v1/transmission');
           done();
