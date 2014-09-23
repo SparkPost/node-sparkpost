@@ -52,14 +52,14 @@ transmission.send(function(err, res) {
 * The SDK's features are namespaced under the various SparkPost API names.
 * There are two ways to provide values to each namespace of the SDK:
     - On instantiation, you pass in a well-formed object (See examples).
-    - You use the helper methods to incrementially create a well-formed object. These helper methods are chainable (See examples).
+    - You use the helper methods to incrementally create a well-formed object. These helper methods are chainable (See examples).
 
 ### Transmissions
 * If you specify a stored recipient list and inline recipients in a Transmission, whichever was provided last will be used.
-    * If you call addRecipient and then useRecipientList, the Recipient list will be used.
-* If you specify HTML and/or Plain Text content and then provide RFC-822 encoded content, you will recieve and error.
+    * If you call addRecipient and then useRecipientList, the latter will overwrite the former.
+* If you specify HTML and/or Plain Text content and then provide RFC-822 encoded content, you will receive an error.
     * RFC-822 content is not valid with any other content type.
-* If you specify a stored template and provide inline content, you will receive an error.
+* If you specify a stored template and also provide inline content via setHTMLContent or setTextContent, you will receive an error.
 * By default, open and click tracking are enabled for a transmission.
 * By default, a transmission will use the published version of a stored template.
 
@@ -74,10 +74,10 @@ Run `npm install` inside the repository to install all the dev dependencies.
 Once all the dependencies are installed, you can execute the unit tests using `grunt test`
 
 ### Contributing
-Adding issues guidelines
+Guidelines for adding issues
 
 Submitting pull requests
 
-Signing CLA
+Signing our CLA
 
-Coding Standards
+Our coding standards

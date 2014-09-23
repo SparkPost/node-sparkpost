@@ -7,7 +7,7 @@ var transmission = new SDK.transmission({
   returnPath: 'return@example.com',
   from: 'From Envelope <from@example.com>',
   html: '<p>Hello World!</p>',
-  text: 'Hellow World!',
+  text: 'Hello World!',
   subject: 'Example Email',
   recipients: [
     {
