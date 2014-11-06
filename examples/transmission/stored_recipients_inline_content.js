@@ -1,21 +1,21 @@
 'use strict';
 
 var key = 'YOURAPIKEY'
-  , SDK = require('../../index')({ key: key })
-  , transmission = new SDK.transmission();
+  , sparkpost = require('sparkpost')({ key: key });
 
-transmission
-  .setReturnPath('return@example.com')
-  .setFrom('From Envelope <from@example.com>')
-  .useRecipientList('Example List')
-  .setSubject('Example Email')
-  .setHTMLContent('<p>Hello World!</p>')
-  .setTextContent('Hello World!')
-  .send(function(err, res) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(res);
-      console.log('Congrats you can use our SDK!');
-    }
-  });
+var trans = {
+  from: 'From Envelope <from@example.com>',
+  recipientList: 'example-list',
+  subject: 'Example Email for Stored List and Inline Content',
+  html: '<html><body><p>Hello World</p></body></html>',
+  text: 'Hello World!'
+};
+
+sparkpost.transmission.send(trans, function(err, res) {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log(res);
+    console.log('Congrats you can use our SDK!');
+  }
+});

@@ -1,23 +1,20 @@
 'use strict';
 
 var key = 'YOURAPIKEY'
-  , SDK = require('../../index')({ key: key })
-  , transmission = new SDK.transmission();
+  , sparkpost = require('sparkpost')({ key: key });
 
-transmission
-  .setReturnPath('return@example.com')
-  .setFrom('From Envelope <from@example.com>')
-  .setRecipient({
-      'address': {
-        'email': 'john.doe@sample.com'
-      }
-  })
-  .useStoredTemplate('my-template')
-  .send(function(err, res) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(res);
-      console.log('Congrats you can use our SDK!');
-    }
-  });
+var trans = {
+  storedTemplate: 'my-template',
+  from: 'From Envelope <from@example.com>',
+  subject: 'Example Email for Stored Template',
+  recipients = [{ address: { email: 'john.doe@example.com' } }]
+};
+
+sparkpost.transmission.send(trans, function(err, res) {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log(res);
+    console.log('Congrats you can use our SDK!');
+  }
+});
