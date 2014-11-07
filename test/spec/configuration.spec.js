@@ -14,7 +14,7 @@ describe('Configuration Library', function() {
 
   it('should set default values if user does not provide values', function() {
     configuration.setConfig({key: '123'});
-    expect(configuration.options.host).to.equal('app.cloudplaceholder.com');
+    expect(configuration.options.host).to.equal('api.sparkpost.com');
     expect(configuration.options.port).to.equal('443');
     expect(configuration.options.protocol).to.equal('https');
     expect(configuration.options.strictSSL).to.be.true;
