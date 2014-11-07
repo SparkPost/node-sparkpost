@@ -61,15 +61,15 @@ sparkpost.transmission.send(trans, function(err, res) {
 | replyTo          | no          | Field for specifying the email address that should be used when a recipient hits the reply button                          | String           |
 | subject          | yes         | Field for setting the subject line of a given transmission                                                                 | String           |
 | from             | yes         | Field for setting the from line of a given transmission                                                                    | String or Object |
-| html             | yes**          | Field for setting the HTML content of a given transmission                                                                 | String           |
-| text             | yes**        | Field for setting the Plain Text content of a given transmission                                                           | String           |
-| rfc822           | no**          | Field for setting the RFC-822 encoded content of a given transmission                                                      | String           |
-| storedTemplate   | no**          | Field for specifying the Template ID of a stored template to be used when sending a given transmission                     | String           |
+| html             | yes**       | Field for setting the HTML content of a given transmission                                                                 | String           |
+| text             | yes**       | Field for setting the Plain Text content of a given transmission                                                           | String           |
+| rfc822           | no**        | Field for setting the RFC-822 encoded content of a given transmission                                                      | String           |
+| template         | no**        | Field for specifying the Template ID of a stored template to be used when sending a given transmission                     | String           |
 | customHeaders    | no          | Field for specifying additional headers to be applied to a given transmission (other than Subject, From, To, and Reply-To) | Object (Simple)  |
-| recipients       | yes**         | Field for specifying who a given transmission should be sent to                                                            | Array of Objects |
-| recipientList    | no**          | Field for specifying a stored recipient list ID to be used for a given transmission                                        | String           |
+| recipients       | yes**       | Field for specifying who a given transmission should be sent to                                                            | Array of Objects |
+| recipientList    | no**        | Field for specifying a stored recipient list ID to be used for a given transmission                                        | String           |
 
-** - If using inline content then html or text are required. If using RFC-822 Inline Content, then rfc822 is required. If using a stored recipient list, then recipientList is required. If using a stored template, then storedTemplate is required.
+** - If using inline content then html or text are required. If using RFC-822 Inline Content, then rfc822 is required. If using a stored recipient list, then recipientList is required. If using a stored template, then template is required.
 
 ## Tips and Tricks
 ### General

@@ -7,7 +7,7 @@ var trans = {
   from: 'From Envelope <from@example.com>',
   subject: 'Example Email for Stored List and Template',
   recipientList: 'example-list',
-  storedTemplate: 'my-template',
+  template: 'my-template',
   recipients: [{ address: { email: 'john.doe@example.com' } }]
 };
 

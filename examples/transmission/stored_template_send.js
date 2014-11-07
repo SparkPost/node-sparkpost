@@ -4,10 +4,10 @@ var key = 'YOURAPIKEY'
   , sparkpost = require('sparkpost')({ key: key });
 
 var trans = {
-  storedTemplate: 'my-template',
+  template: 'my-template',
   from: 'From Envelope <from@example.com>',
   subject: 'Example Email for Stored Template',
-  recipients = [{ address: { email: 'john.doe@example.com' } }]
+  recipients: [{ address: { email: 'john.doe@example.com' } }]
 };
 
 sparkpost.transmission.send(trans, function(err, res) {
