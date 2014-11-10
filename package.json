@@ -1,21 +1,21 @@
 {
-  "name": "msys-rest-sdk",
-  "version": "0.0.0",
-  "description": "A Node.js wrapper for interfacing with Message Systems APIs",
+  "name": "sparkpost",
+  "version": "0.1.0",
+  "description": "A Node.js wrapper for interfacing with your favorite SparkPost APIs",
   "main": "index.js",
   "scripts": {
     "test": "grunt"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/MessageSystems/node-sdk.git"
+    "url": "https://github.com/SparkPost/node-sparkpost"
   },
   "author": "Message Systems, Inc.",
   "license": "Apache 2.0",
   "bugs": {
-    "url": "https://github.com/MessageSystems/node-sdk/issues"
+    "url": "https://github.com/SparkPost/node-sparkpost/issues"
   },
-  "homepage": "https://github.com/MessageSystems/node-sdk",
+  "homepage": "https://github.com/SparkPost/node-sparkpost",
   "devDependencies": {
     "chai": "1.9.1",
     "grunt": "0.4.5",
