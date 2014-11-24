@@ -95,10 +95,12 @@ Run `npm install` inside the repository to install all the dev dependencies.
 Once all the dependencies are installed, you can execute the unit tests using `grunt test`
 
 ### Contributing
-Guidelines for adding issues
+(Guidelines for adding issues)[docs/ADDING_ISSUES.markdown]
 
-Submitting pull requests
+(Submitting pull requests)[docs/CONTRIBUTING.markdown]
 
-Signing our CLA
+(Have read and agree to our CLA)[docs/CONTRIBUTOR_LICENSE_AGREEMENT.markdown]
 
-Our coding standards
+(Signing our CLA)[docs/SIGNING_OUR_CLA.markdown]
+
+(Our coding standards)[docs/CODE_STYLE_GUIDE.markdown]
