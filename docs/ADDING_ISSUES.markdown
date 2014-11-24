@@ -1,7 +1,7 @@
 # Guidelines for Adding Issues to SparkPost
 Thank you for finding an issue, the SparkPost SDKs are open sourced and focused on helping our developers to be successful. Please review the following checklist before submitting a new issue.
 
-1. To prevent duplication, please search for issues and make sure it doesn’t already exist
+1. To prevent duplication, please [search for issues](https://github.com/SparkPost/node-sparkpost/issues) and make sure it doesn’t already exist
 2. Please provide the following information to help our contributors in resolving the issue:
     1. Operating System and Version
     2. Programming language version
