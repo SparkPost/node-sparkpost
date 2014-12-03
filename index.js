@@ -10,3 +10,5 @@ module.exports = function(globalOpts) {
     transmission: Transmission
   };
 };
+
+module.exports.SendGridCompatibility = require('./lib/SendGridCompatibility');
