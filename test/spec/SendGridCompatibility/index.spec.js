@@ -1,49 +1,139 @@
 var chai = require('chai')
   , expect = chai.expect
-  , proxyquire = require('proxyquire')
   , sinon = require('sinon')
   , sinonChai = require('sinon-chai')
+  , transmission = require('../../../lib/transmission')
   , configuration = require('../../../lib/configuration')
-  , MockRequest = require('../../mocks/request.js');
+  , MockRequest = require('../../mocks/request.js')
+  , proxyquire = require('proxyquire')
+  , sendGridCombatibility = require('../../../lib/SendGridCompatibility');
 
 chai.use(sinonChai);
 
 describe('SendGrid Compatibility', function() {
-  var sendgrid;
-
-  beforeEach(function() {
-    sendgrid = proxyquire('../../../lib/SendGridCompatibility', {
-      'request': MockRequest
-    });
- });
+  var sendgrid = new sendGridCombatibility('asdf', 'asdf')
+    , payload = {
+      to:       ['fake@email.org', 'real@notreally.net'],
+      toname:   ['Fakey Fakerson', 'Realy Realerson'],
+      from:     'a.sender@company.com',
+      fromname: 'A. Sender',
+      subject:  'Sale',
+      text:     'Look at this sale!',
+      html:     '<h1>Look </h1><h5>at this sale!</h5>',
+      bcc:      ['bcc@bbc.co.uk', 'bcc@cbc.ca'],
+      replyto:  'a.replyto@company.com',
+      date:     new Date(),
+      files: [
+        {
+          filename:     'name.txt',
+          path:         '../../../../../../',
+          url:          'www.google.com',
+          content:      '?'
+        }
+      ],
+      file_data:  {asdf: 'asdf'},
+      headers: {asdfasdf: 'asdfasdf'},
+      sub: {password: ['******'], num: ['one', 'two']},
+      section: {something: 'something else'}
+    },
+    translatedPayload = {
+      recipients: [
+        {
+          address: {
+            email: 'fake@email.org',
+            name: 'Fakey Fakerson'
+          }
+        },
+        {
+          address: {
+            email: 'real@notreally.net',
+            name: 'Realy Realerson'
+          }
+        }
+      ],
+      from: 'a.sender@company.com <A. Sender>',
+      html: '<h1>Look </h1><h5>at this sale!</h5>',
+      text: 'Look at this sale!',
+      subject: 'Sale',
+      replyTo:  'a.replyto@company.com',
+      customHeaders: {asdfasdf: 'asdfasdf'},
+      substitutionData: {
+        password: [ '******' ],
+        num: [ 'one', 'two' ],
+        something: 'something else'
+      }
+    };
 
   describe('Instantiation', function() {
+    var confSpy = sinon.spy(configuration, 'setConfig');
+    afterEach(function() {
+      confSpy.reset();
+    });
+
     it('should expose a send function', function() {
-      expect(transmission.send).to.be.a.function;
+      expect(sendgrid.send).to.be.a.function;
+    });
+    it('should handle additional options', function() {
+      sendgrid = new sendGridCombatibility('as', 'df', {port: '443', host: 'api.sparkpost.com', protocol: 'https'});
+      expect(confSpy.args[0][0]).to.deep.equal({key: 'df', port: '443', host: 'api.sparkpost.com', protocol: 'https'});
+    });
+    it('should drop incompatible options', function() {
+      sendgrid = new sendGridCombatibility('as', 'df', {starboard: '557', guest: '443', other: 'other'});
+      expect(confSpy.args[0][0]).to.deep.equal({key: 'df'});
     });
   });
 
-  describe('translatePayload Helper Method', function() {
-    var sendSpy;
-
-    beforeEach(function() {
-      sendSpy = sinon.spy(MockRequest, 'post');
-    });
-
+  describe('send Method', function() {
+    var sendSpy = sinon.spy(transmission, 'send');
     afterEach(function() {
-      sendSpy.restore();
+      sendSpy.reset();
     });
 
-    it('should default the return path for sparkpost users', function() {
-      sparkpost.send({}, function(err, res) {
-        expect(sendSpy.args[0][0].json.return_path).to.equal('default@sparkpostmail.com');
-      });
+    it('should handle an absence of toname', function() {
+      var toPayload = { to: 'asdf@qwerty.lg.jp'};
+      sendgrid.send(toPayload);
+      expect(sendSpy.args[0][0].recipients).to.deep.equal([{ address: { email: 'asdf@qwerty.lg.jp' }}]);
     });
 
-    it('should allow on prem users to override the return path', function() {
-      transmission.send({returnPath: 'sketchy@weird-domain.com'}, function(err, res) {
-        expect(sendSpy.args[0][0].json.return_path).to.equal('sketchy@weird-domain.com');
-      });
+    it('should translate only substitutions into substitutionData appropriately', function() {
+      var subPayload = { sub: {password: ['******'], num: ['one', 'two']}};
+      sendgrid.send(subPayload);
+      expect(sendSpy.args[0][0].substitutionData).to.deep.equal({ password: [ '******' ], num: [ 'one', 'two' ]});
     });
+
+    it('should translate only sections into substitutionData appropriately', function() {
+      var sectionPayload = { section: {something: 'something else'}};
+      sendgrid.send(sectionPayload);
+      expect(sendSpy.args[0][0].substitutionData).to.deep.equal({ something: 'something else'});
+    });
+
+    it('should not form substitutionData without substitutions or sections', function() {
+      var barePayload = {};
+      sendgrid.send(barePayload);
+      expect(sendSpy.args[0][0].substitutionData).to.equal(undefined);
+    });
+
+    it('should translate a full payload', function() {
+      sendgrid.send(payload);
+      expect(sendSpy.args[0][0]).to.deep.equal(translatedPayload);
+    });
+
+//-----------------------------------------------------------------------
+    it('should return an error when the request fails', function() {
+      var sg = proxyquire('../../../lib/SendGridCompatibility', {
+        'request': MockRequest
+      });
+      MockRequest.error = 'test';
+      console.log(sg);
+      console.log("/|\\-/|\\-/|\\-/|\\-/|\\-/|\\-/|\\-/|\\-/|\\-/|\\-/|\\");
+      console.log(MockRequest);
+      sg.send({}, function(err, res) {
+        expect(res).to.be.undefined;
+        expect(err).to.match(/test/);
+      });
+      MockRequest.restore();
+    });
+//-----------------------------------------------------------------------
+
   });
 });
