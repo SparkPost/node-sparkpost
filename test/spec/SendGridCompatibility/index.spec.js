@@ -2,11 +2,13 @@ var chai = require('chai')
   , expect = chai.expect
   , sinon = require('sinon')
   , sinonChai = require('sinon-chai')
-  , transmission = require('../../../lib/transmission')
-  , configuration = require('../../../lib/configuration')
-  , MockRequest = require('../../mocks/request.js')
+  , MockTransmission = require('../../mocks/transmissions.js')
+  , MockConfiguration = require('../../mocks/configuration.js')
   , proxyquire = require('proxyquire')
-  , sendGridCombatibility = require('../../../lib/SendGridCompatibility');
+  , sendGridCombatibility = proxyquire('../../../lib/SendGridCompatibility', {
+    '../transmission': MockTransmission,
+    '../configuration': MockConfiguration
+  });
 
 chai.use(sinonChai);
 
@@ -65,7 +67,7 @@ describe('SendGrid Compatibility', function() {
     };
 
   describe('Instantiation', function() {
-    var confSpy = sinon.spy(configuration, 'setConfig');
+    var confSpy = sinon.spy(MockConfiguration, 'setConfig');
     afterEach(function() {
       confSpy.reset();
     });
@@ -84,7 +86,7 @@ describe('SendGrid Compatibility', function() {
   });
 
   describe('send Method', function() {
-    var sendSpy = sinon.spy(transmission, 'send');
+    var sendSpy = sinon.spy(MockTransmission, 'send');
     afterEach(function() {
       sendSpy.reset();
     });
@@ -119,19 +121,18 @@ describe('SendGrid Compatibility', function() {
     });
 
 //-----------------------------------------------------------------------
+    it('should respond when the test succeeds', function() {
+      sendgrid.send({}, function(err, res) {
+        expect(res).to.be.true;
+        expect(err).to.equal(null);
+      });
+    });
+//-----------------------------------------------------------------------
     it('should return an error when the request fails', function() {
-      var sg = proxyquire('../../../lib/SendGridCompatibility', {
-        'request': MockRequest
-      });
-      MockRequest.error = 'test';
-      console.log(sg);
-      console.log("/|\\-/|\\-/|\\-/|\\-/|\\-/|\\-/|\\-/|\\-/|\\-/|\\-/|\\");
-      console.log(MockRequest);
-      sg.send({}, function(err, res) {
+      sendgrid.send({}, function(err, res) {
         expect(res).to.be.undefined;
-        expect(err).to.match(/test/);
+        expect(err).to.be.true;
       });
-      MockRequest.restore();
     });
 //-----------------------------------------------------------------------
 
