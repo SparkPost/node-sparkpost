@@ -93,48 +93,47 @@ describe('SendGrid Compatibility', function() {
 
     it('should handle an absence of toname', function() {
       var toPayload = { to: 'asdf@qwerty.lg.jp'};
-      sendgrid.send(toPayload);
+      sendgrid.send(toPayload, function() {});
       expect(sendSpy.args[0][0].recipients).to.deep.equal([{ address: { email: 'asdf@qwerty.lg.jp' }}]);
     });
 
     it('should translate only substitutions into substitutionData appropriately', function() {
       var subPayload = { sub: {password: ['******'], num: ['one', 'two']}};
-      sendgrid.send(subPayload);
+      sendgrid.send(subPayload, function() {});
       expect(sendSpy.args[0][0].substitutionData).to.deep.equal({ password: [ '******' ], num: [ 'one', 'two' ]});
     });
 
     it('should translate only sections into substitutionData appropriately', function() {
       var sectionPayload = { section: {something: 'something else'}};
-      sendgrid.send(sectionPayload);
+      sendgrid.send(sectionPayload, function() {});
       expect(sendSpy.args[0][0].substitutionData).to.deep.equal({ something: 'something else'});
     });
 
     it('should not form substitutionData without substitutions or sections', function() {
       var barePayload = {};
-      sendgrid.send(barePayload);
+      sendgrid.send(barePayload, function() {});
       expect(sendSpy.args[0][0].substitutionData).to.equal(undefined);
     });
 
     it('should translate a full payload', function() {
-      sendgrid.send(payload);
+      sendgrid.send(payload, function() {});
       expect(sendSpy.args[0][0]).to.deep.equal(translatedPayload);
     });
 
-//-----------------------------------------------------------------------
     it('should respond when the test succeeds', function() {
+      MockTransmission.passing = true;
       sendgrid.send({}, function(err, res) {
-        expect(res).to.be.true;
+        expect(res).to.equal('Everything went better than expected');
         expect(err).to.equal(null);
       });
     });
-//-----------------------------------------------------------------------
+
     it('should return an error when the request fails', function() {
+      MockTransmission.passing = false;
       sendgrid.send({}, function(err, res) {
         expect(res).to.be.undefined;
-        expect(err).to.be.true;
+        expect(err).to.be.defined;
       });
     });
-//-----------------------------------------------------------------------
-
   });
 });
