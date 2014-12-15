@@ -1,6 +1,8 @@
 # Contributing to SparkPost
 
 Transparency is one of our core values, and we encourage developers to contribute and become part of the SparkPost developer community.
+## Prerequisite to contribution
+Part of this transparency is the perpetual management. Every developer (even our own) to get started is required, <a href="https://www.clahub.com/agreements/SparkPost/node-sparkpost">sign the Contributor License Agreement</a>. Your pull requests will be flagged as "has not signed CLA" unless you agree to the CLA.
 
 Before writing code search for issues or create a new issue to confirm where your contribution fits into our roadmap.
 Current milestone Pull Requests will receive priority review for merging.
