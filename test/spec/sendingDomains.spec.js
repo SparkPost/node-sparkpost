@@ -5,7 +5,6 @@ var chai = require('chai')
   , sinonChai = require('sinon-chai')
   , configuration = require('../../lib/configuration')
   , MockRequest = require('../mocks/request.js');
-  //, MockRequest = new mockRequest();
 
 chai.use(sinonChai);
 
