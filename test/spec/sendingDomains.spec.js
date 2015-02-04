@@ -5,6 +5,7 @@ var chai = require('chai')
   , sinonChai = require('sinon-chai')
   , configuration = require('../../lib/configuration')
   , MockRequest = require('../mocks/request.js');
+  //, MockRequest = new mockRequest();
 
 chai.use(sinonChai);
 
@@ -42,6 +43,7 @@ describe('Sending Domains Library', function() {
       sendingDomains.all(function(err, res) {
         expect(fetchSpy.args[0][0].url).to.equal('http://example.com:123/api/v1/sending-domains');
       });
+      MockRequest.get.restore();
       MockRequest.restore();
     });
 
@@ -100,10 +102,11 @@ describe('Sending Domains Library', function() {
           version: 'v1'
       });
 
-      var sendSpy = sinon.spy(MockRequest, 'post');
+      var createSpy = sinon.spy(MockRequest, 'post');
       sendingDomains.create({}, function(err, res) {
-        expect(sendSpy.args[0][0].url).to.equal('http://example.com/api/v1/sending-domains');
+        expect(createSpy.args[0][0].url).to.equal('http://example.com/api/v1/sending-domains');
       });
+      MockRequest.post.restore();
       MockRequest.restore();
     });
 
@@ -146,10 +149,11 @@ describe('Sending Domains Library', function() {
           version: 'v1'
       });
 
-      var sendSpy = sinon.spy(MockRequest, 'put');
-      sendingDomains.update({}, function(err, res) {
-        expect(sendSpy.args[0][0].url).to.equal('http://example.com/api/v1/sending-domains');
+      var updateSpy = sinon.spy(MockRequest, 'put');
+      sendingDomains.update({domainName: "Sample Domain"}, function(err, res) {
+        expect(updateSpy.args[0][0].url).to.equal('http://example.com/api/v1/sending-domains/Sample Domain');
       });
+      MockRequest.put.restore();
       MockRequest.restore();
     });
 
@@ -193,10 +197,11 @@ describe('Sending Domains Library', function() {
           version: 'v1'
       });
 
-      var sendSpy = sinon.spy(MockRequest, 'post');
-      sendingDomains.verify("Sample Domain", {}, function(err, res) {
-        expect(sendSpy.args[0][0].url).to.equal('http://example.com/api/v1/sending-domains');
+      var verifySpy = sinon.spy(MockRequest, 'post');
+      sendingDomains.verify("Sample Domain", function(err, res) {
+        expect(verifySpy.args[0][0].url).to.equal('http://example.com/api/v1/sending-domains/Sample Domain/verify');
       });
+      MockRequest.post.restore();
       MockRequest.restore();
     });
 
@@ -236,21 +241,22 @@ describe('Sending Domains Library', function() {
     });
 
     it('should default verifying DKIM and SPF', function() {
-      var sendSpy = sinon.spy(MockRequest, 'post');
+      var verifySpy = sinon.spy(MockRequest, 'post');
       sendingDomains.verify("Sample Domain", {}, function(err, res) {
-        console.log(sendSpy.args[0][0].json);
-        expect(sendSpy.args[0][0].json.dkim_verify).to.be.true;
-        expect(sendSpy.args[0][0].json.spf_verify).to.be.true;
+        expect(verifySpy.args[0][0].json.dkim_verify).to.be.true;
+        expect(verifySpy.args[0][0].json.spf_verify).to.be.true;
       });
+      MockRequest.post.restore();
       MockRequest.restore();
     });
 
     it('should allow a user to override verifying DKIM and SPF', function() {
-      var sendSpy = sinon.spy(MockRequest, 'post');
+      var verifySpy = sinon.spy(MockRequest, 'post');
       sendingDomains.verify("Sample Domain", {verifyDKIM: false, verifySPF: false}, function(err, res) {
-        expect(sendSpy.args[0][0].json.dkim_verify).to.be.false;
-        expect(sendSpy.args[0][0].json.spf_verify).to.be.false;
+        expect(verifySpy.args[0][0].json.dkim_verify).to.be.false;
+        expect(verifySpy.args[0][0].json.spf_verify).to.be.false;
       });
+      MockRequest.post.restore();
       MockRequest.restore();
     });
   });
