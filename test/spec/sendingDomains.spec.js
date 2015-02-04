@@ -238,6 +238,7 @@ describe('Sending Domains Library', function() {
     it('should default verifying DKIM and SPF', function() {
       var sendSpy = sinon.spy(MockRequest, 'post');
       sendingDomains.verify("Sample Domain", {}, function(err, res) {
+        console.log(sendSpy.args[0][0].json);
         expect(sendSpy.args[0][0].json.dkim_verify).to.be.true;
         expect(sendSpy.args[0][0].json.spf_verify).to.be.true;
       });
