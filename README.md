@@ -15,7 +15,8 @@ npm install sparkpost
 ```
 
 ## Getting Started: Your First Mailing
-```
+
+```javascript
 var sparkpost = require('sparkpost')({key: 'YOUR API KEY'});
 
 var trans = {};
