@@ -95,8 +95,6 @@ Run `npm install` inside the repository to install all the dev dependencies.
 Once all the dependencies are installed, you can execute the unit tests using `grunt test`
 
 ### Contributing
-To get started, <a href="https://www.clahub.com/agreements/SparkPost/node-sparkpost">sign the Contributor License Agreement</a>.
-
 [Guidelines for adding issues](docs/ADDING_ISSUES.markdown)
 
 [Our coding standards](docs/CODE_STYLE_GUIDE.markdown)
