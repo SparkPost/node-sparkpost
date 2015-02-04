@@ -1,3 +1,5 @@
+![Travis CI](https://travis-ci.org/SparkPost/node-sparkpost.svg?branch=master)
+
 # SparkPost Node.js SDK
 
 The official node.js binding for your favorite SparkPost APIs!
