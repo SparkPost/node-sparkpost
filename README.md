@@ -1,4 +1,4 @@
-![Travis CI](https://travis-ci.org/SparkPost/node-sparkpost.svg?branch=master)
+[![Travis CI](https://travis-ci.org/SparkPost/node-sparkpost.svg?branch=master)](https://travis-ci.org/SparkPost/node-sparkpost)
 
 # SparkPost Node.js SDK
 
