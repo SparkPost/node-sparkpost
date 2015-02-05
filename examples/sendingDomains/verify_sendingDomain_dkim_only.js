@@ -4,7 +4,7 @@ var key = 'YOURAPIKEY'
   , sparkpost = require('sparkpost')({ key: key });
 
 var options = {
-  verifyDKIM: false
+  verifySPF: false
 };
 
 sparkpost.sendingDomains.verify('example1.com', options, function(err, res) {
