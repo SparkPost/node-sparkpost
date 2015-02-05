@@ -17,6 +17,10 @@ describe('Sending Domains Library', function() {
     });
   });
 
+  afterEach(function() {
+    MockRequest.restore();
+  });
+
   describe('Instantiation', function() {
     it('should expose five public methods for use', function() {
       expect(sendingDomains.create).to.be.a.function;
@@ -43,7 +47,6 @@ describe('Sending Domains Library', function() {
         expect(fetchSpy.args[0][0].url).to.equal('http://example.com:123/api/v1/sending-domains');
       });
       MockRequest.get.restore();
-      MockRequest.restore();
     });
 
     it('should handle being wrapped by all appropriately', function() {
@@ -51,7 +54,6 @@ describe('Sending Domains Library', function() {
         expect(err).to.be.null;
         expect(res.results).to.match(/success/);
       });
-      MockRequest.restore();
     });
 
     it('should handle being wrapped by find appropriately', function() {
@@ -59,7 +61,6 @@ describe('Sending Domains Library', function() {
         expect(err).to.be.null;
         expect(res.results).to.match(/success/);
       });
-      MockRequest.restore();
     });
 
     it('should return the appropriate error when the request fails', function() {
@@ -68,7 +69,6 @@ describe('Sending Domains Library', function() {
         expect(res).to.be.undefined;
         expect(err).to.match(/Unable to contact Sending Domains API: test/);
       });
-      MockRequest.restore();
     });
 
     it('should return the appropriate error when the request 404s', function() {
@@ -77,7 +77,6 @@ describe('Sending Domains Library', function() {
         expect(res).to.be.undefined;
         expect(err).to.match(/The specified Domain Name does not exist/);
       });
-      MockRequest.restore();
     });
 
     it('should return the appropriate error when the request does not 200', function() {
@@ -86,12 +85,11 @@ describe('Sending Domains Library', function() {
         expect(res).to.be.undefined;
         expect(err).to.match(/Received bad response from Sending Domains API: 500/);
       });
-      MockRequest.restore();
     });
   });
 
-  describe('create Method', function() {
-    it('should construct a URL based on global config', function() {
+  describe('write helper Method', function() {
+    it('should construct a create URL based on global config', function() {
       configuration.setConfig({
           key: 'fancyKey',
           host: 'example.com',
@@ -106,39 +104,9 @@ describe('Sending Domains Library', function() {
         expect(createSpy.args[0][0].url).to.equal('http://example.com/api/v1/sending-domains');
       });
       MockRequest.post.restore();
-      MockRequest.restore();
     });
 
-    it('should return an error when the request fails', function() {
-      MockRequest.error = 'test';
-      sendingDomains.create({}, function(err, res) {
-        expect(res).to.be.undefined;
-        expect(err).to.match(/test/);
-      });
-      MockRequest.restore();
-    });
-
-    it('should return an error if the status code is anything other than 200', function() {
-      MockRequest.response.statusCode = 500;
-      MockRequest.response.body.errors[0] = 'first error';
-      sendingDomains.create({}, function(err, res) {
-        expect(err[0]).to.equal('first error');
-        expect(res).to.be.undefined;
-      });
-      MockRequest.restore();
-    });
-
-    it('should return a body on a successful request', function() {
-      sendingDomains.create({}, function(err, res) {
-        expect(err).to.be.null;
-        expect(res.results).to.match(/success/);
-      });
-      MockRequest.restore();
-    });
-  });
-
-  describe('update Method', function() {
-    it('should construct a URL based on global config', function() {
+    it('should construct an update URL based on global config and domain name', function() {
       configuration.setConfig({
           key: 'fancyKey',
           host: 'example.com',
@@ -153,39 +121,34 @@ describe('Sending Domains Library', function() {
         expect(updateSpy.args[0][0].url).to.equal('http://example.com/api/v1/sending-domains/Sample Domain');
       });
       MockRequest.put.restore();
-      MockRequest.restore();
     });
 
     it('should return an error when the request fails', function() {
       MockRequest.error = 'test';
-      sendingDomains.update({}, function(err, res) {
+      sendingDomains.create({domainName: "Sample Domain"}, function(err, res) {
         expect(res).to.be.undefined;
         expect(err).to.match(/test/);
       });
-      MockRequest.restore();
     });
 
     it('should return an error if the status code is anything other than 200', function() {
       MockRequest.response.statusCode = 500;
       MockRequest.response.body.errors[0] = 'first error';
-      sendingDomains.update({}, function(err, res) {
+      sendingDomains.create({domainName: "Sample Domain"}, function(err, res) {
         expect(err[0]).to.equal('first error');
         expect(res).to.be.undefined;
       });
-      MockRequest.restore();
     });
 
     it('should return a body on a successful request', function() {
-      sendingDomains.update({}, function(err, res) {
+      sendingDomains.create({}, function(err, res) {
         expect(err).to.be.null;
         expect(res.results).to.match(/success/);
       });
-      MockRequest.restore();
     });
   });
 
   describe('verify Method', function() {
-
     it('should construct a URL based on global config', function() {
       configuration.setConfig({
           key: 'fancyKey',
@@ -201,7 +164,6 @@ describe('Sending Domains Library', function() {
         expect(verifySpy.args[0][0].url).to.equal('http://example.com/api/v1/sending-domains/Sample Domain/verify');
       });
       MockRequest.post.restore();
-      MockRequest.restore();
     });
 
     it('should return an error when the request fails', function() {
@@ -210,7 +172,6 @@ describe('Sending Domains Library', function() {
         expect(res).to.be.undefined;
         expect(err).to.match(/test/);
       });
-      MockRequest.restore();
     });
 
     it('should return an error if the status code is anything other than 200', function() {
@@ -220,7 +181,6 @@ describe('Sending Domains Library', function() {
         expect(err[0]).to.equal('first error');
         expect(res).to.be.undefined;
       });
-      MockRequest.restore();
     });
 
     it('should return a body on a successful request', function() {
@@ -228,7 +188,6 @@ describe('Sending Domains Library', function() {
         expect(err).to.be.null;
         expect(res.results).to.match(/success/);
       });
-      MockRequest.restore();
     });
 
     it('should handle no options passed appropriately', function() {
@@ -236,7 +195,6 @@ describe('Sending Domains Library', function() {
         expect(err).to.be.null;
         expect(res.results).to.match(/success/);
       });
-      MockRequest.restore();
     });
 
     it('should default verifying DKIM and SPF', function() {
@@ -246,7 +204,6 @@ describe('Sending Domains Library', function() {
         expect(verifySpy.args[0][0].json.spf_verify).to.be.true;
       });
       MockRequest.post.restore();
-      MockRequest.restore();
     });
 
     it('should allow a user to override verifying DKIM and SPF', function() {
@@ -256,7 +213,6 @@ describe('Sending Domains Library', function() {
         expect(verifySpy.args[0][0].json.spf_verify).to.be.false;
       });
       MockRequest.post.restore();
-      MockRequest.restore();
     });
   });
 });
