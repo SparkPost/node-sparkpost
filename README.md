@@ -71,6 +71,17 @@ sparkpost.transmission.send(trans, function(err, res) {
 
 ** - If using inline content then html or text are required. If using RFC-822 Inline Content, then rfc822 is required. If using a stored recipient list, then recipientList is required. If using a stored template, then template is required.
 
+### Sending Domains
+| Field Name       | Required?   | Description                                                                                                                | Data Type        |
+| ------------     | ----------- | -------------                                                                                                              | -----------      |
+| domainName       | yes         | Name of the sending domain | String           |
+| privateKey       | yes**       | Private key used to create the DKIM Signature. | String           |
+| publicKey        | yes**       | Public key to be retrieved from the DNS of the sending domain. | String           |
+| selector         | yes**       | DomainKey selector that indicates the DKIM public key location. | String           |
+| headers          | no          | Header fields to be included in the DKIM signature | String           |
+
+** - If specifying a privateKey, publicKey, or selector, all three fields are required.
+
 ## Tips and Tricks
 ### General
 * You _must_ provide at least an API key when instantiating the SparkPost Library - `{ key: '184ac5480cfdd2bb2859e4476d2e5b1d2bad079bf' }`
