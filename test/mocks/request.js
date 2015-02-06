@@ -19,6 +19,11 @@ MockRequest.prototype.post = function(options, callbackFunction) {
   callbackFunction(response.error, response.response, response.body);
 };
 
+MockRequest.prototype.put = function(options, callbackFunction) {
+  var response = {error: this.error, response: this.response, body: this.response.body};
+  callbackFunction(response.error, response.response, response.body);
+};
+
 MockRequest.prototype.restore = function() {
   this.error = null;
   this.response = {
