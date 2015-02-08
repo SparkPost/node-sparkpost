@@ -62,6 +62,12 @@ describe('Transmissions Library', function() {
       });
     });
 
+    it('should allow a user to override useSandbox ', function() {
+      transmission.send({useSandbox: true}, function(err, res) {
+        expect(sendSpy.args[0][0].json.options.sandbox).to.be.true;
+      });
+    });
+
     it('should default using a published stored template', function() {
       transmission.send({}, function(err, res) {
         expect(sendSpy.args[0][0].json.content.use_draft_template).to.be.false;
