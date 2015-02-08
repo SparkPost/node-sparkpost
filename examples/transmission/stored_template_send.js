@@ -5,7 +5,7 @@ var key = 'YOURAPIKEY'
 
 var trans = {
   template: 'my-template',
-  from: 'From Envelope <from@example.com>',
+  from: 'From Envelope <example@sparkpostbox.com>',
   subject: 'Example Email for Stored Template',
   recipients: [{ address: { email: 'john.doe@example.com' } }]
 };
