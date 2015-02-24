@@ -19,6 +19,7 @@ var trans = {
   },
   trackOpens: false,
   trackClicks: false,
+  useSandbox: true,
   useDraftTemplate: true,
   from: 'From Envelope <from@example.com>',
   html: '<p>Hello World! Your name is: {{name}}</p>',
