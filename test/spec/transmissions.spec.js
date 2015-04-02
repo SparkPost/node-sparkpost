@@ -170,6 +170,18 @@ describe('Transmissions Library', function() {
       MockRequest.restore();
     });
 
+    it('should return a generic error when we get an ill-formed response from the API', function() {
+      MockRequest.response = {}; // no body
+
+      transmission.send({}, function(err, res) {
+        expect(res).to.be.undefined;
+        expect(err).to.match(/Unexpected error occurred while trying to send transmission/);
+      });
+
+      MockRequest.restore();
+    });
+
+
     it('should return an error if the status code is anything other than 200', function() {
       MockRequest.response.statusCode = 500;
       MockRequest.response.body.errors[0] = 'first error';
