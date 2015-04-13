@@ -1,13 +1,14 @@
 'use strict';
 
 var key = 'YOURAPIKEY'
-  , sparkpost = require('sparkpost')({ key: key });
+  , SparkPost = require('sparkpost')
+  , client = new SparkPost(key);
 
 var options = {
   verifyDKIM: false
 };
 
-sparkpost.sendingDomains.verify('example1.com', options, function(err, res) {
+client.sendingDomains.verify('example1.com', options, function(err, res) {
   if (err) {
     console.log(err);
   } else {

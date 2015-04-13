@@ -1,7 +1,8 @@
 'use strict';
 
 var key = 'YOURAPIKEY'
-  , sparkpost = require('sparkpost')({ key: key });
+  , SparkPost = require('sparkpost')
+  , client = new SparkPost(key);
 
 var domain = {
   domainName: 'example1.com',
@@ -11,7 +12,7 @@ var domain = {
   headers: 'from:to:subject:date'
 };
 
-sparkpost.sendingDomains.create(domain, function(err, res) {
+client.sendingDomains.create(domain, function(err, res) {
   if (err) {
     console.log(err);
   } else {

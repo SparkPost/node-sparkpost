@@ -1,9 +1,10 @@
 'use strict';
 
 var key = 'YOURAPIKEY'
-  , sparkpost = require('sparkpost')({ key: key });
+  , SparkPost = require('sparkpost')
+  , client = new SparkPost(key);
 
-sparkpost.sendingDomains.verify('example1.com', function(err, res) {
+client.sendingDomains.verify('example1.com', function(err, res) {
   if (err) {
     console.log(err);
   } else {
