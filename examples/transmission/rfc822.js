@@ -1,7 +1,8 @@
 'use strict';
 
 var key = 'YOURAPIKEY'
-  , sparkpost = require('sparkpost')({ key: key });
+  , SparkPost = require('sparkpost')
+  , client = new SparkPost(key);
 
 var trans = {
   recipients: [{ address: { email: 'john.doe@example.com' } }],
@@ -10,7 +11,7 @@ var trans = {
   subject: 'Example Email for RFC-822 Content'
 };
 
-sparkpost.transmission.send(trans, function(err, res) {
+client.transmission.send(trans, function(err, res) {
   if (err) {
     console.log(err);
   } else {

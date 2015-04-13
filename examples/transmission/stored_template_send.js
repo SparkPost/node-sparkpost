@@ -1,7 +1,8 @@
 'use strict';
 
 var key = 'YOURAPIKEY'
-  , sparkpost = require('sparkpost')({ key: key });
+  , SparkPost = require('sparkpost')
+  , client = new SparkPost(key);
 
 var trans = {
   template: 'my-template',
@@ -10,7 +11,7 @@ var trans = {
   recipients: [{ address: { email: 'john.doe@example.com' } }]
 };
 
-sparkpost.transmission.send(trans, function(err, res) {
+client.transmission.send(trans, function(err, res) {
   if (err) {
     console.log(err);
   } else {

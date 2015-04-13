@@ -1,9 +1,10 @@
 'use strict';
 
 var key = 'YOURAPIKEY'
-  , sparkpost = require('sparkpost')({ key: key });
+  , SparkPost = require('sparkpost')
+  , client = new SparkPost(key);
 
-sparkpost.transmission.find('YOUR-TRANSMISSION-KEY', function(err, res) {
+client.transmission.find('YOUR-TRANSMISSION-KEY', function(err, res) {
   if (err) {
     console.log(err);
   } else {
