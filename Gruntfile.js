@@ -10,7 +10,7 @@ module.exports = function(grunt) {
 
   var config = {
     binPath: './node_modules/.bin'
-  }
+  };
   // Configure existing grunt tasks and create custom ones
   grunt.initConfig({
     config: config,
@@ -30,6 +30,7 @@ module.exports = function(grunt) {
     shell: {
       test: {
         command : '<%= config.binPath %>/istanbul cover --report lcov --dir test/reports/ <%= config.binPath %>/_mocha test/spec -- --reporter xunit-file',
+        //command : '<%= config.binPath %>/istanbul cover --report lcov --dir test/reports/ <%= config.binPath %>/_mocha test/spec -- --reporter spec',
         options : {
           stdout : true,
           failOnError : true
@@ -49,4 +50,4 @@ module.exports = function(grunt) {
 
   // register default grunt command as grunt test
   grunt.registerTask('default', [ 'test' ]);
-}
+};
