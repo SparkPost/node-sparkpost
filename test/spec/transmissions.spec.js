@@ -48,14 +48,14 @@ describe('Transmissions Library', function() {
       });
     });
 
-    it('should default open and click tracking', function() {
+    it('should default open and click tracking to be undefined', function() {
       transmission.send({}, function(err, res) {
-        expect(sendSpy.args[0][0].json.options.open_tracking).to.be.true;
-        expect(sendSpy.args[0][0].json.options.click_tracking).to.be.true;
+        expect(sendSpy.args[0][0].json.options.open_tracking).to.be.undefined;
+        expect(sendSpy.args[0][0].json.options.click_tracking).to.be.undefined;
       });
     });
 
-    it('should allow a user to override open and click tracking', function() {
+    it('should allow a user to set open/click tracking', function() {
       transmission.send({trackOpens: false, trackClicks: false}, function(err, res) {
         expect(sendSpy.args[0][0].json.options.open_tracking).to.be.false;
         expect(sendSpy.args[0][0].json.options.click_tracking).to.be.false;
