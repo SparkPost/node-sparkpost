@@ -58,8 +58,8 @@ sparkpost.transmission.send(trans, function(err, res) {
 | campaign         | no          | Field for assigning a given transmission to a specific campaign, which is a logical container for similar transmissions    | String           |
 | metadata         | no          | Field for adding arbitrary key/value pairs which will be included in open/click tracking                                   | Object (Simple)  |
 | substitutionData | no          | Field for adding transmission level substitution data, which can be used in a variety of fields and in content             | Object (Complex) |
-| trackOpens       | no          | Field for enabling/disabling transmission level open tracking  (default: true)                                             | Boolean          |
-| trackClicks      | no          | Field for enabling/disabling transmission level click tracking (default: true)                                             | Boolean          |
+| trackOpens       | no          | Field for enabling/disabling transmission level open tracking, if not set will use settings from Template                                             | Boolean          |
+| trackClicks      | no          | Field for enabling/disabling transmission level click tracking, if not set will use settings from Template                                             | Boolean          |
 | useSandbox       | no          | Field for enabling/disabling using sandbox domain to send transmission(You are limited to 50 messages ever with sandbox)   | Boolean          |
 | useDraftTemplate | no          | Field for allowing the sending of a transmission using a draft of a stored template (default: false)                       | Boolean          |
 | replyTo          | no          | Field for specifying the email address that should be used when a recipient hits the reply button                          | String           |
