@@ -18,8 +18,8 @@ var trans = {
   customHeaders: {
     'X-Custom-Header': 'Sample Custom Header'
   },
-  trackOpens: false,
-  trackClicks: false,
+  trackOpens: true,
+  trackClicks: true,
   useSandbox: true,
   useDraftTemplate: true,
   from: 'From Envelope <from@example.com>',

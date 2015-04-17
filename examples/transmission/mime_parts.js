@@ -9,7 +9,9 @@ var trans = {
   recipients: [{ address: { email: 'john.doe@example.com' } }],
   subject: 'Example Email for MIME Parts',
   html: '<html><body><p>Hello World!</p></body></html>',
-  text: 'Hello World!'
+  text: 'Hello World!',
+  trackOpens: true,
+  trackClicks: true
 };
 
 client.transmission.send(trans, function(err, res) {
