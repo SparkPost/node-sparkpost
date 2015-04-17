@@ -63,22 +63,14 @@ describe('SendGrid Compatibility', function() {
     };
 
   describe('Instantiation', function() {
-    /*var confSpy = sinon.spy(MockConfiguration, 'setConfig');
-    afterEach(function() {
-      confSpy.reset();
-    });*/
-
     it('should expose a send function', function() {
       expect(sendgrid.send).to.be.a.function;
     });
-    /*it('should handle additional options', function() {
-      sendgrid = new sendGridCompatibility('as', 'df', {port: '443', host: 'api.sparkpost.com', protocol: 'https'});
-      expect(confSpy.args[0][0]).to.deep.equal({key: 'df', port: '443', host: 'api.sparkpost.com', protocol: 'https'});
+
+    it('should handle building an endpoint from options', function() {
+      var sendgrid = new sendGridCompatibility('as', 'df', {port: '5000', host: 'test.sparkpost.com', protocol: 'http'});
+      expect(sendgrid.client.origin).to.equal('http://test.sparkpost.com:5000');
     });
-    it('should drop incompatible options', function() {
-      sendgrid = new sendGridCompatibility('as', 'df', {starboard: '557', guest: '443', other: 'other'});
-      expect(confSpy.args[0][0]).to.deep.equal({key: 'df'});
-    });*/
   });
 
   describe('send Method', function() {
