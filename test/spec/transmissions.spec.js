@@ -1,39 +1,116 @@
 var chai = require('chai')
   , expect = chai.expect
-  , proxyquire = require('proxyquire')
   , sinon = require('sinon')
   , sinonChai = require('sinon-chai')
-  , configuration = require('../../lib/configuration')
-  , MockRequest = require('../mocks/request.js');
+  , nock = require('nock')
+  , SparkPost = require('../../lib/index');
 
 chai.use(sinonChai);
 
 describe('Transmissions Library', function() {
-  var transmission;
+  var client, transmission;
 
-  beforeEach(function() {
-    transmission = proxyquire('../../lib/transmission', {
-      'request': MockRequest
+  before( function() {
+    // setting up a client for all tests to use
+    var key = '12345678901234567890';
+
+    client = new SparkPost( key );
+    transmission = require('../../lib/transmission')(client);
+  });
+
+  it('should expose a public all method', function() {
+    expect(transmission.all).to.be.a.function;
+  });
+
+  it('should expose a public find method', function() {
+    expect(transmission.find).to.be.a.function;
+  });
+
+  it('should expose a public send method', function() {
+    expect(transmission.send).to.be.a.function;
+  });
+
+  describe('all Method', function() {
+    it('should call client get method with the appropriate uri', function(done) {
+      var requestSpy = sinon.spy( SparkPost.prototype, 'get' );
+
+      var scope = nock('https://api.sparkpost.com')
+        .get('/api/v1/transmissions')
+        .reply(200, { ok: true });
+
+      transmission.all(function(err, data) {
+        // need to make sure we called get method
+        expect( requestSpy.calledOnce ).to.be.true;
+
+        // making sure the correct uri was constructed
+        expect( data.request.uri.href ).to.equal( 'https://api.sparkpost.com:443/api/v1/transmissions' );
+
+        SparkPost.prototype.get.restore(); // restoring function
+        scope.done();
+        done();
+      });
     });
- });
+  });
 
-  describe('Instantiation', function() {
-    it('should expose three public methods for use', function() {
-      expect(transmission.send).to.be.a.function;
-      expect(transmission.all).to.be.a.function;
-      expect(transmission.find).to.be.a.function;
+  describe('find Method', function() {
+    it('should call client get method with the appropriate uri', function(done) {
+      var requestSpy = sinon.spy( SparkPost.prototype, 'get' );
+
+      var scope = nock('https://api.sparkpost.com')
+        .get('/api/v1/transmissions/test')
+        .reply(200, { ok: true });
+
+      transmission.find('test', function(err, data) {
+        // need to make sure we called get method
+        expect( requestSpy.calledOnce ).to.be.true;
+
+        // making sure the correct uri was constructed
+        expect( data.request.uri.href ).to.equal( 'https://api.sparkpost.com:443/api/v1/transmissions/test' );
+
+        SparkPost.prototype.get.restore(); // restoring function
+        scope.done();
+        done();
+      });
+    });
+  });
+
+  describe('send Method', function() {
+    it('should call client post method with the appropriate uri', function(done) {
+      var requestSpy = sinon.spy( SparkPost.prototype, 'post' );
+
+      var scope = nock('https://api.sparkpost.com')
+        .post('/api/v1/transmissions')
+        .reply(200, { ok: true });
+
+      var transmissionBody = {};
+
+      transmission.send(transmissionBody, function(err, data) {
+        // need to make sure we called get method
+        expect( requestSpy.calledOnce ).to.be.true;
+
+        // making sure the correct uri was constructed
+        expect( data.request.uri.href ).to.equal( 'https://api.sparkpost.com:443/api/v1/transmissions' );
+
+        SparkPost.prototype.post.restore(); // restoring function
+        scope.done();
+        done();
+      });
     });
   });
 
   describe('toApiFormat Helper Method', function() {
-    var sendSpy;
+    var sendSpy, scope;
 
     beforeEach(function() {
-      sendSpy = sinon.spy(MockRequest, 'post');
+      sendSpy = sinon.spy(SparkPost.prototype, 'post');
+      scope = nock('https://api.sparkpost.com')
+        .post('/api/v1/transmissions')
+        .reply(200, { ok: true });
     });
 
     afterEach(function() {
-      sendSpy.restore();
+      SparkPost.prototype.post.restore(); // restoring function
+      scope.done();
     });
 
     it('should default the return path for sparkpost users', function() {
@@ -48,14 +125,14 @@ describe('Transmissions Library', function() {
       });
     });
 
-    it('should default open and click tracking', function() {
+    it('should default open and click tracking to be undefined', function() {
       transmission.send({}, function(err, res) {
-        expect(sendSpy.args[0][0].json.options.open_tracking).to.be.true;
-        expect(sendSpy.args[0][0].json.options.click_tracking).to.be.true;
+        expect(sendSpy.args[0][0].json.options.open_tracking).to.be.undefined;
+        expect(sendSpy.args[0][0].json.options.click_tracking).to.be.undefined;
       });
     });
 
-    it('should allow a user to override open and click tracking', function() {
+    it('should allow a user to set open/click tracking', function() {
       transmission.send({trackOpens: false, trackClicks: false}, function(err, res) {
         expect(sendSpy.args[0][0].json.options.open_tracking).to.be.false;
         expect(sendSpy.args[0][0].json.options.click_tracking).to.be.false;
@@ -80,6 +157,7 @@ describe('Transmissions Library', function() {
       });
     });
   });
+  /*
 
   describe('fetch Helper Method', function() {
     it('should construct a URL appropriately based on global config', function() {
@@ -199,5 +277,5 @@ describe('Transmissions Library', function() {
       });
       MockRequest.restore();
     });
-  });
+  });*/
 });

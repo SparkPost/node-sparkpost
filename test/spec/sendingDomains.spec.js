@@ -1,218 +1,194 @@
 var chai = require('chai')
   , expect = chai.expect
-  , proxyquire = require('proxyquire')
   , sinon = require('sinon')
   , sinonChai = require('sinon-chai')
-  , configuration = require('../../lib/configuration')
-  , MockRequest = require('../mocks/request.js');
+  , nock = require('nock')
+  , SparkPost = require('../../lib/index');
 
 chai.use(sinonChai);
 
 describe('Sending Domains Library', function() {
-  var sendingDomains;
+  var client, sendingDomains;
 
-  beforeEach(function() {
-    sendingDomains = proxyquire('../../lib/sendingDomains', {
-      'request': MockRequest
-    });
+  before( function() {
+    // setting up a client for all tests to use
+    var key = '12345678901234567890';
+
+    client = new SparkPost( key );
+    sendingDomains = require('../../lib/sendingDomains')(client);
   });
 
-  afterEach(function() {
-    MockRequest.restore();
+  it('should expose a public all method', function() {
+    expect(sendingDomains.all).to.be.a.function;
   });
 
-  describe('Instantiation', function() {
-    it('should expose five public methods for use', function() {
-      expect(sendingDomains.create).to.be.a.function;
-      expect(sendingDomains.update).to.be.a.function;
-      expect(sendingDomains.verify).to.be.a.function;
-      expect(sendingDomains.find).to.be.a.function;
-      expect(sendingDomains.all).to.be.a.function;
-    });
+  it('should expose a public find method', function() {
+    expect(sendingDomains.find).to.be.a.function;
   });
 
-  describe('fetch Helper Method', function() {
-    it('should construct a URL appropriately based on global config', function() {
-      configuration.setConfig({
-          key: 'fancyKey',
-          host: 'example.com',
-          protocol: 'http',
-          strictSSL: false,
-          port: '123',
-          version: 'v1'
-      });
+  it('should expose a public create method', function() {
+    expect(sendingDomains.create).to.be.a.function;
+  });
 
-      var fetchSpy = sinon.spy(MockRequest, 'get');
-      sendingDomains.all(function(err, res) {
-        expect(fetchSpy.args[0][0].url).to.equal('http://example.com:123/api/v1/sending-domains');
-      });
-      MockRequest.get.restore();
-    });
+  it('should expose a public update method', function() {
+    expect(sendingDomains.update).to.be.a.function;
+  });
 
-    it('should handle being wrapped by all appropriately', function() {
-      sendingDomains.all(function(err, res) {
-        expect(err).to.be.null;
-        expect(res.results).to.match(/success/);
-      });
-    });
+  it('should expose a public verify method', function() {
+    expect(sendingDomains.verify).to.be.a.function;
+  });
 
-    it('should handle being wrapped by find appropriately', function() {
-      sendingDomains.find("Sample Domain", function(err, res) {
-        expect(err).to.be.null;
-        expect(res.results).to.match(/success/);
-      });
-    });
+  describe('find Method', function() {
+    it('should call client get method with the appropriate uri', function(done) {
+      var requestSpy = sinon.spy( SparkPost.prototype, 'get' );
 
-    it('should return the appropriate error when the request fails', function() {
-      MockRequest.error = 'test';
-      sendingDomains.find("Sample Domain", function(err, res) {
-        expect(res).to.be.undefined;
-        expect(err).to.match(/Unable to contact Sending Domains API: test/);
-      });
-    });
+      var scope = nock('https://api.sparkpost.com')
+        .get('/api/v1/sending-domains/test')
+        .reply(200, { ok: true });
 
-    it('should return the appropriate error when the request 404s', function() {
-      MockRequest.response.statusCode = 404;
-      sendingDomains.find("Sample Domain", function(err, res) {
-        expect(res).to.be.undefined;
-        expect(err).to.match(/The specified Domain Name does not exist/);
-      });
-    });
+      sendingDomains.find('test', function(err, data) {
+        // need to make sure we called get method
+        expect( requestSpy.calledOnce ).to.be.true;
 
-    it('should return the appropriate error when the request does not 200', function() {
-      MockRequest.response.statusCode = 500;
-      sendingDomains.find("Sample Domain", function(err, res) {
-        expect(res).to.be.undefined;
-        expect(err).to.match(/Received bad response from Sending Domains API: 500/);
+        // making sure the correct uri was constructed
+        expect( data.request.uri.href ).to.equal( 'https://api.sparkpost.com:443/api/v1/sending-domains/test' );
+
+        SparkPost.prototype.get.restore(); // restoring function
+        scope.done();
+        done();
       });
     });
   });
 
-  describe('write helper Method', function() {
-    it('should construct a create URL based on global config', function() {
-      configuration.setConfig({
-          key: 'fancyKey',
-          host: 'example.com',
-          protocol: 'http',
-          strictSSL: false,
-          port: '',
-          version: 'v1'
-      });
+  describe('all Method', function() {
+    it('should call client get method with the appropriate uri', function(done) {
+      var requestSpy = sinon.spy( SparkPost.prototype, 'get' );
 
-      var createSpy = sinon.spy(MockRequest, 'post');
-      sendingDomains.create({}, function(err, res) {
-        expect(createSpy.args[0][0].url).to.equal('http://example.com/api/v1/sending-domains');
-      });
-      MockRequest.post.restore();
-    });
+      var scope = nock('https://api.sparkpost.com')
+        .get('/api/v1/sending-domains')
+        .reply(200, { ok: true });
 
-    it('should construct an update URL based on global config and domain name', function() {
-      configuration.setConfig({
-          key: 'fancyKey',
-          host: 'example.com',
-          protocol: 'http',
-          strictSSL: false,
-          port: '',
-          version: 'v1'
-      });
+      sendingDomains.all(function(err, data) {
+        // need to make sure we called get method
+        expect( requestSpy.calledOnce ).to.be.true;
 
-      var updateSpy = sinon.spy(MockRequest, 'put');
-      sendingDomains.update({domainName: "Sample Domain"}, function(err, res) {
-        expect(updateSpy.args[0][0].url).to.equal('http://example.com/api/v1/sending-domains/Sample Domain');
-      });
-      MockRequest.put.restore();
-    });
+        // making sure the correct uri was constructed
+        expect( data.request.uri.href ).to.equal( 'https://api.sparkpost.com:443/api/v1/sending-domains' );
 
-    it('should return an error when the request fails', function() {
-      MockRequest.error = 'test';
-      sendingDomains.create({domainName: "Sample Domain"}, function(err, res) {
-        expect(res).to.be.undefined;
-        expect(err).to.match(/test/);
+        SparkPost.prototype.get.restore(); // restoring function
+        scope.done();
+        done();
       });
     });
+  });
 
-    it('should return an error if the status code is anything other than 200', function() {
-      MockRequest.response.statusCode = 500;
-      MockRequest.response.body.errors[0] = 'first error';
-      sendingDomains.create({domainName: "Sample Domain"}, function(err, res) {
-        expect(err[0]).to.equal('first error');
-        expect(res).to.be.undefined;
+  describe('create Method', function() {
+    it('should call client post method with the appropriate uri', function(done) {
+      var requestSpy = sinon.spy( SparkPost.prototype, 'post' );
+
+      var scope = nock('https://api.sparkpost.com')
+        .post('/api/v1/sending-domains')
+        .reply(200, { ok: true });
+
+      var domainBody = {
+        domainName: "SampleDomain"
+      };
+
+      sendingDomains.create(domainBody, function(err, data) {
+        // need to make sure we called post method
+        expect( requestSpy.calledOnce ).to.be.true;
+
+        // making sure the correct uri was constructed
+        expect( data.request.uri.href ).to.equal( 'https://api.sparkpost.com:443/api/v1/sending-domains' );
+
+        SparkPost.prototype.post.restore(); // restoring function
+        scope.done();
+        done();
       });
     });
+  });
 
-    it('should return a body on a successful request', function() {
-      sendingDomains.create({}, function(err, res) {
-        expect(err).to.be.null;
-        expect(res.results).to.match(/success/);
+  describe('update Method', function() {
+    it('should call client put method with the appropriate uri', function(done) {
+      var requestSpy = sinon.spy( SparkPost.prototype, 'put' );
+
+      var scope = nock('https://api.sparkpost.com')
+        .put('/api/v1/sending-domains/SampleDomain')
+        .reply(200, { ok: true });
+
+      var domainBody = {
+        domainName: "SampleDomain"
+      };
+
+      sendingDomains.update(domainBody, function(err, data) {
+        // need to make sure we called put method
+        expect( requestSpy.calledOnce ).to.be.true;
+
+        // making sure the correct uri was constructed
+        expect( data.request.uri.href ).to.equal( 'https://api.sparkpost.com:443/api/v1/sending-domains/SampleDomain' );
+
+        SparkPost.prototype.put.restore(); // restoring function
+        scope.done();
+        done();
       });
     });
   });
 
   describe('verify Method', function() {
-    it('should construct a URL based on global config', function() {
-      configuration.setConfig({
-          key: 'fancyKey',
-          host: 'example.com',
-          protocol: 'http',
-          strictSSL: false,
-          port: '',
-          version: 'v1'
-      });
+    var requestSpy, scope;
 
-      var verifySpy = sinon.spy(MockRequest, 'post');
-      sendingDomains.verify("Sample Domain", function(err, res) {
-        expect(verifySpy.args[0][0].url).to.equal('http://example.com/api/v1/sending-domains/Sample Domain/verify');
-      });
-      MockRequest.post.restore();
+    beforeEach(function() {
+      requestSpy = sinon.spy( SparkPost.prototype, 'post' );
+      scope = nock('https://api.sparkpost.com')
+        .post('/api/v1/sending-domains/SampleDomain/verify')
+        .reply(200, { ok: true });
     });
 
-    it('should return an error when the request fails', function() {
-      MockRequest.error = 'test';
-      sendingDomains.verify("Sample Domain", {}, function(err, res) {
-        expect(res).to.be.undefined;
-        expect(err).to.match(/test/);
-      });
+    afterEach(function() {
+      SparkPost.prototype.post.restore(); // restoring function
+      scope.done();
     });
 
-    it('should return an error if the status code is anything other than 200', function() {
-      MockRequest.response.statusCode = 500;
-      MockRequest.response.body.errors[0] = 'first error';
-      sendingDomains.verify("Sample Domain", {}, function(err, res) {
-        expect(err[0]).to.equal('first error');
-        expect(res).to.be.undefined;
+    it('should call client post method with the appropriate uri', function(done) {
+
+      sendingDomains.verify('SampleDomain', function(err, data) {
+        // need to make sure we called get method
+        expect( requestSpy.calledOnce ).to.be.true;
+
+        // making sure the correct uri was constructed
+        expect( data.request.uri.href ).to.equal( 'https://api.sparkpost.com:443/api/v1/sending-domains/SampleDomain/verify' );
+        done();
       });
     });
 
-    it('should return a body on a successful request', function() {
-      sendingDomains.verify("Sample Domain", {}, function(err, res) {
-        expect(err).to.be.null;
-        expect(res.results).to.match(/success/);
+    it('should allow dkim_verify to be overridden', function(done) {
+      var options = {
+        dkim_verify: false
+      };
+
+      sendingDomains.verify('SampleDomain', options, function(err, data) {
+        // need to make sure we called get method
+        expect( requestSpy.calledOnce ).to.be.true;
+
+        // making sure the correct uri was constructed
+        expect( data.request.uri.href ).to.equal( 'https://api.sparkpost.com:443/api/v1/sending-domains/SampleDomain/verify' );
+        done();
       });
     });
 
-    it('should handle no options passed appropriately', function() {
-      sendingDomains.verify("Sample Domain", function(err, res) {
-        expect(err).to.be.null;
-        expect(res.results).to.match(/success/);
-      });
-    });
+    it('should allow spf_verify to be overridden', function(done) {
+      var options = {
+        spf_verify: false
+      };
 
-    it('should default verifying DKIM and SPF', function() {
-      var verifySpy = sinon.spy(MockRequest, 'post');
-      sendingDomains.verify("Sample Domain", {}, function(err, res) {
-        expect(verifySpy.args[0][0].json.dkim_verify).to.be.true;
-        expect(verifySpy.args[0][0].json.spf_verify).to.be.true;
-      });
-      MockRequest.post.restore();
-    });
+      sendingDomains.verify('SampleDomain', options, function(err, data) {
+        // need to make sure we called get method
+        expect( requestSpy.calledOnce ).to.be.true;
 
-    it('should allow a user to override verifying DKIM and SPF', function() {
-      var verifySpy = sinon.spy(MockRequest, 'post');
-      sendingDomains.verify("Sample Domain", {verifyDKIM: false, verifySPF: false}, function(err, res) {
-        expect(verifySpy.args[0][0].json.dkim_verify).to.be.false;
-        expect(verifySpy.args[0][0].json.spf_verify).to.be.false;
+        // making sure the correct uri was constructed
+        expect( data.request.uri.href ).to.equal( 'https://api.sparkpost.com:443/api/v1/sending-domains/SampleDomain/verify' );
+        done();
       });
-      MockRequest.post.restore();
     });
   });
 });

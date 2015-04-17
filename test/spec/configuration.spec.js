@@ -1,4 +1,4 @@
-var chai = require('chai')
+/*var chai = require('chai')
   , expect = chai.expect;
 
 describe('Configuration Library', function() {
@@ -32,3 +32,4 @@ describe('Configuration Library', function() {
     expect(configuration.options.version).to.equal('v3');
   });
 });
+*/
