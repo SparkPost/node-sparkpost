@@ -11,6 +11,9 @@ module.exports = function(grunt) {
   var config = {
     binPath: './node_modules/.bin'
   };
+
+  var reporter = grunt.option('reporter') || 'xunit-file';
+
   // Configure existing grunt tasks and create custom ones
   grunt.initConfig({
     config: config,
@@ -29,8 +32,7 @@ module.exports = function(grunt) {
 
     shell: {
       test: {
-        command : '<%= config.binPath %>/istanbul cover --report lcov --dir test/reports/ <%= config.binPath %>/_mocha test/spec -- --reporter xunit-file',
-        //command : '<%= config.binPath %>/istanbul cover --report lcov --dir test/reports/ <%= config.binPath %>/_mocha test/spec -- --reporter spec',
+        command : '<%= config.binPath %>/istanbul cover --report lcov --dir test/reports/ <%= config.binPath %>/_mocha test/spec -- --reporter ' + reporter,
         options : {
           stdout : true,
           failOnError : true
