@@ -133,19 +133,5 @@ describe('SendGrid Compatibility', function() {
         done();
       });
     });
-
-    /*it('should return an error when the request fails', function(done) {
-      nock.cleanAll();
-      var scope2 = nock('https://api.sparkpost.com')
-        .log(console.log)
-        .post('/api/v1/transmissions')
-        .replyWithError('something awful happened');
-
-      /*sendgrid.send({}, function(err, res) {
-        expect(res).to.be.undefined;
-        expect(err).to.be.defined;
-        done();
-      });
-    });*/
   });
 });

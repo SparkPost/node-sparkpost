@@ -43,10 +43,9 @@ describe('Transmissions Library', function() {
         expect(requestSpy.calledOnce).to.be.true;
 
         // making sure the correct uri was constructed
-        expect(data.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/transmissions');
+        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/transmissions');
 
         SparkPost.prototype.get.restore(); // restoring function
-        scope.done();
         done();
       });
     });
@@ -65,10 +64,9 @@ describe('Transmissions Library', function() {
         expect(requestSpy.calledOnce).to.be.true;
 
         // making sure the correct uri was constructed
-        expect(data.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/transmissions/test');
+        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/transmissions/test');
 
         SparkPost.prototype.get.restore(); // restoring function
-        scope.done();
         done();
       });
     });
@@ -89,10 +87,9 @@ describe('Transmissions Library', function() {
         expect(requestSpy.calledOnce).to.be.true;
 
         // making sure the correct uri was constructed
-        expect(data.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/transmissions');
+        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/transmissions');
 
         SparkPost.prototype.post.restore(); // restoring function
-        scope.done();
         done();
       });
     });
@@ -110,7 +107,6 @@ describe('Transmissions Library', function() {
 
     afterEach(function() {
       SparkPost.prototype.post.restore(); // restoring function
-      scope.done();
     });
 
     it('should default the return path for sparkpost users', function() {

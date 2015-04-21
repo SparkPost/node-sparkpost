@@ -51,10 +51,9 @@ describe('Sending Domains Library', function() {
         expect(requestSpy.calledOnce).to.be.true;
 
         // making sure the correct uri was constructed
-        expect(data.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/sending-domains/test');
+        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/sending-domains/test');
 
         SparkPost.prototype.get.restore(); // restoring function
-        scope.done();
         done();
       });
     });
@@ -73,10 +72,9 @@ describe('Sending Domains Library', function() {
         expect(requestSpy.calledOnce).to.be.true;
 
         // making sure the correct uri was constructed
-        expect(data.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/sending-domains');
+        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/sending-domains');
 
         SparkPost.prototype.get.restore(); // restoring function
-        scope.done();
         done();
       });
     });
@@ -99,10 +97,9 @@ describe('Sending Domains Library', function() {
         expect(requestSpy.calledOnce).to.be.true;
 
         // making sure the correct uri was constructed
-        expect(data.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/sending-domains');
+        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/sending-domains');
 
         SparkPost.prototype.post.restore(); // restoring function
-        scope.done();
         done();
       });
     });
@@ -125,10 +122,9 @@ describe('Sending Domains Library', function() {
         expect(requestSpy.calledOnce).to.be.true;
 
         // making sure the correct uri was constructed
-        expect(data.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/sending-domains/SampleDomain');
+        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/sending-domains/SampleDomain');
 
         SparkPost.prototype.put.restore(); // restoring function
-        scope.done();
         done();
       });
     });
@@ -146,7 +142,6 @@ describe('Sending Domains Library', function() {
 
     afterEach(function() {
       SparkPost.prototype.post.restore(); // restoring function
-      scope.done();
     });
 
     it('should call client post method with the appropriate uri', function(done) {
@@ -156,7 +151,7 @@ describe('Sending Domains Library', function() {
         expect(requestSpy.calledOnce).to.be.true;
 
         // making sure the correct uri was constructed
-        expect(data.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/sending-domains/SampleDomain/verify');
+        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/sending-domains/SampleDomain/verify');
         done();
       });
     });
@@ -171,7 +166,7 @@ describe('Sending Domains Library', function() {
         expect(requestSpy.calledOnce).to.be.true;
 
         // making sure the correct uri was constructed
-        expect(data.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/sending-domains/SampleDomain/verify');
+        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/sending-domains/SampleDomain/verify');
         done();
       });
     });
@@ -186,7 +181,7 @@ describe('Sending Domains Library', function() {
         expect(requestSpy.calledOnce).to.be.true;
 
         // making sure the correct uri was constructed
-        expect(data.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/sending-domains/SampleDomain/verify');
+        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/sending-domains/SampleDomain/verify');
         done();
       });
     });

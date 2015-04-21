@@ -134,11 +134,32 @@ describe('SparkPost Library', function() {
 
       client.request(options, function(err, data) {
         // making sure original request was GET
-        expect(data.request.method).to.equal('GET');
+        expect(data.res.request.method).to.equal('GET');
 
         // finish async test
         done();
-        scope.done();
+      });
+    });
+
+    it('should return an error when the request fails', function(done) {
+      // simulate a timeout
+      var scope = nock('https://api.sparkpost.com')
+        .get('/api/v1/get/test/fail')
+        .delayConnection(500)
+        .reply(200);
+
+      var options = {
+        method: 'GET'
+        , uri: 'get/test/fail'
+        , timeout: 100
+      };
+
+      client.request(options, function(err, data) {
+        expect(data).to.be.null;
+        expect(err).to.be.defined;
+
+        // finish async test
+        done();
       });
     });
 
@@ -153,11 +174,10 @@ describe('SparkPost Library', function() {
       };
 
       client.request(options, function(err, data) {
-        expect(data.request.uri.href).to.equal('https://test.sparkpost.com/test');
+        expect(data.res.request.uri.href).to.equal('https://test.sparkpost.com/test');
 
         // finish async test
         done();
-        scope.done();
       });
     });
 
@@ -173,11 +193,10 @@ describe('SparkPost Library', function() {
       };
 
       client.request(options, function(err, data) {
-        expect(data.request.strictSSL).to.be.false;
+        expect(data.res.request.strictSSL).to.be.false;
 
         // finish async test
         done();
-        scope.done();
       });
     });
   });
@@ -198,10 +217,9 @@ describe('SparkPost Library', function() {
         expect(requestSpy.calledOnce).to.be.true;
 
         // making sure original request was GET
-        expect(data.request.method).to.equal('GET');
+        expect(data.res.request.method).to.equal('GET');
 
         SparkPost.prototype.request.restore(); // restoring function
-        scope.done();
         done();
       });
     });
@@ -230,10 +248,9 @@ describe('SparkPost Library', function() {
         expect(requestSpy.calledOnce).to.be.true;
 
         // making sure original request was POST
-        expect(data.request.method).to.equal('POST');
+        expect(data.res.request.method).to.equal('POST');
 
         SparkPost.prototype.request.restore(); // restoring function
-        scope.done();
         done();
       });
     });
@@ -262,10 +279,9 @@ describe('SparkPost Library', function() {
         expect(requestSpy.calledOnce).to.be.true;
 
         // making sure original request was PUT
-        expect(data.request.method).to.equal('PUT');
+        expect(data.res.request.method).to.equal('PUT');
 
         SparkPost.prototype.request.restore(); // restoring function
-        scope.done();
         done();
       });
     });
@@ -294,10 +310,9 @@ describe('SparkPost Library', function() {
         expect(requestSpy.calledOnce).to.be.true;
 
         // making sure original request was DELETE
-        expect(data.request.method).to.equal('DELETE');
+        expect(data.res.request.method).to.equal('DELETE');
 
         SparkPost.prototype.request.restore(); // restoring function
-        scope.done();
         done();
       });
     });
