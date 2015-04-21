@@ -10,11 +10,11 @@ chai.use(sinonChai);
 describe('Transmissions Library', function() {
   var client, transmission;
 
-  before( function() {
+  before(function() {
     // setting up a client for all tests to use
     var key = '12345678901234567890';
 
-    client = new SparkPost( key );
+    client = new SparkPost(key);
     transmission = require('../../lib/transmission')(client);
   });
 
@@ -32,7 +32,7 @@ describe('Transmissions Library', function() {
 
   describe('all Method', function() {
     it('should call client get method with the appropriate uri', function(done) {
-      var requestSpy = sinon.spy( SparkPost.prototype, 'get' );
+      var requestSpy = sinon.spy(SparkPost.prototype, 'get');
 
       var scope = nock('https://api.sparkpost.com')
         .get('/api/v1/transmissions')
@@ -40,10 +40,10 @@ describe('Transmissions Library', function() {
 
       transmission.all(function(err, data) {
         // need to make sure we called get method
-        expect( requestSpy.calledOnce ).to.be.true;
+        expect(requestSpy.calledOnce).to.be.true;
 
         // making sure the correct uri was constructed
-        expect( data.request.uri.href ).to.equal( 'https://api.sparkpost.com:443/api/v1/transmissions' );
+        expect(data.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/transmissions');
 
         SparkPost.prototype.get.restore(); // restoring function
         scope.done();
@@ -54,7 +54,7 @@ describe('Transmissions Library', function() {
 
   describe('find Method', function() {
     it('should call client get method with the appropriate uri', function(done) {
-      var requestSpy = sinon.spy( SparkPost.prototype, 'get' );
+      var requestSpy = sinon.spy(SparkPost.prototype, 'get');
 
       var scope = nock('https://api.sparkpost.com')
         .get('/api/v1/transmissions/test')
@@ -62,10 +62,10 @@ describe('Transmissions Library', function() {
 
       transmission.find('test', function(err, data) {
         // need to make sure we called get method
-        expect( requestSpy.calledOnce ).to.be.true;
+        expect(requestSpy.calledOnce).to.be.true;
 
         // making sure the correct uri was constructed
-        expect( data.request.uri.href ).to.equal( 'https://api.sparkpost.com:443/api/v1/transmissions/test' );
+        expect(data.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/transmissions/test');
 
         SparkPost.prototype.get.restore(); // restoring function
         scope.done();
@@ -76,7 +76,7 @@ describe('Transmissions Library', function() {
 
   describe('send Method', function() {
     it('should call client post method with the appropriate uri', function(done) {
-      var requestSpy = sinon.spy( SparkPost.prototype, 'post' );
+      var requestSpy = sinon.spy(SparkPost.prototype, 'post');
 
       var scope = nock('https://api.sparkpost.com')
         .post('/api/v1/transmissions')
@@ -86,10 +86,10 @@ describe('Transmissions Library', function() {
 
       transmission.send(transmissionBody, function(err, data) {
         // need to make sure we called get method
-        expect( requestSpy.calledOnce ).to.be.true;
+        expect(requestSpy.calledOnce).to.be.true;
 
         // making sure the correct uri was constructed
-        expect( data.request.uri.href ).to.equal( 'https://api.sparkpost.com:443/api/v1/transmissions' );
+        expect(data.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/transmissions');
 
         SparkPost.prototype.post.restore(); // restoring function
         scope.done();
