@@ -1,7 +1,8 @@
 'use strict';
 
 var key = 'YOURAPIKEY'
-  , sparkpost = require('sparkpost')({ key: key });
+  , SparkPost = require('sparkpost')
+  , client = new SparkPost(key);
 
 var trans = {
   from: 'From Envelope <from@example.com>',
@@ -13,11 +14,11 @@ var trans = {
   trackClicks: true
 };
 
-sparkpost.transmission.send(trans, function(err, res) {
+client.transmission.send(trans, function(err, res) {
   if (err) {
     console.log(err);
   } else {
-    console.log(res);
+    console.log(res.body);
     console.log('Congrats you can use our SDK!');
   }
 });
