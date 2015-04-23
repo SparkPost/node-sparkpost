@@ -35,15 +35,12 @@ describe('Recipient Lists Library', function() {
   });
 
   describe('find Method', function() {
+    it('should call client get method with the appropriate uri', function(done) {
+      var requestSpy = sinon.spy(SparkPost.prototype, 'get');
 
-    beforeEach(function() {
       nock('https://api.sparkpost.com')
         .get('/api/v1/recipient-lists/test')
         .reply(200, { ok: true });
-    });
-
-    it('should call client get method with the appropriate uri', function(done) {
-      var requestSpy = sinon.spy(SparkPost.prototype, 'get');
 
       recipientLists.find('test', function(err, data) {
         // need to make sure we called get method
@@ -62,9 +59,13 @@ describe('Recipient Lists Library', function() {
         show_recipients: true
       };
 
+      nock('https://api.sparkpost.com')
+        .get('/api/v1/recipient-lists/test?show_recipients=true')
+        .reply(200, { ok: true });
+
       recipientLists.find('test', options, function(err, data) {
         // making sure show_recipients was appended to the querystring
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/recipient-lists/test');
+        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/recipient-lists/test?show_recipients=true');
         done();
       });
     });
@@ -99,9 +100,13 @@ describe('Recipient Lists Library', function() {
     });
 
     it('should call client post method with the appropriate uri', function(done) {
-      var requestSpy = sinon.spy(SparkPost.prototype, 'post');
+      var requestSpy = sinon.spy(SparkPost.prototype, 'post')
+        , list = [];
 
-      var list = [];
+
+      nock('https://api.sparkpost.com')
+        .post('/api/v1/recipient-lists')
+        .reply(200, {ok: true});
 
       recipientLists.create(list, function(err, data) {
         // need to make sure we called post method
@@ -121,9 +126,13 @@ describe('Recipient Lists Library', function() {
           num_rcpt_errors: 3
         };
 
+      nock('https://api.sparkpost.com')
+        .post('/api/v1/recipient-lists?num_rcpt_errors=3')
+        .reply(200, {ok: true});
+
       recipientLists.create(list, options, function(err, data) {
         // making sure num_rcpt_errors was appended to the querystring
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/recipient-lists');
+        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/recipient-lists?num_rcpt_errors=3');
 
         done();
       });
