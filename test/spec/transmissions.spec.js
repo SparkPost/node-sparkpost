@@ -10,42 +10,19 @@ chai.use(sinonChai);
 describe('Transmissions Library', function() {
   var client, transmission;
 
-  before(function() {
-    // setting up a client for all tests to use
-    var key = '12345678901234567890';
+  beforeEach(function() {
+    client = {
+      get: sinon.stub().yields(),
+      post: sinon.stub().yields()
+    };
 
-    client = new SparkPost(key);
     transmission = require('../../lib/transmission')(client);
-  });
-
-  it('should expose a public all method', function() {
-    expect(transmission.all).to.be.a.function;
-  });
-
-  it('should expose a public find method', function() {
-    expect(transmission.find).to.be.a.function;
-  });
-
-  it('should expose a public send method', function() {
-    expect(transmission.send).to.be.a.function;
   });
 
   describe('all Method', function() {
     it('should call client get method with the appropriate uri', function(done) {
-      var requestSpy = sinon.spy(SparkPost.prototype, 'get');
-
-      var scope = nock('https://api.sparkpost.com')
-        .get('/api/v1/transmissions')
-        .reply(200, { ok: true });
-
-      transmission.all(function(err, data) {
-        // need to make sure we called get method
-        expect(requestSpy.calledOnce).to.be.true;
-
-        // making sure the correct uri was constructed
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/transmissions');
-
-        SparkPost.prototype.get.restore(); // restoring function
+      transmission.all(function() {
+        expect(client.get.firstCall.args[0]).to.deep.equal({uri:'transmissions'});
         done();
       });
     });
@@ -53,20 +30,24 @@ describe('Transmissions Library', function() {
 
   describe('find Method', function() {
     it('should call client get method with the appropriate uri', function(done) {
-      var requestSpy = sinon.spy(SparkPost.prototype, 'get');
+      transmission.find('test', function() {
+        expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'transmissions/test'});
+        done();
+      });
+    });
 
-      var scope = nock('https://api.sparkpost.com')
-        .get('/api/v1/transmissions/test')
-        .reply(200, { ok: true });
+    it('should throw an error if transmissionID is null', function(done) {
+      transmission.find(null, function(err) {
+        expect(err.message).to.equal('transmissionID is required');
+        expect(client.get).not.to.have.been.called;
+        done();
+      });
+    });
 
-      transmission.find('test', function(err, data) {
-        // need to make sure we called get method
-        expect(requestSpy.calledOnce).to.be.true;
-
-        // making sure the correct uri was constructed
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/transmissions/test');
-
-        SparkPost.prototype.get.restore(); // restoring function
+    it('should throw an error if transmissionID is missing', function(done) {
+      transmission.find(function(err) {
+        expect(err.message).to.equal('transmissionID is required');
+        expect(client.get).not.to.have.been.called;
         done();
       });
     });
@@ -74,204 +55,81 @@ describe('Transmissions Library', function() {
 
   describe('send Method', function() {
     it('should call client post method with the appropriate uri', function(done) {
-      var requestSpy = sinon.spy(SparkPost.prototype, 'post');
-
-      var scope = nock('https://api.sparkpost.com')
-        .post('/api/v1/transmissions')
-        .reply(200, { ok: true });
-
       var transmissionBody = {};
 
-      transmission.send(transmissionBody, function(err, data) {
-        // need to make sure we called get method
-        expect(requestSpy.calledOnce).to.be.true;
-
-        // making sure the correct uri was constructed
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/transmissions');
-
-        SparkPost.prototype.post.restore(); // restoring function
+      transmission.send(transmissionBody, function() {
+        expect(client.post.firstCall.args[0].uri).to.equal('transmissions');
         done();
       });
     });
-  });
 
-  describe('toApiFormat Helper Method', function() {
-    var sendSpy, scope;
-
-    beforeEach(function() {
-      sendSpy = sinon.spy(SparkPost.prototype, 'post');
-      scope = nock('https://api.sparkpost.com')
-        .post('/api/v1/transmissions')
-        .reply(200, { ok: true });
-    });
-
-    afterEach(function() {
-      SparkPost.prototype.post.restore(); // restoring function
-    });
-
-    it('should default the return path for sparkpost users', function() {
-      transmission.send({}, function(err, res) {
-        expect(sendSpy.args[0][0].json.return_path).to.equal('default@sparkpostmail.com');
+    it('should throw an error if transmissionBody is null', function(done) {
+      transmission.send(null, function(err) {
+        expect(err.message).to.equal('transmissionBody is required');
+        expect(client.post).not.to.have.been.called;
+        done();
       });
     });
 
-    it('should allow on prem users to override the return path', function() {
-      transmission.send({returnPath: 'sketchy@weird-domain.com'}, function(err, res) {
-        expect(sendSpy.args[0][0].json.return_path).to.equal('sketchy@weird-domain.com');
+    it('should throw an error if transmissionBody is missing', function(done) {
+      transmission.send(function(err) {
+        expect(err.message).to.equal('transmissionBody is required');
+        expect(client.post).not.to.have.been.called;
+        done();
       });
     });
 
-    it('should default open and click tracking to be undefined', function() {
-      transmission.send({}, function(err, res) {
-        expect(sendSpy.args[0][0].json.options.open_tracking).to.be.undefined;
-        expect(sendSpy.args[0][0].json.options.click_tracking).to.be.undefined;
-      });
-    });
-
-    it('should allow a user to set open/click tracking', function() {
-      transmission.send({trackOpens: false, trackClicks: false}, function(err, res) {
-        expect(sendSpy.args[0][0].json.options.open_tracking).to.be.false;
-        expect(sendSpy.args[0][0].json.options.click_tracking).to.be.false;
-      });
-    });
-
-    it('should allow a user to override useSandbox ', function() {
-      transmission.send({useSandbox: true}, function(err, res) {
-        expect(sendSpy.args[0][0].json.options.sandbox).to.be.true;
-      });
-    });
-
-    it('should default using a published stored template', function() {
-      transmission.send({}, function(err, res) {
-        expect(sendSpy.args[0][0].json.content.use_draft_template).to.be.false;
-      });
-    });
-
-    it('should allow a user to override and use a draft stored template', function() {
-      transmission.send({useDraftTemplate: true}, function(err, res) {
-        expect(sendSpy.args[0][0].json.content.use_draft_template).to.be.true;
-      });
-    });
-  });
-  /*
-
-  describe('fetch Helper Method', function() {
-    it('should construct a URL appropriately based on global config', function() {
-      configuration.setConfig({
-          key: 'fancyKey',
-          host: 'example.com',
-          protocol: 'http',
-          strictSSL: false,
-          port: '123',
-          version: 'v1'
+    describe('toApiFormat Helper Method', function() {
+      it('should default the return path for sparkpost users', function(done) {
+        transmission.send({}, function(err, res) {
+          expect(client.post.firstCall.args[0].json.return_path).to.equal('default@sparkpostmail.com');
+          done();
+        });
       });
 
-      var fetchSpy = sinon.spy(MockRequest, 'get');
-      transmission.all(function(err, res) {
-        expect(fetchSpy.args[0][0].url).to.equal('http://example.com:123/api/v1/transmissions');
+      it('should allow on prem users to override the return path', function(done) {
+        transmission.send({returnPath: 'sketchy@weird-domain.com'}, function() {
+          expect(client.post.firstCall.args[0].json.return_path).to.equal('sketchy@weird-domain.com');
+          done();
+        });
       });
-      MockRequest.restore();
-    });
 
-    it('should handle being wrapped by all appropriately', function() {
-      transmission.all(function(err, res) {
-        expect(err).to.be.null;
-        expect(res.results).to.match(/success/);
+      it('should default open and click tracking to be undefined', function(done) {
+        transmission.send({}, function() {
+          expect(client.post.firstCall.args[0].json.options.open_tracking).to.be.undefined;
+          expect(client.post.firstCall.args[0].json.options.click_tracking).to.be.undefined;
+          done();
+        });
       });
-      MockRequest.restore();
-    });
 
-    it('should handle being wrapped by find appropriately', function() {
-      transmission.find(12, function(err, res) {
-        expect(err).to.be.null;
-        expect(res.results).to.match(/success/);
+      it('should allow a user to set open/click tracking', function(done) {
+        transmission.send({trackOpens: false, trackClicks: false}, function() {
+          expect(client.post.firstCall.args[0].json.options.open_tracking).to.be.false;
+          expect(client.post.firstCall.args[0].json.options.click_tracking).to.be.false;
+          done();
+        });
       });
-      MockRequest.restore();
-    });
 
-    it('should return the appropriate error when the request fails', function() {
-      MockRequest.error = 'test';
-      transmission.find(12, function(err, res) {
-        expect(res).to.be.undefined;
-        expect(err).to.match(/Unable to contact Transmissions API: test/);
+      it('should allow a user to override useSandbox ', function(done) {
+        transmission.send({useSandbox: true}, function() {
+          expect(client.post.firstCall.args[0].json.options.sandbox).to.be.true;
+          done();
+        });
       });
-      MockRequest.restore();
-    });
 
-    it('should return the appropriate error when the request 404s', function() {
-      MockRequest.response.statusCode = 404;
-      transmission.find(12, function(err, res) {
-        expect(res).to.be.undefined;
-        expect(err).to.match(/The specified Transmission ID does not exist/);
+      it('should default using a published stored template', function(done) {
+        transmission.send({}, function() {
+          expect(client.post.firstCall.args[0].json.content.use_draft_template).to.be.false;
+          done();
+        });
       });
-      MockRequest.restore();
-    });
 
-    it('should return the appropriate error when the request does not 200', function() {
-      MockRequest.response.statusCode = 500;
-      transmission.find(12, function(err, res) {
-        expect(res).to.be.undefined;
-        expect(err).to.match(/Received bad response from Transmission API: 500/);
+      it('should allow a user to override and use a draft stored template', function(done) {
+        transmission.send({useDraftTemplate: true}, function() {
+          expect(client.post.firstCall.args[0].json.content.use_draft_template).to.be.true;
+          done();
+        });
       });
-      MockRequest.restore();
     });
   });
-
-  describe('send Method', function() {
-    it('should construct a URL based on global config', function() {
-      configuration.setConfig({
-          key: 'fancyKey',
-          host: 'example.com',
-          protocol: 'http',
-          strictSSL: false,
-          port: '',
-          version: 'v1'
-      });
-
-      var sendSpy = sinon.spy(MockRequest, 'post');
-      transmission.send({}, function(err, res) {
-        expect(sendSpy.args[0][0].url).to.equal('http://example.com/api/v1/transmissions');
-      });
-      MockRequest.restore();
-    });
-
-    it('should return an error when the request fails', function() {
-      MockRequest.error = 'test';
-      transmission.send({}, function(err, res) {
-        expect(res).to.be.undefined;
-        expect(err).to.match(/test/);
-      });
-      MockRequest.restore();
-    });
-
-    it('should return a generic error when we get an ill-formed response from the API', function() {
-      MockRequest.response = {}; // no body
-
-      transmission.send({}, function(err, res) {
-        expect(res).to.be.undefined;
-        expect(err).to.match(/Unexpected error occurred while trying to send transmission/);
-      });
-
-      MockRequest.restore();
-    });
-
-
-    it('should return an error if the status code is anything other than 200', function() {
-      MockRequest.response.statusCode = 500;
-      MockRequest.response.body.errors[0] = 'first error';
-      transmission.send({}, function(err, res) {
-        expect(err[0]).to.equal('first error');
-        expect(res).to.be.undefined;
-      });
-      MockRequest.restore();
-    });
-
-    it('should return a body on a successful request', function() {
-      transmission.send({}, function(err, res) {
-        expect(err).to.be.null;
-        expect(res.results).to.match(/success/);
-      });
-      MockRequest.restore();
-    });
-  });*/
 });
