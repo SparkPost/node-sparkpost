@@ -2,7 +2,7 @@
 
 var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
-  , client = new SparkPost(key);
+  , client = new SparkPost({key: key});
 
 var trans = {
   template: 'my-template',
