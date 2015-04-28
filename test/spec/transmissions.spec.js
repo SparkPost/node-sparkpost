@@ -1,9 +1,7 @@
 var chai = require('chai')
   , expect = chai.expect
   , sinon = require('sinon')
-  , sinonChai = require('sinon-chai')
-  , nock = require('nock')
-  , SparkPost = require('../../lib/index');
+  , sinonChai = require('sinon-chai');
 
 chai.use(sinonChai);
 
