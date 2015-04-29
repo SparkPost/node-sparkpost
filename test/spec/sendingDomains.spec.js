@@ -1,80 +1,52 @@
 var chai = require('chai')
   , expect = chai.expect
   , sinon = require('sinon')
-  , sinonChai = require('sinon-chai')
-  , nock = require('nock')
-  , SparkPost = require('../../lib/index');
+  , sinonChai = require('sinon-chai');
 
 chai.use(sinonChai);
 
 describe('Sending Domains Library', function() {
   var client, sendingDomains;
 
-  before(function() {
-    // setting up a client for all tests to use
-    var key = '12345678901234567890';
+  beforeEach(function() {
+    client = {
+      get: sinon.stub().yields(),
+      post: sinon.stub().yields(),
+      put: sinon.stub().yields()
+    };
 
-    client = new SparkPost(key);
     sendingDomains = require('../../lib/sendingDomains')(client);
   });
 
-  it('should expose a public all method', function() {
-    expect(sendingDomains.all).to.be.a.function;
-  });
-
-  it('should expose a public find method', function() {
-    expect(sendingDomains.find).to.be.a.function;
-  });
-
-  it('should expose a public create method', function() {
-    expect(sendingDomains.create).to.be.a.function;
-  });
-
-  it('should expose a public update method', function() {
-    expect(sendingDomains.update).to.be.a.function;
-  });
-
-  it('should expose a public verify method', function() {
-    expect(sendingDomains.verify).to.be.a.function;
-  });
-
-  describe('find Method', function() {
+  describe('all Method', function() {
     it('should call client get method with the appropriate uri', function(done) {
-      var requestSpy = sinon.spy(SparkPost.prototype, 'get');
-
-      var scope = nock('https://api.sparkpost.com')
-        .get('/api/v1/sending-domains/test')
-        .reply(200, { ok: true });
-
-      sendingDomains.find('test', function(err, data) {
-        // need to make sure we called get method
-        expect(requestSpy.calledOnce).to.be.true;
-
-        // making sure the correct uri was constructed
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/sending-domains/test');
-
-        SparkPost.prototype.get.restore(); // restoring function
+      sendingDomains.all(function() {
+        expect(client.get.firstCall.args[0]).to.deep.equal({uri:'sending-domains'});
         done();
       });
     });
   });
 
-  describe('all Method', function() {
+  describe('find Method', function() {
     it('should call client get method with the appropriate uri', function(done) {
-      var requestSpy = sinon.spy(SparkPost.prototype, 'get');
+      sendingDomains.find('test', function() {
+        expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'sending-domains/test'});
+        done();
+      });
+    });
 
-      var scope = nock('https://api.sparkpost.com')
-        .get('/api/v1/sending-domains')
-        .reply(200, { ok: true });
+    it('should throw an error if domainName is null', function(done) {
+      sendingDomains.find(null, function(err) {
+        expect(err.message).to.equal('domainName is required');
+        expect(client.get).not.to.have.been.called;
+        done();
+      });
+    });
 
-      sendingDomains.all(function(err, data) {
-        // need to make sure we called get method
-        expect(requestSpy.calledOnce).to.be.true;
-
-        // making sure the correct uri was constructed
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/sending-domains');
-
-        SparkPost.prototype.get.restore(); // restoring function
+    it('should throw an error if domainName is missing', function(done) {
+      sendingDomains.find(function(err) {
+        expect(err.message).to.equal('domainName is required');
+        expect(client.get).not.to.have.been.called;
         done();
       });
     });
@@ -82,24 +54,36 @@ describe('Sending Domains Library', function() {
 
   describe('create Method', function() {
     it('should call client post method with the appropriate uri', function(done) {
-      var requestSpy = sinon.spy(SparkPost.prototype, 'post');
-
-      var scope = nock('https://api.sparkpost.com')
-        .post('/api/v1/sending-domains')
-        .reply(200, { ok: true });
-
       var domainBody = {
-        domainName: "SampleDomain"
+        domainName: "test"
       };
 
       sendingDomains.create(domainBody, function(err, data) {
-        // need to make sure we called post method
-        expect(requestSpy.calledOnce).to.be.true;
+        expect(client.post.firstCall.args[0].uri).to.equal('sending-domains');
+        done();
+      });
+    });
 
-        // making sure the correct uri was constructed
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/sending-domains');
+    it('should throw an error if domainBody is null', function(done) {
+      sendingDomains.create(null, function(err) {
+        expect(err.message).to.equal('domainBody is required');
+        expect(client.post).not.to.have.been.called;
+        done();
+      });
+    });
 
-        SparkPost.prototype.post.restore(); // restoring function
+    it('should throw an error if domainBody is missing', function(done) {
+      sendingDomains.create(function(err) {
+        expect(err.message).to.equal('domainBody is required');
+        expect(client.post).not.to.have.been.called;
+        done();
+      });
+    });
+
+    it('should throw an error if domainName is missing from domainBody', function(done) {
+      sendingDomains.create({}, function(err){
+        expect(err.message).to.equal('domainName is required in the domainBody');
+        expect(client.post).not.to.have.been.called;
         done();
       });
     });
@@ -107,81 +91,114 @@ describe('Sending Domains Library', function() {
 
   describe('update Method', function() {
     it('should call client put method with the appropriate uri', function(done) {
-      var requestSpy = sinon.spy(SparkPost.prototype, 'put');
-
-      var scope = nock('https://api.sparkpost.com')
-        .put('/api/v1/sending-domains/SampleDomain')
-        .reply(200, { ok: true });
-
       var domainBody = {
-        domainName: "SampleDomain"
+        domainName: "test"
       };
 
       sendingDomains.update(domainBody, function(err, data) {
-        // need to make sure we called put method
-        expect(requestSpy.calledOnce).to.be.true;
+        expect(client.put.firstCall.args[0].uri).to.equal('sending-domains/test');
+        done();
+      });
+    });
 
-        // making sure the correct uri was constructed
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/sending-domains/SampleDomain');
+    it('should throw an error if domainBody is null', function(done) {
+      sendingDomains.update(null, function(err) {
+        expect(err.message).to.equal('domainBody is required');
+        expect(client.put).not.to.have.been.called;
+        done();
+      });
+    });
 
-        SparkPost.prototype.put.restore(); // restoring function
+    it('should throw an error if domainBody is missing', function(done) {
+      sendingDomains.update(function(err) {
+        expect(err.message).to.equal('domainBody is required');
+        expect(client.put).not.to.have.been.called;
+        done();
+      });
+    });
+
+    it('should throw an error if domainName is missing from domainBody', function(done) {
+      sendingDomains.update({}, function(err){
+        expect(err.message).to.equal('domainName is required in the domainBody');
+        expect(client.put).not.to.have.been.called;
         done();
       });
     });
   });
 
   describe('verify Method', function() {
-    var requestSpy, scope;
-
-    beforeEach(function() {
-      requestSpy = sinon.spy(SparkPost.prototype, 'post');
-      scope = nock('https://api.sparkpost.com')
-        .post('/api/v1/sending-domains/SampleDomain/verify')
-        .reply(200, { ok: true });
-    });
-
-    afterEach(function() {
-      SparkPost.prototype.post.restore(); // restoring function
-    });
-
     it('should call client post method with the appropriate uri', function(done) {
-
-      sendingDomains.verify('SampleDomain', function(err, data) {
-        // need to make sure we called get method
-        expect(requestSpy.calledOnce).to.be.true;
-
-        // making sure the correct uri was constructed
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/sending-domains/SampleDomain/verify');
+      sendingDomains.verify('test', function() {
+        expect(client.post.firstCall.args[0].uri).to.equal('sending-domains/test/verify');
         done();
       });
     });
 
-    it('should allow dkim_verify to be overridden', function(done) {
-      var options = {
-        dkim_verify: false
-      };
-
-      sendingDomains.verify('SampleDomain', options, function(err, data) {
-        // need to make sure we called get method
-        expect(requestSpy.calledOnce).to.be.true;
-
-        // making sure the correct uri was constructed
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/sending-domains/SampleDomain/verify');
+    it('should throw an error if domainName is null', function(done) {
+      sendingDomains.verify(null, function(err) {
+        expect(err.message).to.equal('domainName is required');
+        expect(client.post).not.to.have.been.called;
         done();
       });
     });
 
-    it('should allow spf_verify to be overridden', function(done) {
+    it('should throw an error if domainName is missing', function(done) {
+      sendingDomains.verify(function(err) {
+        expect(err.message).to.equal('domainName is required');
+        expect(client.post).not.to.have.been.called;
+        done();
+      });
+    });
+
+    it('should default verifyDKIM and verifySPF to be true', function(done) {
+      sendingDomains.verify('test', {}, function() {
+        expect(client.post.firstCall.args[0].json.dkim_verify).to.be.true;
+        expect(client.post.firstCall.args[0].json.spf_verify).to.be.true;
+        done();
+      });
+    });
+
+    it('should allow a user to set verifyDKIM and verifySPF', function(done){
       var options = {
-        spf_verify: false
+        verifyDKIM: false,
+        verifySPF: false
       };
 
-      sendingDomains.verify('SampleDomain', options, function(err, data) {
-        // need to make sure we called get method
-        expect(requestSpy.calledOnce).to.be.true;
+      sendingDomains.verify('test', options, function() {
+        expect(client.post.firstCall.args[0].json.dkim_verify).to.be.false;
+        expect(client.post.firstCall.args[0].json.spf_verify).to.be.false;
+        done();
+      });
+    });
+  });
 
-        // making sure the correct uri was constructed
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/sending-domains/SampleDomain/verify');
+  describe('toApiFormat Helper Method', function() {
+    it('should format domainName as domain', function(done) {
+      var domainBody = {
+        domainName: 'test'
+      };
+
+      sendingDomains.create(domainBody, function() {
+        expect(client.post.firstCall.args[0].json.domain).to.equal(domainBody.domainName);
+        done();
+      });
+    });
+
+    it('should group DKIM fields in an object', function(done) {
+      var domainBody = {
+        domainName: 'test'
+        , privateKey: 'TEST_PRIVATE_KEY'
+        , publicKey: 'TEST_PUBLIC_KEY'
+        , selector: 'TEST_SELECTOR'
+      };
+
+      sendingDomains.create(domainBody, function() {
+        expect(client.post.firstCall.args[0].json.dkim).to.deep.equal({
+          'private': domainBody.privateKey
+          , 'public': domainBody.publicKey
+          , selector: domainBody.selector
+          , headers: domainBody.headers
+        });
         done();
       });
     });
