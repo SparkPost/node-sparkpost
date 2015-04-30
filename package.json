@@ -2,7 +2,7 @@
   "name": "sparkpost",
   "version": "0.1.6",
   "description": "A Node.js wrapper for interfacing with your favorite SparkPost APIs",
-  "main": "./lib/index.js",
+  "main": "./lib/sparkpost.js",
   "scripts": {
     "test": "grunt"
   },
