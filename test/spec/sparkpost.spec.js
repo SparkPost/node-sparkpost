@@ -3,7 +3,7 @@ var chai = require('chai')
   , sinon = require('sinon')
   , sinonChai = require('sinon-chai')
   , nock = require('nock')
-  , SparkPost = require('../../lib/index');
+  , SparkPost = require('../../lib/sparkpost');
 
 chai.use(sinonChai);
 
@@ -64,43 +64,6 @@ describe('SparkPost Library', function() {
     expect(client.origin).to.equal('https://dev.sparkpost.com');
   });
 
-  it('should allow strictSSL to be overridden', function () {
-    var key = '12345678901234567890';
-    var options = {};
-
-    // testing default initialization
-    var client = new SparkPost(key, options);
-
-    expect(client.strictSSL).to.be.true;
-
-    options.strictSSL = false;
-
-    // testing strictSSL override
-    client = new SparkPost(options);
-
-    expect(client.strictSSL).to.be.false;
-  });
-
-  it('should have request on prototype', function() {
-    expect(SparkPost.prototype.request).to.be.a('function');
-  });
-
-  it('should have get on prototype', function() {
-    expect(SparkPost.prototype.get).to.be.a('function');
-  });
-
-  it('should have post on prototype', function() {
-    expect(SparkPost.prototype.post).to.be.a('function');
-  });
-
-  it('should have put on prototype', function() {
-    expect(SparkPost.prototype.put).to.be.a('function');
-  });
-
-  it('should have delete on prototype', function() {
-    expect(SparkPost.prototype.delete).to.be.a('function');
-  });
-
   describe('request method', function() {
     var client;
 
@@ -123,7 +86,7 @@ describe('SparkPost Library', function() {
     });
 
     it('should make a request to the API', function(done) {
-      var scope = nock('https://api.sparkpost.com')
+      nock('https://api.sparkpost.com')
         .get('/api/v1/get/test')
         .reply(200, { ok: true });
 
@@ -143,7 +106,7 @@ describe('SparkPost Library', function() {
 
     it('should return an error when the request fails', function(done) {
       // simulate a timeout
-      var scope = nock('https://api.sparkpost.com')
+      nock('https://api.sparkpost.com')
         .get('/api/v1/get/test/fail')
         .delayConnection(500)
         .reply(200);
@@ -164,7 +127,7 @@ describe('SparkPost Library', function() {
     });
 
     it('should use a full URI if provided', function(done) {
-      var scope = nock('https://test.sparkpost.com')
+      nock('https://test.sparkpost.com')
         .get('/test')
         .reply(200, { ok: true });
 
@@ -180,25 +143,6 @@ describe('SparkPost Library', function() {
         done();
       });
     });
-
-    it('should allow strictSSL to be overridden per request', function(done) {
-      var scope = nock('https://api.sparkpost.com')
-        .get('/api/v1/get/test')
-        .reply(200, { ok: true });
-
-      var options = {
-        method: 'GET'
-        , uri: 'get/test'
-        , strictSSL: false
-      };
-
-      client.request(options, function(err, data) {
-        expect(data.res.request.strictSSL).to.be.false;
-
-        // finish async test
-        done();
-      });
-    });
   });
 
   describe('get method', function() {
@@ -208,7 +152,7 @@ describe('SparkPost Library', function() {
       var key = '12345678901234567890';
       var client = new SparkPost(key);
 
-      var scope = nock('https://api.sparkpost.com')
+      nock('https://api.sparkpost.com')
         .get('/api/v1/get/test')
         .reply(200, { ok: true });
 
@@ -232,7 +176,7 @@ describe('SparkPost Library', function() {
       var key = '12345678901234567890';
       var client = new SparkPost(key);
 
-      var scope = nock('https://api.sparkpost.com')
+      nock('https://api.sparkpost.com')
         .post('/api/v1/post/test')
         .reply(200, { ok: true });
 
@@ -263,7 +207,7 @@ describe('SparkPost Library', function() {
       var key = '12345678901234567890';
       var client = new SparkPost(key);
 
-      var scope = nock('https://api.sparkpost.com')
+      nock('https://api.sparkpost.com')
         .put('/api/v1/put/test')
         .reply(200, { ok: true });
 
@@ -294,7 +238,7 @@ describe('SparkPost Library', function() {
       var key = '12345678901234567890';
       var client = new SparkPost(key);
 
-      var scope = nock('https://api.sparkpost.com')
+      nock('https://api.sparkpost.com')
         .delete('/api/v1/delete/test')
         .reply(200, { ok: true });
 
