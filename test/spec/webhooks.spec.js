@@ -1,67 +1,28 @@
 var chai = require('chai')
   , expect = chai.expect
   , sinon = require('sinon')
-  , sinonChai = require('sinon-chai')
-  , nock = require('nock')
-  , SparkPost = require('../../lib/index');
+  , sinonChai = require('sinon-chai');
 
 chai.use(sinonChai);
 
 describe('Webhooks Library', function() {
   var client, webhooks;
 
-  before(function () {
-    // setting up a client for all tests to use
-    var key = '12345678901234567890';
+  beforeEach(function() {
+    client = {
+      get: sinon.stub().yields(),
+      post: sinon.stub().yields(),
+      put: sinon.stub().yields(),
+      'delete': sinon.stub().yields()
+    };
 
-    client = new SparkPost(key);
     webhooks = require('../../lib/webhooks')(client);
-  });
-
-  it('should expose a public all method', function () {
-    expect(webhooks.all).to.be.a.function;
-  });
-
-  it('should expose a public describe method', function () {
-    expect(webhooks.describe).to.be.a.function;
-  });
-
-  it('should expose a public create method', function () {
-    expect(webhooks.create).to.be.a.function;
-  });
-
-  it('should expose a public update method', function () {
-    expect(webhooks.update).to.be.a.function;
-  });
-
-  it('should expose a public delete method', function () {
-    expect(webhooks['delete']).to.be.a.function;
-  });
-
-  it('should expose a public validate method', function () {
-    expect(webhooks.validate).to.be.a.function;
-  });
-
-  it('should expose a public getBatchStatus method', function () {
-    expect(webhooks.getBatchStatus).to.be.a.function;
   });
 
   describe('all Method', function() {
     it('should call client get method with the appropriate uri', function(done) {
-      var requestSpy = sinon.spy(SparkPost.prototype, 'get');
-
-      nock('https://api.sparkpost.com')
-        .get('/api/v1/webhooks')
-        .reply(200, { ok: true });
-
       webhooks.all(function(err, data) {
-        // need to make sure we called get method
-        expect(requestSpy.calledOnce).to.be.true;
-
-        // making sure the correct uri was constructed
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/webhooks');
-
-        SparkPost.prototype.get.restore(); // restoring function
+        expect(client.get.firstCall.args[0].uri).to.equal('webhooks');
         done();
       });
     });
@@ -71,13 +32,8 @@ describe('Webhooks Library', function() {
         timezone: 'America/New_York'
       };
 
-      nock('https://api.sparkpost.com')
-        .get('/api/v1/webhooks?timezone=America%2FNew_York')
-        .reply(200, { ok: true });
-
       webhooks.all(options, function(err, data) {
-        // making sure timezone was appended to the querystring
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/webhooks?timezone=America%2FNew_York');
+        expect(client.get.firstCall.args[0].qs).to.deep.equal({timezone: 'America/New_York'});
         done();
       });
     });
@@ -85,36 +41,32 @@ describe('Webhooks Library', function() {
 
   describe('describe Method', function() {
     it('should call client get method with the appropriate uri', function(done) {
-      var requestSpy = sinon.spy(SparkPost.prototype, 'get');
+      var options = {
+        id: 'test'
+      };
 
-      nock('https://api.sparkpost.com')
-        .get('/api/v1/webhooks/test')
-        .reply(200, { ok: true });
+      webhooks.describe(options, function(err, data) {
+        expect(client.get.firstCall.args[0].uri).to.equal('webhooks/test');
+        done();
+      });
+    });
 
-      webhooks.describe('test', function(err, data) {
-        // need to make sure we called get method
-        expect(requestSpy.calledOnce).to.be.true;
-
-        // making sure the correct uri was constructed
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/webhooks/test');
-
-        SparkPost.prototype.get.restore(); // restoring function
+    it('should throw an error if id is missing', function(done) {
+      webhooks.describe(null, function(err) {
+        expect(err.message).to.equal('id is required');
+        expect(client.get).not.to.have.been.called;
         done();
       });
     });
 
     it('should allow timezone to be set in options', function(done) {
       var options = {
+        id: 'test',
         timezone: 'America/New_York'
       };
 
-      nock('https://api.sparkpost.com')
-        .get('/api/v1/webhooks/test?timezone=America%2FNew_York')
-        .reply(200, { ok: true });
-
-      webhooks.describe('test', options, function(err, data) {
-        // making sure timezone was appended to the querystring
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/webhooks/test?timezone=America%2FNew_York');
+      webhooks.describe(options, function(err, data) {
+        expect(client.get.firstCall.args[0].qs).to.deep.equal({timezone: 'America/New_York'});
         done();
       });
     });
@@ -122,20 +74,24 @@ describe('Webhooks Library', function() {
 
   describe('create Method', function() {
     it('should call client post method with the appropriate uri', function(done) {
-      var requestSpy = sinon.spy(SparkPost.prototype, 'post');
-
-      nock('https://api.sparkpost.com')
-        .post('/api/v1/webhooks')
-        .reply(200, { ok: true });
-
       webhooks.create({}, function(err, data) {
-        // need to make sure we called post method
-        expect(requestSpy.calledOnce).to.be.true;
+        expect(client.post.firstCall.args[0].uri).to.equal('webhooks');
+        done();
+      });
+    });
 
-        // making sure the correct uri was constructed
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/webhooks');
+    it('should throw an error if webhook is null', function(done) {
+      webhooks.create(null, function(err) {
+        expect(err.message).to.equal('webhook object is required');
+        expect(client.post).not.to.have.been.called;
+        done();
+      });
+    });
 
-        SparkPost.prototype.post.restore(); // restoring function
+    it('should throw an error if webhook is missing', function(done) {
+      webhooks.create(function(err) {
+        expect(err.message).to.equal('webhook object is required');
+        expect(client.post).not.to.have.been.called;
         done();
       });
     });
@@ -143,24 +99,28 @@ describe('Webhooks Library', function() {
 
   describe('update Method', function() {
     it('should call client put method with the appropriate uri', function(done) {
-      var requestSpy = sinon.spy(SparkPost.prototype, 'put');
-
-      nock('https://api.sparkpost.com')
-        .put('/api/v1/webhooks/test')
-        .reply(200, { ok: true });
-
       var webhook = {
         id: "test"
       };
 
       webhooks.update(webhook, function(err, data) {
-        // need to make sure we called put method
-        expect(requestSpy.calledOnce).to.be.true;
+        expect(client.put.firstCall.args[0].uri).to.equal('webhooks/test');
+        done();
+      });
+    });
 
-        // making sure the correct uri was constructed
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/webhooks/test');
+    it('should throw an error if webhook is null', function(done) {
+      webhooks.update(null, function(err) {
+        expect(err.message).to.equal('webhook object is required');
+        expect(client.put).not.to.have.been.called;
+        done();
+      });
+    });
 
-        SparkPost.prototype.put.restore(); // restoring function
+    it('should throw an error if webhook is missing', function(done) {
+      webhooks.update(function(err) {
+        expect(err.message).to.equal('webhook object is required');
+        expect(client.put).not.to.have.been.called;
         done();
       });
     });
@@ -168,41 +128,60 @@ describe('Webhooks Library', function() {
 
   describe('delete Method', function() {
     it('should call client delete method with the appropriate uri', function(done) {
-      var requestSpy = sinon.spy(SparkPost.prototype, 'delete');
+      webhooks['delete']('test', function(err, data) {
+        expect(client['delete'].firstCall.args[0].uri).to.equal('webhooks/test');
+        done();
+      });
+    });
 
-      nock('https://api.sparkpost.com')
-        .delete('/api/v1/webhooks/test')
-        .reply(200);
+    it('should throw an error if id is null', function(done) {
+      webhooks['delete'](null, function(err) {
+        expect(err.message).to.equal('id is required');
+        expect(client['delete']).not.to.have.been.called;
+        done();
+      });
+    });
 
-      webhooks.delete('test', function(err, data) {
-        // need to make sure we called put method
-        expect(requestSpy.calledOnce).to.be.true;
-
-        // making sure the correct uri was constructed
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/webhooks/test');
-
-        SparkPost.prototype['delete'].restore(); // restoring function
+    it('should throw an error if id is missing', function(done) {
+      webhooks['delete'](function(err) {
+        expect(err.message).to.equal('id is required');
+        expect(client['delete']).not.to.have.been.called;
         done();
       });
     });
   });
 
   describe('validate Method', function() {
-    it('should call client get method with the appropriate uri', function(done) {
-      var requestSpy = sinon.spy(SparkPost.prototype, 'post');
+    it('should call client post method with the appropriate uri', function(done) {
+      var options = {
+        id: 'test',
+        message: {
+          msys: {}
+        }
+      };
 
-      nock('https://api.sparkpost.com')
-        .post('/api/v1/webhooks/test/validate')
-        .reply(200, { ok: true });
+      webhooks.validate(options, function(err, data) {
+        expect(client.post.firstCall.args[0].uri).to.equal('webhooks/test/validate');
+        done();
+      });
+    });
 
-      webhooks.validate('test', {}, function(err, data) {
-        // need to make sure we called get method
-        expect(requestSpy.calledOnce).to.be.true;
+    it('should throw an error if id is missing', function(done) {
+      webhooks.validate(null, function (err) {
+        expect(err.message).to.equal('id is required');
+        expect(client.post).not.to.have.been.called;
+        done();
+      });
+    });
 
-        // making sure the correct uri was constructed
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/webhooks/test/validate');
+    it('should throw an error if message is missing', function(done) {
+      var options = {
+        id: 'test'
+      };
 
-        SparkPost.prototype.post.restore(); // restoring function
+      webhooks.validate(options, function (err) {
+        expect(err.message).to.equal('message is required');
+        expect(client.post).not.to.have.been.called;
         done();
       });
     });
@@ -210,36 +189,32 @@ describe('Webhooks Library', function() {
 
   describe('getBatchStatus Method', function() {
     it('should call client get method with the appropriate uri', function(done) {
-      var requestSpy = sinon.spy(SparkPost.prototype, 'get');
+      var options = {
+        id: 'test'
+      };
 
-      nock('https://api.sparkpost.com')
-        .get('/api/v1/webhooks/test/batch-status')
-        .reply(200, { ok: true });
+      webhooks.getBatchStatus(options, function(err, data) {
+        expect(client.get.firstCall.args[0].uri).to.equal('webhooks/test/batch-status');
+        done();
+      });
+    });
 
-      webhooks.getBatchStatus('test', function(err, data) {
-        // need to make sure we called get method
-        expect(requestSpy.calledOnce).to.be.true;
-
-        // making sure the correct uri was constructed
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/webhooks/test/batch-status');
-
-        SparkPost.prototype.get.restore(); // restoring function
+    it('should throw an error if id is missing', function(done) {
+      webhooks.getBatchStatus(null, function (err) {
+        expect(err.message).to.equal('id is required');
+        expect(client.get).not.to.have.been.called;
         done();
       });
     });
 
     it('should allow timezone to be set in options', function(done) {
       var options = {
+        id: 'test',
         timezone: 'America/New_York'
       };
 
-      nock('https://api.sparkpost.com')
-        .get('/api/v1/webhooks/test/batch-status?timezone=America%2FNew_York')
-        .reply(200, { ok: true });
-
-      webhooks.getBatchStatus('test', options, function(err, data) {
-        // making sure timezone was appended to the querystring
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/webhooks/test/batch-status?timezone=America%2FNew_York');
+      webhooks.getBatchStatus(options, function(err, data) {
+        expect(client.get.firstCall.args[0].qs).to.deep.equal({timezone: 'America/New_York'});
         done();
       });
     });
