@@ -1,63 +1,28 @@
 var chai = require('chai')
   , expect = chai.expect
   , sinon = require('sinon')
-  , sinonChai = require('sinon-chai')
-  , nock = require('nock')
-  , SparkPost = require('../../lib/index');
+  , sinonChai = require('sinon-chai');
 
 chai.use(sinonChai);
 
 describe('Templates Library', function() {
   var client, templates;
 
-  before(function () {
-    // setting up a client for all tests to use
-    var key = '12345678901234567890';
+  beforeEach(function() {
+    client = {
+      get: sinon.stub().yields(),
+      post: sinon.stub().yields(),
+      put: sinon.stub().yields(),
+      'delete': sinon.stub().yields()
+    };
 
-    client = new SparkPost(key);
     templates = require('../../lib/templates')(client);
-  });
-
-  it('should expose a public all method', function () {
-    expect(templates.all).to.be.a.function;
-  });
-
-  it('should expose a public find method', function () {
-    expect(templates.find).to.be.a.function;
-  });
-
-  it('should expose a public create method', function () {
-    expect(templates.create).to.be.a.function;
-  });
-
-  it('should expose a public update method', function () {
-    expect(templates.update).to.be.a.function;
-  });
-
-  it('should expose a public delete method', function () {
-    expect(templates['delete']).to.be.a.function;
-  });
-
-  it('should expose a public preview method', function () {
-    expect(templates.preview).to.be.a.function;
   });
 
   describe('all Method', function() {
     it('should call client get method with the appropriate uri', function(done) {
-      var requestSpy = sinon.spy(SparkPost.prototype, 'get');
-
-      nock('https://api.sparkpost.com')
-        .get('/api/v1/templates')
-        .reply(200, { ok: true });
-
       templates.all(function(err, data) {
-        // need to make sure we called get method
-        expect(requestSpy.calledOnce).to.be.true;
-
-        // making sure the correct uri was constructed
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/templates');
-
-        SparkPost.prototype.get.restore(); // restoring function
+        expect(client.get.firstCall.args[0].uri).to.equal('templates');
         done();
       });
     });
@@ -65,36 +30,31 @@ describe('Templates Library', function() {
 
   describe('find Method', function() {
     it('should call client get method with the appropriate uri', function(done) {
-      var requestSpy = sinon.spy(SparkPost.prototype, 'get');
+      var options = {
+        id: 'test'
+      };
+      templates.find(options, function(err, data) {
+        expect(client.get.firstCall.args[0].uri).to.equal('templates/test');
+        done();
+      });
+    });
 
-      nock('https://api.sparkpost.com')
-        .get('/api/v1/templates/test')
-        .reply(200, { ok: true });
-
-      templates.find('test', function(err, data) {
-        // need to make sure we called get method
-        expect(requestSpy.calledOnce).to.be.true;
-
-        // making sure the correct uri was constructed
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/templates/test');
-
-        SparkPost.prototype.get.restore(); // restoring function
+    it('should throw an error if id is missing', function(done) {
+      templates.find(null, function(err) {
+        expect(err.message).to.equal('template id is required');
+        expect(client.get).not.to.have.been.called;
         done();
       });
     });
 
     it('should allow draft to be set in options', function(done) {
       var options = {
+        id: 'test',
         draft: true
       };
 
-      nock('https://api.sparkpost.com')
-        .get('/api/v1/templates/test?draft=true')
-        .reply(200, { ok: true });
-
-      templates.find('test', options, function(err, data) {
-        // making sure show_recipients was appended to the querystring
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/templates/test?draft=true');
+      templates.find(options, function(err, data) {
+        expect(client.get.firstCall.args[0].qs).to.deep.equal({draft: true});
         done();
       });
     });
@@ -102,20 +62,22 @@ describe('Templates Library', function() {
 
   describe('create Method', function() {
     it('should call client post method with the appropriate uri', function(done) {
-      var requestSpy = sinon.spy(SparkPost.prototype, 'post');
+      var options = {
+        template: {
+          id: "test"
+        }
+      };
 
-      nock('https://api.sparkpost.com')
-        .post('/api/v1/templates')
-        .reply(200, { ok: true });
+      templates.create(options, function(err, data) {
+        expect(client.post.firstCall.args[0].uri).to.equal('templates');
+        done();
+      });
+    });
 
-      templates.create({}, function(err, data) {
-        // need to make sure we called post method
-        expect(requestSpy.calledOnce).to.be.true;
-
-        // making sure the correct uri was constructed
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/templates');
-
-        SparkPost.prototype.post.restore(); // restoring function
+    it('should throw an error if id is missing', function(done) {
+      templates.create(null, function(err) {
+        expect(err.message).to.equal('template object is required');
+        expect(client.post).not.to.have.been.called;
         done();
       });
     });
@@ -123,44 +85,36 @@ describe('Templates Library', function() {
 
   describe('update Method', function() {
     it('should call client put method with the appropriate uri', function(done) {
-      var requestSpy = sinon.spy(SparkPost.prototype, 'put');
-
-      nock('https://api.sparkpost.com')
-        .put('/api/v1/templates/test')
-        .reply(200, { ok: true });
-
-      var template = {
-        id: "test"
+      var options = {
+        template: {
+          id: "test"
+        }
       };
 
-      templates.update(template, function(err, data) {
-        // need to make sure we called put method
-        expect(requestSpy.calledOnce).to.be.true;
+      templates.update(options, function(err, data) {
+        expect(client.put.firstCall.args[0].uri).to.equal('templates/test');
+        done();
+      });
+    });
 
-        // making sure the correct uri was constructed
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/templates/test');
-
-        SparkPost.prototype.put.restore(); // restoring function
+    it('should throw an error if id is missing', function(done) {
+      templates.update(null, function(err) {
+        expect(err.message).to.equal('template object is required');
+        expect(client.put).not.to.have.been.called;
         done();
       });
     });
 
     it('should allow update_published to be set in options', function(done) {
       var options = {
-          update_published: true
-        }
-        ,template = {
+        template: {
           id: "test"
-        };
+        },
+        update_published: true
+      };
 
-      nock('https://api.sparkpost.com')
-        .put('/api/v1/templates/test?update_published=true')
-        .reply(200, { ok: true });
-
-      templates.update(template, options, function(err, data) {
-
-        // making sure the correct uri was constructed
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/templates/test?update_published=true');
+      templates.update(options, function(err, data) {
+        expect(client.put.firstCall.args[0].qs).to.deep.equal({update_published: true});
         done();
       });
     });
@@ -168,20 +122,24 @@ describe('Templates Library', function() {
 
   describe('delete Method', function() {
     it('should call client delete method with the appropriate uri', function(done) {
-      var requestSpy = sinon.spy(SparkPost.prototype, 'delete');
+      templates['delete']('test', function(err, data) {
+        expect(client['delete'].firstCall.args[0].uri).to.equal('templates/test');
+        done();
+      });
+    });
 
-      nock('https://api.sparkpost.com')
-        .delete('/api/v1/templates/test')
-        .reply(200);
+    it('should throw an error if id is null', function(done) {
+      templates['delete'](null, function(err) {
+        expect(err.message).to.equal('template id is required');
+        expect(client['delete']).not.to.have.been.called;
+        done();
+      });
+    });
 
-      templates.delete('test', function(err, data) {
-        // need to make sure we called put method
-        expect(requestSpy.calledOnce).to.be.true;
-
-        // making sure the correct uri was constructed
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/templates/test');
-
-        SparkPost.prototype['delete'].restore(); // restoring function
+    it('should throw an error if id is missing', function(done) {
+      templates['delete'](function(err) {
+        expect(err.message).to.equal('template id is required');
+        expect(client['delete']).not.to.have.been.called;
         done();
       });
     });
@@ -189,36 +147,31 @@ describe('Templates Library', function() {
 
   describe('preview Method', function() {
     it('should call client post method with the appropriate uri', function(done) {
-      var requestSpy = sinon.spy(SparkPost.prototype, 'post');
+      var options = {
+        id: 'test'
+      };
+      templates.preview(options, function(err, data) {
+        expect(client.post.firstCall.args[0].uri).to.equal('templates/test/preview');
+        done();
+      });
+    });
 
-      nock('https://api.sparkpost.com')
-        .post('/api/v1/templates/test/preview')
-        .reply(200, { ok: true });
-
-      templates.preview('test', {}, function(err, data) {
-        // need to make sure we called post method
-        expect(requestSpy.calledOnce).to.be.true;
-
-        // making sure the correct uri was constructed
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/templates/test/preview');
-
-        SparkPost.prototype.post.restore(); // restoring function
+    it('should throw an error if id is missing', function(done) {
+      templates.preview(null, function(err) {
+        expect(err.message).to.equal('template id is required');
+        expect(client.post).not.to.have.been.called;
         done();
       });
     });
 
     it('should allow draft to be set in options', function(done) {
       var options = {
+        id: 'test',
         draft: true
       };
 
-      nock('https://api.sparkpost.com')
-        .post('/api/v1/templates/test/preview?draft=true')
-        .reply(200, { ok: true });
-
-      templates.preview('test', {}, options, function(err, data) {
-        // making sure show_recipients was appended to the querystring
-        expect(data.res.request.uri.href).to.equal('https://api.sparkpost.com:443/api/v1/templates/test/preview?draft=true');
+      templates.preview(options, function(err, data) {
+        expect(client.post.firstCall.args[0].qs).to.deep.equal({draft: true});
         done();
       });
     });
