@@ -72,7 +72,7 @@ describe('Recipient Lists Library', function() {
 
     it('should call client post method with the appropriate uri', function(done) {
       var options = {
-        list: test_list
+        recipients: test_list
       };
 
       recipientLists.create(options, function(err, data) {
@@ -83,7 +83,7 @@ describe('Recipient Lists Library', function() {
 
     it('should throw an error if id is missing', function(done) {
       recipientLists.create(null, function(err) {
-        expect(err.message).to.equal('list is required');
+        expect(err.message).to.equal('recipients list is required');
         expect(client.post).not.to.have.been.called;
         done();
       });
@@ -91,7 +91,7 @@ describe('Recipient Lists Library', function() {
 
     it('should allow num_rcpt_errors to be set in options', function(done) {
       var options = {
-        list: test_list,
+        recipients: test_list,
         num_rcpt_errors: 3
       };
 

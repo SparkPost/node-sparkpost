@@ -207,14 +207,14 @@ describe('Webhooks Library', function() {
       });
     });
 
-    it('should allow timezone to be set in options', function(done) {
+    it('should allow limit to be set in options', function(done) {
       var options = {
         id: 'test',
-        timezone: 'America/New_York'
+        limit: 1000
       };
 
       webhooks.getBatchStatus(options, function(err, data) {
-        expect(client.get.firstCall.args[0].qs).to.deep.equal({timezone: 'America/New_York'});
+        expect(client.get.firstCall.args[0].qs).to.deep.equal({limit: 1000});
         done();
       });
     });

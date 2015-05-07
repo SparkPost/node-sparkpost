@@ -1,12 +1,16 @@
 [![Travis CI](https://travis-ci.org/SparkPost/node-sparkpost.svg?branch=master)](https://travis-ci.org/SparkPost/node-sparkpost)
 
-# SparkPost Node.js SDK
+![SparkPost Build by MessageSystems](/docs/sparkpost_logo.png)
+# Node.js SDK
 
-The official node.js binding for your favorite SparkPost APIs!
+The official Node.js binding for your favorite [SparkPost APIs](https://www.sparkpost.com/api)!
 
-Before using this library, you must have a valid API Key.
+## Prerequisites
 
-To get an API Key, please log in to your SparkPost account and generate one in the Settings page.
+Before using this library, you must have:
+
+* A shiny new SparkPost Account, [sign up for a new account](https://app.sparkpost.com/#/sign-up) or [login to SparkPost](https://app.sparkpost.com/)
+* A valid SparkPost API Key. Check out our [Support Center](https://support.sparkpost.com/) for information on how to [create API keys](https://support.sparkpost.com/customer/portal/articles/1933377-create-api-keys)
 
 ## Installation
 
@@ -14,91 +18,91 @@ To get an API Key, please log in to your SparkPost account and generate one in t
 npm install sparkpost
 ```
 
-## Getting Started: Your First Mailing
+## Initialization
+**new SparkPost(apiKey, options)** - Initialization
 
-```javascript
-var SparkPost = require('sparkpost')
-  , client = new SparkPost('YOUR API KEY');
+* `apiKey`
+    * Required: yes (unless key is stored in `SPARKPOST_API_KEY` environment variable)
+    * Type: `String`
+    * a passed in apiKey will take precedence over an environment variable
+* `options.origin` or `options.endpoint`
+    * Required: no
+    * Type: `String`
+    * Default: `https://api.sparkpost.com:443`
+* `options.apiVersion`
+    * Required: no
+    * Type: `String`
+    * Default: `v1`
+* `options.headers`
+    * Required: no
+    * Type: `Object`
+    * set headers that apply to all requests
 
-var trans = {};
+## Methods
+* **request(options, callback)**
+    * `options` - [see request modules options](https://github.com/mikeal/request#requestoptions-callback)
+    * `options.uri` - can either be a full url or a path that is appended to `options.origin` used at initialization ([url.resolve](http://nodejs.org/api/url.html#url_url_resolve_from_to))
+    * `callback` - executed after task is completed. **required**
+      * standard `callback(err, data)`
+      * `err` - any error that occurred
+      * `data.res` - full response from request client
+      * `data.body` - payload from response
+* **get | post | put | delete(options, callback)**
+    * `options` - see request options
+    * `callback` - see request options
+    * Request method will be overwritten and set to the same value as the name of these methods.
 
-// Set some metadata for your email
-trans.campaign = 'first-mailing';
-trans.from = 'you@your-company.com';
-trans.subject = 'First SDK Mailing';
+## Creating a SparkPost Client
 
-// Add some content to your email
-trans.html = '<html><body><h1>Congratulations, {{name}}!</h1><p>You just sent your very first mailing!</p></body></html>';
-trans.text = 'Congratulations, {{name}}!! You just sent your very first mailing!';
-trans.substitutionData = {name: 'YOUR FIRST NAME'};
+Passing in an API key
+```js
+var SparkPost = require('sparkpost');
+var client = new SparkPost('YOUR_API_KEY');
+```
 
-// Pick someone to receive your email
-trans.recipients = [{ address: { name: 'YOUR FULL NAME', email: 'YOUR EMAIL ADDRESS' } }];
+Using an API key stored in an environment variable
+```js
+process.env.SPARKPOST_API_KEY = 'YOUR_API_KEY';
+var SparkPost = require('sparkpost');
+var client = new SparkPost();
+```
 
-// Send it off into the world!
-client.transmission.send(trans, function(err, res) {
-  if (err) {
-    console.log('Whoops! Something went wrong');
+Specifying non-default options
+```js
+var SparkPost = require('sparkpost');
+var options = {
+  endpoint: 'https://dev.sparkpost.com:443'
+};
+var client = new SparkPost('YOUR_API_KEY', options);
+```
+
+## Example
+
+```js
+var options = {
+  uri: 'sendingDomains'
+};
+
+client.get(options, function(err, data) {
+  if(err) {
     console.log(err);
-  } else {
-    console.log('Woohoo! You just sent your first mailing!');
+    return;
   }
+
+  console.log(data.body);
 });
 ```
 
-## Learn More
-* For more detailed examples, check our examples:
-    * [Transmissions](https://github.com/MessageSystems/node-sdk/blob/master/examples/transmission/)
-* Read our REST API documentation - <http://www.sparkpost.com/docs>
+## Supported SparkPost APIs
+Click on the desired API to see usage and more information
 
-## Field Descriptions
-### Transmissions
-| Field Name       | Required?   | Description                                                                                                                | Data Type        |
-| ------------     | ----------- | -------------                                                                                                              | -----------      |
-| description      | no          | Field for describing what this transmission is for the user                                                                | String           |
-| campaign         | no          | Field for assigning a given transmission to a specific campaign, which is a logical container for similar transmissions    | String           |
-| metadata         | no          | Field for adding arbitrary key/value pairs which will be included in open/click tracking                                   | Object (Simple)  |
-| substitutionData | no          | Field for adding transmission level substitution data, which can be used in a variety of fields and in content             | Object (Complex) |
-| trackOpens       | no          | Field for enabling/disabling transmission level open tracking, if not set will use settings from Template                                             | Boolean          |
-| trackClicks      | no          | Field for enabling/disabling transmission level click tracking, if not set will use settings from Template                                             | Boolean          |
-| useSandbox       | no          | Field for enabling/disabling using sandbox domain to send transmission(You are limited to 50 messages ever with sandbox)   | Boolean          |
-| useDraftTemplate | no          | Field for allowing the sending of a transmission using a draft of a stored template (default: false)                       | Boolean          |
-| replyTo          | no          | Field for specifying the email address that should be used when a recipient hits the reply button                          | String           |
-| subject          | yes         | Field for setting the subject line of a given transmission                                                                 | String           |
-| from             | yes         | Field for setting the from line of a given transmission                                                                    | String or Object |
-| html             | yes**       | Field for setting the HTML content of a given transmission                                                                 | String           |
-| text             | yes**       | Field for setting the Plain Text content of a given transmission                                                           | String           |
-| rfc822           | no**        | Field for setting the RFC-822 encoded content of a given transmission                                                      | String           |
-| template         | no**        | Field for specifying the Template ID of a stored template to be used when sending a given transmission                     | String           |
-| customHeaders    | no          | Field for specifying additional headers to be applied to a given transmission (other than Subject, From, To, and Reply-To) | Object (Simple)  |
-| recipients       | yes**       | Field for specifying who a given transmission should be sent to                                                            | Array of Objects |
-| recipientList    | no**        | Field for specifying a stored recipient list ID to be used for a given transmission                                        | String           |
+* [Recipient Lists](/docs/apis/recipientLists.md) - `client.recipientLists` ([examples](/examples/recipientLists))
+* [Sending Domains](/docs/apis/sendingDomains.md) - `client.sendingDomains` ([examples](/examples/sendingDomains))
+* [Suppression List](/docs/apis/suppressionList.md) - `client.suppressionList` ([examples](/examples/suppressionList))
+* [Templates](/docs/apis/templates.md) - `client.templates` ([examples](/examples/templates))
+* [Transmissions](/docs/apis/transmission.md) - `client.transmission` ([examples](/examples/transmission))
+* [Webhooks](/docs/apis/webhooks.md) - `client.webhooks` ([examples](/examples/webhooks))
 
-** - If using inline content then html or text are required. If using RFC-822 Inline Content, then rfc822 is required. If using a stored recipient list, then recipientList is required. If using a stored template, then template is required.
-
-### Sending Domains
-| Field Name       | Required?   | Description                                                                                                                | Data Type        |
-| ------------     | ----------- | -------------                                                                                                              | -----------      |
-| domainName       | yes         | Name of the sending domain | String           |
-| privateKey       | yes**       | Private key used to create the DKIM Signature. | String           |
-| publicKey        | yes**       | Public key to be retrieved from the DNS of the sending domain. | String           |
-| selector         | yes**       | DomainKey selector that indicates the DKIM public key location. | String           |
-| headers          | no          | Header fields to be included in the DKIM signature | String           |
-
-** - If specifying a privateKey, publicKey, or selector, all three fields are required.
-
-## Tips and Tricks
-### General
-* You _must_ provide at least an API key when instantiating the SparkPost Library - `{ key: '184ac5480cfdd2bb2859e4476d2e5b1d2bad079bf' }`
-* The SDK's features are namespaced under the various SparkPost API names.
-
-### Transmissions
-* If you specify a stored recipient list and inline recipients in a Transmission, you will receive an error.
-* If you specify HTML and/or Plain Text content and then provide RFC-822 encoded content, you will receive an error.
-    * RFC-822 content is not valid with any other content type.
-* If you specify a stored template and also provide inline content, you will receive an error.
-* By default, open and click tracking are enabled for a transmission.
-* By default, a transmission will use the published version of a stored template.
 
 ## Development
 
