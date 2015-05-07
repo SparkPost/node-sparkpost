@@ -2,9 +2,12 @@
 
 var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
-  , client = new SparkPost(key);
+  , client = new SparkPost(key)
+  , options = {
+    domainName: 'example1.com'
+  };
 
-client.sendingDomains.verify('example1.com', function(err, res) {
+client.sendingDomains.verify(options, function(err, res) {
   if (err) {
     console.log(err);
   } else {
