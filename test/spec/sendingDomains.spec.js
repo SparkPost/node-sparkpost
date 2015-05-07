@@ -128,13 +128,17 @@ describe('Sending Domains Library', function() {
 
   describe('verify Method', function() {
     it('should call client post method with the appropriate uri', function(done) {
-      sendingDomains.verify('test', function() {
+      var options = {
+        domainName: 'test'
+      };
+
+      sendingDomains.verify(options, function() {
         expect(client.post.firstCall.args[0].uri).to.equal('sending-domains/test/verify');
         done();
       });
     });
 
-    it('should throw an error if domainName is null', function(done) {
+    it('should throw an error if domainName is missing', function(done) {
       sendingDomains.verify(null, function(err) {
         expect(err.message).to.equal('domainName is required');
         expect(client.post).not.to.have.been.called;
@@ -142,16 +146,12 @@ describe('Sending Domains Library', function() {
       });
     });
 
-    it('should throw an error if domainName is missing', function(done) {
-      sendingDomains.verify(function(err) {
-        expect(err.message).to.equal('domainName is required');
-        expect(client.post).not.to.have.been.called;
-        done();
-      });
-    });
-
     it('should default verifyDKIM and verifySPF to be true', function(done) {
-      sendingDomains.verify('test', {}, function() {
+      var options = {
+        domainName: 'test'
+      };
+
+      sendingDomains.verify(options, function() {
         expect(client.post.firstCall.args[0].json.dkim_verify).to.be.true;
         expect(client.post.firstCall.args[0].json.spf_verify).to.be.true;
         done();
@@ -160,11 +160,12 @@ describe('Sending Domains Library', function() {
 
     it('should allow a user to set verifyDKIM and verifySPF', function(done){
       var options = {
+        domainName: 'test',
         verifyDKIM: false,
         verifySPF: false
       };
 
-      sendingDomains.verify('test', options, function() {
+      sendingDomains.verify(options, function() {
         expect(client.post.firstCall.args[0].json.dkim_verify).to.be.false;
         expect(client.post.firstCall.args[0].json.spf_verify).to.be.false;
         done();
