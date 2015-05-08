@@ -5,10 +5,10 @@ var key = 'YOURAPIKEY'
   , client = new SparkPost(key)
   , webhook = {
     id: 'TEST_WEBHOOK_UUID'
-    , name: "Renamed Test webhook"
+    , name: 'Renamed Test webhook'
     , events: [
-      "policy_rejection",
-      "delay"
+      'policy_rejection',
+      'delay'
     ]
   };
 

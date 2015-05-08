@@ -4,14 +4,14 @@ var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key)
   , webhook = {
-    name: "Test webhook"
-    , target: "http://client.test.com/test-webhook"
-    , auth_token: "AUTH_TOKEN"
+    name: 'Test webhook'
+    , target: 'http://client.test.com/test-webhook'
+    , auth_token: 'AUTH_TOKEN'
     , events: [
-      "delivery",
-      "injection",
-      "open",
-      "click"
+      'delivery',
+      'injection',
+      'open',
+      'click'
     ]
   };
 
