@@ -1,6 +1,6 @@
 # Suppression List
 
-This library provides easy access to the [Suppression List](https://www.sparkpost.com/api#/reference/suppression-list/) API.
+This library provides easy access to the [Suppression List](https://www.sparkpost.com/api#/reference/suppression-list/) Resource.
 
 ## Methods
 * **search(parameters, callback)**

@@ -1,6 +1,6 @@
 # Webhooks
 
-This library provides easy access to the [Webhooks](https://www.sparkpost.com/api#/reference/webhooks/) API.
+This library provides easy access to the [Webhooks](https://www.sparkpost.com/api#/reference/webhooks/) Resource.
 
 ## Methods
 * **all(options, callback)**

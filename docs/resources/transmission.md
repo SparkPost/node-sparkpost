@@ -1,6 +1,6 @@
 # Transmissions
 
-This library provides easy access to the [Transmissions](https://www.sparkpost.com/api#/reference/transmissions/) API.
+This library provides easy access to the [Transmissions](https://www.sparkpost.com/api#/reference/transmissions/) Resource.
 
 ## Methods
 * **all(callback)**

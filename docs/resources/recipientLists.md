@@ -1,6 +1,6 @@
 # Recipient Lists
 
-This library provides easy access to the [Recipient Lists](https://www.sparkpost.com/api#/reference/recipient-lists/) API.
+This library provides easy access to the [Recipient Lists](https://www.sparkpost.com/api#/reference/recipient-lists/) Resource.
 
 ## Methods
 * **all(callback)**

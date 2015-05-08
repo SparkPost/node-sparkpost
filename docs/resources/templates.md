@@ -1,6 +1,6 @@
 # Templates
 
-This library provides easy access to the [Templates](https://www.sparkpost.com/api#/reference/templates/) API.
+This library provides easy access to the [Templates](https://www.sparkpost.com/api#/reference/templates/) Resource.
 
 ## Methods
 * **all(callback)**

@@ -76,11 +76,17 @@ var options = {
 var client = new SparkPost('YOUR_API_KEY', options);
 ```
 
-## Example
+## Using the Node SDK Base Object
+We may not wrap every resource available in the SparkPost SDK, for example the Node SDK does not wrap the Metrics resource,
+but you can use the Node SDK Base Object to form requests to these unwrapped resources. Here is an example request using the
+base object to make requests to the Metrics resource. Here is an example request using the base object to make requests to
+the Metrics resource.
 
+Get a list of domains that the Metrics API contains data on.
 ```js
+// Get a list of domains that the Metrics API contains data on.
 var options = {
-  uri: 'sendingDomains'
+  uri: 'metrics/domains'
 };
 
 client.get(options, function(err, data) {
@@ -93,15 +99,15 @@ client.get(options, function(err, data) {
 });
 ```
 
-## Supported SparkPost APIs
+## SparkPost API Resources Supported in Node SDK
 Click on the desired API to see usage and more information
 
-* [Recipient Lists](/docs/apis/recipientLists.md) - `client.recipientLists` ([examples](/examples/recipientLists))
-* [Sending Domains](/docs/apis/sendingDomains.md) - `client.sendingDomains` ([examples](/examples/sendingDomains))
-* [Suppression List](/docs/apis/suppressionList.md) - `client.suppressionList` ([examples](/examples/suppressionList))
-* [Templates](/docs/apis/templates.md) - `client.templates` ([examples](/examples/templates))
+* [Recipient Lists](/docs/resources/recipientLists.md) - `client.recipientLists` ([examples](/examples/recipientLists))
+* [Sending Domains](/docs/resources/sendingDomains.md) - `client.sendingDomains` ([examples](/examples/sendingDomains))
+* [Suppression List](/docs/resources/suppressionList.md) - `client.suppressionList` ([examples](/examples/suppressionList))
+* [Templates](/docs/resources/templates.md) - `client.templates` ([examples](/examples/templates))
 * [Transmissions](/docs/apis/transmission.md) - `client.transmission` ([examples](/examples/transmission))
-* [Webhooks](/docs/apis/webhooks.md) - `client.webhooks` ([examples](/examples/webhooks))
+* [Webhooks](/docs/resources/webhooks.md) - `client.webhooks` ([examples](/examples/webhooks))
 
 
 ## Development

@@ -1,6 +1,6 @@
 # Sending Domains
 
-This library provides easy access to the [Sending Domains](https://www.sparkpost.com/api#/reference/sending-domains/) API.
+This library provides easy access to the [Sending Domains](https://www.sparkpost.com/api#/reference/sending-domains/) Resource.
 
 ## Methods
 * **all(callback)**
