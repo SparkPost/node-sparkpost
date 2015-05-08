@@ -82,7 +82,6 @@ but you can use the Node SDK Base Object to form requests to these unwrapped res
 base object to make requests to the Metrics resource. Here is an example request using the base object to make requests to
 the Metrics resource.
 
-Get a list of domains that the Metrics API contains data on.
 ```js
 // Get a list of domains that the Metrics API contains data on.
 var options = {
