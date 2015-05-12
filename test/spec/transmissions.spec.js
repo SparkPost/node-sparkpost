@@ -14,7 +14,7 @@ describe('Transmissions Library', function() {
       post: sinon.stub().yields()
     };
 
-    transmission = require('../../lib/transmission')(client);
+    transmission = require('../../lib/transmissions')(client);
   });
 
   describe('all Method', function() {

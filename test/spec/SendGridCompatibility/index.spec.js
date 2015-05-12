@@ -9,7 +9,7 @@ chai.use(sinonChai);
 
 describe('SendGrid Compatibility', function() {
   var sendgrid = new sendGridCompatibility('asdf', 'asdf')
-    , transmission = sendgrid.client.transmission
+    , transmissions = sendgrid.client.transmissions
     , payload = {
       to:       ['fake@email.org', 'real@notreally.net'],
       toname:   ['Fakey Fakerson', 'Realy Realerson'],
@@ -77,14 +77,14 @@ describe('SendGrid Compatibility', function() {
     var sendSpy, scope;
 
     beforeEach(function() {
-      sendSpy = sinon.spy(transmission, 'send');
+      sendSpy = sinon.spy(transmissions, 'send');
       scope = nock('https://api.sparkpost.com')
         .post('/api/v1/transmissions')
         .reply(200, { ok: true });
     });
 
     afterEach(function() {
-      transmission.send.restore(); // restoring function
+      transmissions.send.restore(); // restoring function
     });
 
     it('should handle an absence of toname', function(done) {

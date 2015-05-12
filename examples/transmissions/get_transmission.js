@@ -4,7 +4,7 @@ var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key);
 
-client.transmission.all(function(err, res) {
+client.transmissions.find('YOUR-TRANSMISSION-KEY', function(err, res) {
   if (err) {
     console.log(err);
   } else {

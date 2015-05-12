@@ -6,15 +6,13 @@ var key = 'YOURAPIKEY'
 
 var trans = {
   from: 'From Envelope <from@example.com>',
-  recipients: [{ address: { email: 'john.doe@example.com' } }],
-  subject: 'Example Email for MIME Parts',
-  html: '<html><body><p>Hello World!</p></body></html>',
-  text: 'Hello World!',
-  trackOpens: true,
-  trackClicks: true
+  subject: 'Example Email for Stored List and Template',
+  recipientList: 'example-list',
+  template: 'my-template',
+  recipients: [{ address: { email: 'john.doe@example.com' } }]
 };
 
-client.transmission.send(trans, function(err, res) {
+client.transmissions.send(trans, function(err, res) {
   if (err) {
     console.log(err);
   } else {
