@@ -17,7 +17,7 @@ module.exports = function(grunt) {
   // Configure existing grunt tasks and create custom ones
   grunt.initConfig({
     config: config,
-
+    pkg: grunt.file.readJSON('package.json'),
     jshint: {
       files: [
         'index.js',
@@ -29,7 +29,21 @@ module.exports = function(grunt) {
         jshintrc: './.jshintrc'
       }
     },
-
+    bump: {
+      options: {
+        files: [ 'package.json' ]
+        , updateConfigs: [ 'pkg' ]
+        , commit: true
+        , commitMessage: 'Release %VERSION%'
+        , commitFiles: [ 'package.json', 'README.md' ]
+        , createTag: true
+        , tagName: '%VERSION%'
+        , tagMessage: '%VERSION%'
+        , push: true
+        , pushTo: 'upstream'
+        , gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d'
+      }
+    },
     shell: {
       test: {
         command : '<%= config.binPath %>/istanbul cover --report lcov --dir test/reports/ <%= config.binPath %>/_mocha test/spec -- --reporter ' + reporter,

@@ -39,7 +39,7 @@ trans.substitutionData = {name: 'YOUR FIRST NAME'};
 trans.recipients = [{ address: { name: 'YOUR FULL NAME', email: 'YOUR EMAIL ADDRESS' } }];
 
 // Send it off into the world!
-client.transmission.send(trans, function(err, res) {
+client.transmissions.send(trans, function(err, res) {
   if (err) {
     console.log('Whoops! Something went wrong');
     console.log(err);
