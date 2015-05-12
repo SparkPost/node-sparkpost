@@ -20,7 +20,29 @@ describe('Transmissions Library', function() {
   describe('all Method', function() {
     it('should call client get method with the appropriate uri', function(done) {
       transmission.all(function() {
-        expect(client.get.firstCall.args[0]).to.deep.equal({uri:'transmissions'});
+        expect(client.get.firstCall.args[0].uri).to.equal('transmissions');
+        done();
+      });
+    });
+
+    it('should allow campaign_id to be set in options', function(done) {
+      var options = {
+        campaign_id: 'test-campaign'
+      };
+
+      transmission.all(options, function(err, data) {
+        expect(client.get.firstCall.args[0].qs).to.deep.equal({campaign_id: 'test-campaign'});
+        done();
+      });
+    });
+
+    it('should allow template_id to be set in options', function(done) {
+      var options = {
+        template_id: 'test-template'
+      };
+
+      transmission.all(options, function(err, data) {
+        expect(client.get.firstCall.args[0].qs).to.deep.equal({template_id: 'test-template'});
         done();
       });
     });
@@ -53,15 +75,19 @@ describe('Transmissions Library', function() {
 
   describe('send Method', function() {
     it('should call client post method with the appropriate uri', function(done) {
-      var transmissionBody = {};
+      var options = {
+        transmissionBody: {
+          campaign: 'test-campaign'
+        }
+      };
 
-      transmission.send(transmissionBody, function() {
+      transmission.send(options, function() {
         expect(client.post.firstCall.args[0].uri).to.equal('transmissions');
         done();
       });
     });
 
-    it('should throw an error if transmissionBody is null', function(done) {
+    it('should throw an error if transmissionBody is missing', function(done) {
       transmission.send(null, function(err) {
         expect(err.message).to.equal('transmissionBody is required');
         expect(client.post).not.to.have.been.called;
@@ -69,31 +95,43 @@ describe('Transmissions Library', function() {
       });
     });
 
-    it('should throw an error if transmissionBody is missing', function(done) {
-      transmission.send(function(err) {
-        expect(err.message).to.equal('transmissionBody is required');
-        expect(client.post).not.to.have.been.called;
+    it('should allow num_rcpt_errors to be set in options', function(done) {
+      var options = {
+        transmissionBody: {
+          campaign: 'test-campaign'
+        },
+        num_rcpt_errors: 3
+      };
+
+      transmission.send(options, function(err, data) {
+        expect(client.post.firstCall.args[0].qs).to.deep.equal({num_rcpt_errors: 3});
         done();
       });
     });
 
     describe('toApiFormat Helper Method', function() {
+      var options = {
+        transmissionBody: {
+          campaign: 'test-campaign'
+        }
+      };
+
       it('should default the return path for sparkpost users', function(done) {
-        transmission.send({}, function(err, res) {
+        transmission.send(options, function(err, res) {
           expect(client.post.firstCall.args[0].json.return_path).to.equal('default@sparkpostmail.com');
           done();
         });
       });
 
       it('should allow on prem users to override the return path', function(done) {
-        transmission.send({returnPath: 'sketchy@weird-domain.com'}, function() {
+        transmission.send({transmissionBody:{returnPath: 'sketchy@weird-domain.com'}}, function() {
           expect(client.post.firstCall.args[0].json.return_path).to.equal('sketchy@weird-domain.com');
           done();
         });
       });
 
       it('should default open and click tracking to be undefined', function(done) {
-        transmission.send({}, function() {
+        transmission.send(options, function() {
           expect(client.post.firstCall.args[0].json.options.open_tracking).to.be.undefined;
           expect(client.post.firstCall.args[0].json.options.click_tracking).to.be.undefined;
           done();
@@ -101,7 +139,7 @@ describe('Transmissions Library', function() {
       });
 
       it('should allow a user to set open/click tracking', function(done) {
-        transmission.send({trackOpens: false, trackClicks: false}, function() {
+        transmission.send({transmissionBody:{trackOpens: false, trackClicks: false}}, function() {
           expect(client.post.firstCall.args[0].json.options.open_tracking).to.be.false;
           expect(client.post.firstCall.args[0].json.options.click_tracking).to.be.false;
           done();
@@ -109,21 +147,21 @@ describe('Transmissions Library', function() {
       });
 
       it('should allow a user to override useSandbox ', function(done) {
-        transmission.send({useSandbox: true}, function() {
+        transmission.send({transmissionBody:{useSandbox: true}}, function() {
           expect(client.post.firstCall.args[0].json.options.sandbox).to.be.true;
           done();
         });
       });
 
       it('should default using a published stored template', function(done) {
-        transmission.send({}, function() {
+        transmission.send(options, function() {
           expect(client.post.firstCall.args[0].json.content.use_draft_template).to.be.false;
           done();
         });
       });
 
       it('should allow a user to override and use a draft stored template', function(done) {
-        transmission.send({useDraftTemplate: true}, function() {
+        transmission.send({transmissionBody:{useDraftTemplate: true}}, function() {
           expect(client.post.firstCall.args[0].json.content.use_draft_template).to.be.true;
           done();
         });
