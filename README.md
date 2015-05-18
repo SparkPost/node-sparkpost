@@ -105,7 +105,7 @@ Click on the desired API to see usage and more information
 * [Sending Domains](/docs/resources/sendingDomains.md) - `client.sendingDomains` ([examples](/examples/sendingDomains))
 * [Suppression List](/docs/resources/suppressionList.md) - `client.suppressionList` ([examples](/examples/suppressionList))
 * [Templates](/docs/resources/templates.md) - `client.templates` ([examples](/examples/templates))
-* [Transmissions](/docs/apis/transmissions.md) - `client.transmission` ([examples](/examples/transmissions))
+* [Transmissions](/docs/resources/transmissions.md) - `client.transmissions` ([examples](/examples/transmissions))
 * [Webhooks](/docs/resources/webhooks.md) - `client.webhooks` ([examples](/examples/webhooks))
 
 
