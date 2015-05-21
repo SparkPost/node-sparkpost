@@ -5,20 +5,6 @@ var chai = require('chai')
   , expect = chai.expect
   ;
 
-/*
-naturalTest:  fooBar
-spaceHyphenTest:  -
-Ftest:  f
-CapCaseTest:  foobar
-camelCaseTest:  camelCase
-FOO:  foo
-Foo:  foo
-allCapsTest:  fooBar
-mixedCapsTest:  fooBarBaz
-hyphenOnly:  -
-hyphenSeparated:  fooBar
-hyphenPreMidPostFix:  fooBar
-*/
 describe('Snaker', function() {
   it('should not munge existing snake_case', function(done) {
     expect(snaker('foo_bar')).to.equal('foo_bar');
