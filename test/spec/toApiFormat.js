@@ -1,7 +1,7 @@
 'use strict';
 
 var chai = require('chai')
-  , snaker = require('../../lib/toApiFormatter')
+  , toApiFormatter = require('../../lib/toApiFormatter')
   , expect = chai.expect
   ;
 
@@ -13,13 +13,19 @@ describe('toApiFormatter', function() {
       , fooBarBaz: "fooBarBaz"
     };
 
-    var comparisonObj = {
+    var validationObj = {
       foo: "foo"
       , foo_bar: "fooBar"
       , foo_bar_baz: "fooBarBaz"
     };
 
-    expect(testObj).to.deep.equal(comparisonObj);
-    done();
+    toApiFormatter( testObj, function( err, data ) {
+      if( err ) {
+        console.error( err );
+      } else {
+        expect(data).to.deep.equal(validationObj);
+        done();
+      }
+    });
   });
 });
