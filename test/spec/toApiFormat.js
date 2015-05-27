@@ -27,14 +27,10 @@ describe('toApiFormatter', function() {
       , foo_bar_baz: "fooBarBaz"
     };
 
-    toApiFormatter( testObj, function( err, data ) {
-      if( err ) {
-        console.error( err );
-      } else {
-        expect(data).to.deep.equal(validationObj);
-        done();
-      }
-    });
+    var out = toApiFormatter(testObj);
+
+    expect(out).to.deep.equal(validationObj);
+    done();
   });
 
   it('should recursively convert complex object\'s keys to snake_case', function(done) {
@@ -76,13 +72,9 @@ describe('toApiFormatter', function() {
       , good_name: null
     };
 
-    toApiFormatter( testObj, function( err, data ) {
-      if( err ) {
-        console.error( err );
-      } else {
-        expect(data).to.deep.equal(validationObj);
-        done();
-      }
-    });
+    var out = toApiFormatter(testObj);
+
+    expect(out).to.deep.equal(validationObj);
+    done();
   });
 });
