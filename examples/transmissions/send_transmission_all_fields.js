@@ -35,7 +35,7 @@ var trans = {
   ]
 };
 
-client.transmissions.send(trans, function(err, res) {
+client.transmissions.send({transmissionBody: trans}, function(err, res) {
   if (err) {
     console.log(err);
   } else {

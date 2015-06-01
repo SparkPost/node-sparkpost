@@ -88,9 +88,9 @@ describe('SendGrid Compatibility', function() {
     });
 
     it('should handle an absence of toname', function(done) {
-      var toPayload = { to: 'asdf@qwerty.lg.jp'};
+      var toPayload =  {to: 'asdf@qwerty.lg.jp'};
       sendgrid.send(toPayload, function() {
-        expect(sendSpy.args[0][0].recipients).to.deep.equal([{ address: { email: 'asdf@qwerty.lg.jp' }}]);
+        expect(sendSpy.args[0][0].transmissionBody.recipients).to.deep.equal([{ address: { email: 'asdf@qwerty.lg.jp' }}]);
         done();
       });
     });
@@ -98,7 +98,7 @@ describe('SendGrid Compatibility', function() {
     it('should translate only substitutions into substitutionData appropriately', function(done) {
       var subPayload = { sub: {password: ['******'], num: ['one', 'two']}};
       sendgrid.send(subPayload, function() {
-        expect(sendSpy.args[0][0].substitutionData).to.deep.equal({ password: [ '******' ], num: [ 'one', 'two' ]});
+        expect(sendSpy.args[0][0].transmissionBody.substitutionData).to.deep.equal({ password: [ '******' ], num: [ 'one', 'two' ]});
         done();
       });
     });
@@ -106,7 +106,7 @@ describe('SendGrid Compatibility', function() {
     it('should translate only sections into substitutionData appropriately', function(done) {
       var sectionPayload = { section: {something: 'something else'}};
       sendgrid.send(sectionPayload, function() {
-        expect(sendSpy.args[0][0].substitutionData).to.deep.equal({ something: 'something else'});
+        expect(sendSpy.args[0][0].transmissionBody.substitutionData).to.deep.equal({ something: 'something else'});
         done();
       });
     });
@@ -114,14 +114,14 @@ describe('SendGrid Compatibility', function() {
     it('should not form substitutionData without substitutions or sections', function(done) {
       var barePayload = {};
       sendgrid.send(barePayload, function() {
-        expect(sendSpy.args[0][0].substitutionData).to.equal(undefined);
+        expect(sendSpy.args[0][0].transmissionBody.substitutionData).to.equal(undefined);
         done();
       });
     });
 
     it('should translate a full payload', function(done) {
       sendgrid.send(payload, function() {
-        expect(sendSpy.args[0][0]).to.deep.equal(translatedPayload);
+        expect(sendSpy.args[0][0].transmissionBody).to.deep.equal(translatedPayload);
         done();
       });
     });
