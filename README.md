@@ -62,7 +62,7 @@ var client = new SparkPost('YOUR_API_KEY');
 
 Using an API key stored in an environment variable
 ```js
-process.env.SPARKPOST_API_KEY = 'YOUR_API_KEY';
+//Create an env var as SPARKPOST_API_KEY
 var SparkPost = require('sparkpost');
 var client = new SparkPost();
 ```
