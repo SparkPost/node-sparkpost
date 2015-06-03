@@ -97,7 +97,7 @@ describe('SparkPost Library', function() {
 
       client.request(options, function(err, data) {
         // making sure original request was GET
-        expect(data.res.request.method).to.equal('GET');
+        expect(data.request.method).to.equal('GET');
 
         // finish async test
         done();
@@ -118,7 +118,8 @@ describe('SparkPost Library', function() {
       };
 
       client.request(options, function(err, data) {
-        expect(data).to.be.null;
+        console.log(data);
+        expect(data).to.be.undefined;
         expect(err).to.be.defined;
 
         // finish async test
@@ -137,7 +138,7 @@ describe('SparkPost Library', function() {
       };
 
       client.request(options, function(err, data) {
-        expect(data.res.request.uri.href).to.equal('https://test.sparkpost.com/test');
+        expect(data.request.uri.href).to.equal('https://test.sparkpost.com/test');
 
         // finish async test
         done();
@@ -161,7 +162,7 @@ describe('SparkPost Library', function() {
         expect(requestSpy.calledOnce).to.be.true;
 
         // making sure original request was GET
-        expect(data.res.request.method).to.equal('GET');
+        expect(data.request.method).to.equal('GET');
 
         SparkPost.prototype.request.restore(); // restoring function
         done();
@@ -192,7 +193,7 @@ describe('SparkPost Library', function() {
         expect(requestSpy.calledOnce).to.be.true;
 
         // making sure original request was POST
-        expect(data.res.request.method).to.equal('POST');
+        expect(data.request.method).to.equal('POST');
 
         SparkPost.prototype.request.restore(); // restoring function
         done();
@@ -223,7 +224,7 @@ describe('SparkPost Library', function() {
         expect(requestSpy.calledOnce).to.be.true;
 
         // making sure original request was PUT
-        expect(data.res.request.method).to.equal('PUT');
+        expect(data.request.method).to.equal('PUT');
 
         SparkPost.prototype.request.restore(); // restoring function
         done();
@@ -254,7 +255,7 @@ describe('SparkPost Library', function() {
         expect(requestSpy.calledOnce).to.be.true;
 
         // making sure original request was DELETE
-        expect(data.res.request.method).to.equal('DELETE');
+        expect(data.request.method).to.equal('DELETE');
 
         SparkPost.prototype.request.restore(); // restoring function
         done();
