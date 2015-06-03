@@ -118,9 +118,30 @@ describe('SparkPost Library', function() {
       };
 
       client.request(options, function(err, data) {
-        console.log(data);
         expect(data).to.be.undefined;
         expect(err).to.be.defined;
+
+        // finish async test
+        done();
+      });
+    });
+
+    it('should return an error if statusCode not 2XX', function(done) {
+      // simulate a timeout
+      nock('https://api.sparkpost.com')
+        .post('/api/v1/post/test/fail')
+        .reply(422, { errors: [] });
+
+      var options = {
+        method: 'POST'
+        , uri: 'post/test/fail'
+      };
+
+      client.request(options, function(err, data) {
+        expect(data).to.be.defined;
+        expect(err).to.be.defined;
+
+        expect(err.errors).to.deep.equal(data.body.errors);
 
         // finish async test
         done();
