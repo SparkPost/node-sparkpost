@@ -1,6 +1,12 @@
 ## Change Log
 
-### v0.9.0 (2015/05/12)
+### v1.0.0 (2015/06/XX) - *breaking*
+- [#66](https://github.com/SparkPost/node-sparkpost/pull/66) Issue [#51](https://github.com/SparkPost/node-sparkpost/issues/51) Modify the base object to handle non 2XX status and simplify second callback param (@aydrian)
+- [#56](https://github.com/SparkPost/node-sparkpost/pull/56) Issue [#46](https://github.com/SparkPost/node-sparkpost/issues/46) Updates to Transmissions library (@aydrian)
+- [#55](https://github.com/SparkPost/node-sparkpost/pull/55) Fix doc about using process.env.SPARKPOST_API_KEY (@bizob2828)
+- [#54](https://github.com/SparkPost/node-sparkpost/pull/54) fixed link to transmissions in readme (@bizob2828)
+
+### v0.9.0 (2015/05/12) - *breaking*
 - [#49](https://github.com/SparkPost/node-sparkpost/pull/49) Issue [#48](https://github.com/SparkPost/node-sparkpost/issues/48) Add Grunt Bump (@aydrian)
 - [#47](https://github.com/SparkPost/node-sparkpost/pull/47) Issue [#44](https://github.com/SparkPost/node-sparkpost/issues/44) Create docs and examples for new APIs (@aydrian)
 - [#43](https://github.com/SparkPost/node-sparkpost/pull/43) Issue [#42](https://github.com/SparkPost/node-sparkpost/issues/42) Modified sendingDomains.verify and updated the unit tests and examples.(@aydrian)
