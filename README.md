@@ -125,3 +125,7 @@ Once all the dependencies are installed, you can execute the unit tests using `g
 [Our coding standards](docs/CODE_STYLE_GUIDE.markdown)
 
 [Submitting pull requests](CONTRIBUTING.md)
+
+### ChangeLog
+
+[See ChangeLog here](CHANGELOG.md)
