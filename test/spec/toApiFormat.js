@@ -1,39 +1,12 @@
 'use strict';
 
 var chai = require('chai')
-  , toApiFormatter = require('../../lib/toApiFormatter')
+  , toApiFormat = require('../../lib/toApiFormat')
   , expect = chai.expect
   ;
 
-describe('toApiFormatter', function() {
-  it('should convert keys of an object to snake_case', function(done) {
-    var testObj = {
-      foo: "foo"
-      , fooBar: "fooBar"
-      , fizz: {
-          buzz: "buzz",
-          fizzBuzz: "fizzBuzz"
-      }
-      , fooBarBaz: "fooBarBaz"
-    };
-
-    var validationObj = {
-      foo: "foo"
-      , foo_bar: "fooBar"
-      , fizz: {
-          buzz: "buzz",
-          fizz_buzz: "fizzBuzz"
-      }
-      , foo_bar_baz: "fooBarBaz"
-    };
-
-    var out = toApiFormatter(testObj);
-
-    expect(out).to.deep.equal(validationObj);
-    done();
-  });
-
-  it('should recursively convert complex object\'s keys to snake_case', function(done) {
+describe('toApiFormat', function() {
+  it('should recursively convert complex object keys to snake_case', function(done) {
     var testObj = {
       simpleString: "foo"
       , boolVal: true 
@@ -72,9 +45,10 @@ describe('toApiFormatter', function() {
       , good_name: null
     };
 
-    var out = toApiFormatter(testObj);
+    var out = toApiFormat(testObj);
 
     expect(out).to.deep.equal(validationObj);
+
     done();
   });
 });
