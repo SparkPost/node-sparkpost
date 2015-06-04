@@ -34,7 +34,7 @@
     "xunit-file": "0.0.5"
   },
   "dependencies": {
-    "lodash": "2.4.1",
+    "lodash": "3.9.3",
     "request": "2.42.0",
     "snake-case": "^1.1.1"
   }
