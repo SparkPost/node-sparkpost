@@ -6,6 +6,10 @@
   "scripts": {
     "test": "grunt"
   },
+  "keywords": [
+    "email",
+    "messaging"
+    ],
   "repository": {
     "type": "git",
     "url": "https://github.com/SparkPost/node-sparkpost"
