@@ -6,7 +6,7 @@ var key = 'YOURAPIKEY'
 
 var trans = {
   from: 'From Envelope <from@example.com>',
-  recipientList: 'example-list',
+  recipient_list: 'example-list',
   subject: 'Example Email for Stored List and Inline Content',
   html: '<html><body><p>Hello World</p></body></html>',
   text: 'Hello World!'

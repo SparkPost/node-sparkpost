@@ -4,7 +4,7 @@ var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key)
   , options = {
-    domainName: 'example1.com'
+    domain: 'example1.com'
   };
 
 client.sendingDomains.verify(options, function(err, res) {
