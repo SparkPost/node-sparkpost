@@ -15,11 +15,21 @@ describe('toApiFormat', function() {
         strTwo: "bar"
         , string_three: "skip"
       }
+      , recipients: [
+        {name: 'John Doe', address: 'j.doe@sparkpost.com'}
+        , {name: 'Sam Jones', address: 's.jones@sparkpost.com'}
+      ]
       , fizzArr: [
         {
           buzzInga: "buzz"
           , bang: {
             bellHop: "bell"
+          }
+        }
+        , {
+          bilBo: "baggins"
+          , alias: {
+            misTer: "underhill"
           }
         }
       ]
@@ -34,11 +44,21 @@ describe('toApiFormat', function() {
         str_two: "bar"
         , string_three: "skip"
       }
+      , recipients: [
+        {name: 'John Doe', address: 'j.doe@sparkpost.com'}
+        , {name: 'Sam Jones', address: 's.jones@sparkpost.com'}
+      ]
       , fizz_arr: [
         {
           buzz_inga: "buzz"
           , bang: {
             bell_hop: "bell"
+          }
+        }
+        , {
+          bil_bo: "baggins"
+          , alias: {
+            mis_ter: "underhill"
           }
         }
       ]
