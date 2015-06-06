@@ -35,17 +35,17 @@ describe('Sending Domains Library', function() {
       });
     });
 
-    it('should throw an error if domainName is null', function(done) {
+    it('should throw an error if domain is null', function(done) {
       sendingDomains.find(null, function(err) {
-        expect(err.message).to.equal('domainName is required');
+        expect(err.message).to.equal('domain is required');
         expect(client.get).not.to.have.been.called;
         done();
       });
     });
 
-    it('should throw an error if domainName is missing', function(done) {
+    it('should throw an error if domain is missing', function(done) {
       sendingDomains.find(function(err) {
-        expect(err.message).to.equal('domainName is required');
+        expect(err.message).to.equal('domain is required');
         expect(client.get).not.to.have.been.called;
         done();
       });
@@ -55,7 +55,7 @@ describe('Sending Domains Library', function() {
   describe('create Method', function() {
     it('should call client post method with the appropriate uri', function(done) {
       var domainBody = {
-        domainName: "test"
+        domain: "test"
       };
 
       sendingDomains.create(domainBody, function(err, data) {
@@ -80,9 +80,9 @@ describe('Sending Domains Library', function() {
       });
     });
 
-    it('should throw an error if domainName is missing from domainBody', function(done) {
+    it('should throw an error if domain is missing from domainBody', function(done) {
       sendingDomains.create({}, function(err){
-        expect(err.message).to.equal('domainName is required in the domainBody');
+        expect(err.message).to.equal('domain is required in the domainBody');
         expect(client.post).not.to.have.been.called;
         done();
       });
@@ -92,7 +92,7 @@ describe('Sending Domains Library', function() {
   describe('update Method', function() {
     it('should call client put method with the appropriate uri', function(done) {
       var domainBody = {
-        domainName: "test"
+        domain: "test"
       };
 
       sendingDomains.update(domainBody, function(err, data) {
@@ -117,9 +117,9 @@ describe('Sending Domains Library', function() {
       });
     });
 
-    it('should throw an error if domainName is missing from domainBody', function(done) {
+    it('should throw an error if domain is missing from domainBody', function(done) {
       sendingDomains.update({}, function(err){
-        expect(err.message).to.equal('domainName is required in the domainBody');
+        expect(err.message).to.equal('domain is required in the domainBody');
         expect(client.put).not.to.have.been.called;
         done();
       });
@@ -129,7 +129,7 @@ describe('Sending Domains Library', function() {
   describe('verify Method', function() {
     it('should call client post method with the appropriate uri', function(done) {
       var options = {
-        domainName: 'test'
+        domain: 'test'
       };
 
       sendingDomains.verify(options, function() {
@@ -138,9 +138,9 @@ describe('Sending Domains Library', function() {
       });
     });
 
-    it('should throw an error if domainName is missing', function(done) {
+    it('should throw an error if domain is missing', function(done) {
       sendingDomains.verify(null, function(err) {
-        expect(err.message).to.equal('domainName is required');
+        expect(err.message).to.equal('domain is required');
         expect(client.post).not.to.have.been.called;
         done();
       });
@@ -148,7 +148,7 @@ describe('Sending Domains Library', function() {
 
     it('should default verifyDKIM and verifySPF to be true', function(done) {
       var options = {
-        domainName: 'test'
+        domain: 'test'
       };
 
       sendingDomains.verify(options, function() {
@@ -160,7 +160,7 @@ describe('Sending Domains Library', function() {
 
     it('should allow a user to set verifyDKIM and verifySPF', function(done){
       var options = {
-        domainName: 'test',
+        domain: 'test',
         verifyDKIM: false,
         verifySPF: false
       };
@@ -168,38 +168,6 @@ describe('Sending Domains Library', function() {
       sendingDomains.verify(options, function() {
         expect(client.post.firstCall.args[0].json.dkim_verify).to.be.false;
         expect(client.post.firstCall.args[0].json.spf_verify).to.be.false;
-        done();
-      });
-    });
-  });
-
-  describe('toApiFormat Helper Method', function() {
-    it('should format domainName as domain', function(done) {
-      var domainBody = {
-        domainName: 'test'
-      };
-
-      sendingDomains.create(domainBody, function() {
-        expect(client.post.firstCall.args[0].json.domain).to.equal(domainBody.domainName);
-        done();
-      });
-    });
-
-    it('should group DKIM fields in an object', function(done) {
-      var domainBody = {
-        domainName: 'test'
-        , privateKey: 'TEST_PRIVATE_KEY'
-        , publicKey: 'TEST_PUBLIC_KEY'
-        , selector: 'TEST_SELECTOR'
-      };
-
-      sendingDomains.create(domainBody, function() {
-        expect(client.post.firstCall.args[0].json.dkim).to.deep.equal({
-          'private': domainBody.privateKey
-          , 'public': domainBody.publicKey
-          , selector: domainBody.selector
-          , headers: domainBody.headers
-        });
         done();
       });
     });
