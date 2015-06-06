@@ -31,11 +31,11 @@ module.exports = function(grunt) {
     },
     bump: {
       options: {
-        files: [ 'package.json', 'CHANGELOG.md' ]
+        files: [ 'package.json' ]
         , updateConfigs: [ 'pkg' ]
         , commit: true
         , commitMessage: 'Release %VERSION%'
-        , commitFiles: [ 'package.json', 'README.md' ]
+        , commitFiles: [ 'package.json', 'README.md', 'CHANGELOG.md' ]
         , createTag: true
         , tagName: '%VERSION%'
         , tagMessage: '%VERSION%'
