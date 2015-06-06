@@ -62,7 +62,7 @@ var client = new SparkPost('YOUR_API_KEY');
 
 Using an API key stored in an environment variable
 ```js
-process.env.SPARKPOST_API_KEY = 'YOUR_API_KEY';
+//Create an env var as SPARKPOST_API_KEY
 var SparkPost = require('sparkpost');
 var client = new SparkPost();
 ```
@@ -105,7 +105,7 @@ Click on the desired API to see usage and more information
 * [Sending Domains](/docs/resources/sendingDomains.md) - `client.sendingDomains` ([examples](/examples/sendingDomains))
 * [Suppression List](/docs/resources/suppressionList.md) - `client.suppressionList` ([examples](/examples/suppressionList))
 * [Templates](/docs/resources/templates.md) - `client.templates` ([examples](/examples/templates))
-* [Transmissions](/docs/apis/transmissions.md) - `client.transmission` ([examples](/examples/transmissions))
+* [Transmissions](/docs/resources/transmissions.md) - `client.transmissions` ([examples](/examples/transmissions))
 * [Webhooks](/docs/resources/webhooks.md) - `client.webhooks` ([examples](/examples/webhooks))
 
 
@@ -125,3 +125,7 @@ Once all the dependencies are installed, you can execute the unit tests using `g
 [Our coding standards](docs/CODE_STYLE_GUIDE.markdown)
 
 [Submitting pull requests](CONTRIBUTING.md)
+
+### ChangeLog
+
+[See ChangeLog here](CHANGELOG.md)

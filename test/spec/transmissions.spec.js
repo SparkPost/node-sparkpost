@@ -20,7 +20,29 @@ describe('Transmissions Library', function() {
   describe('all Method', function() {
     it('should call client get method with the appropriate uri', function(done) {
       transmission.all(function() {
-        expect(client.get.firstCall.args[0]).to.deep.equal({uri:'transmissions'});
+        expect(client.get.firstCall.args[0].uri).to.equal('transmissions');
+        done();
+      });
+    });
+
+    it('should allow campaign_id to be set in options', function(done) {
+      var options = {
+        campaign_id: 'test-campaign'
+      };
+
+      transmission.all(options, function(err, data) {
+        expect(client.get.firstCall.args[0].qs).to.deep.equal({campaign_id: 'test-campaign'});
+        done();
+      });
+    });
+
+    it('should allow template_id to be set in options', function(done) {
+      var options = {
+        template_id: 'test-template'
+      };
+
+      transmission.all(options, function(err, data) {
+        expect(client.get.firstCall.args[0].qs).to.deep.equal({template_id: 'test-template'});
         done();
       });
     });
@@ -53,15 +75,19 @@ describe('Transmissions Library', function() {
 
   describe('send Method', function() {
     it('should call client post method with the appropriate uri', function(done) {
-      var transmissionBody = {};
+      var options = {
+        transmissionBody: {
+          campaign: 'test-campaign'
+        }
+      };
 
-      transmission.send(transmissionBody, function() {
+      transmission.send(options, function() {
         expect(client.post.firstCall.args[0].uri).to.equal('transmissions');
         done();
       });
     });
 
-    it('should throw an error if transmissionBody is null', function(done) {
+    it('should throw an error if transmissionBody is missing', function(done) {
       transmission.send(null, function(err) {
         expect(err.message).to.equal('transmissionBody is required');
         expect(client.post).not.to.have.been.called;
@@ -69,13 +95,18 @@ describe('Transmissions Library', function() {
       });
     });
 
-    it('should throw an error if transmissionBody is missing', function(done) {
-      transmission.send(function(err) {
-        expect(err.message).to.equal('transmissionBody is required');
-        expect(client.post).not.to.have.been.called;
+    it('should allow num_rcpt_errors to be set in options', function(done) {
+      var options = {
+        transmissionBody: {
+          campaign: 'test-campaign'
+        },
+        num_rcpt_errors: 3
+      };
+
+      transmission.send(options, function(err, data) {
+        expect(client.post.firstCall.args[0].qs).to.deep.equal({num_rcpt_errors: 3});
         done();
       });
     });
-
   });
 });
