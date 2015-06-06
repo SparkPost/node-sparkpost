@@ -1,6 +1,6 @@
 ## Change Log
 
-### v1.0.0 WIP - *breaking*
+### v1.0.0 (2015/06/06) - *breaking*
 - [#68](https://github.com/SparkPost/node-sparkpost/pull/68) Added keywords for searching in npm (@nornholdj)
 - [#67](https://github.com/SparkPost/node-sparkpost/pull/67) Created a change log as CHANGELOG.md (@aydrian)
 - [#66](https://github.com/SparkPost/node-sparkpost/pull/66) Issue [#51](https://github.com/SparkPost/node-sparkpost/issues/51) Modify the base object to handle non 2XX status and simplify second callback param (@aydrian)
@@ -14,7 +14,7 @@
   - Issue [#61](https://github.com/SparkPost/node-sparkpost/issues/61) Update sending domains to use toApiFormat
   - Issue [#60](https://github.com/SparkPost/node-sparkpost/issues/60) Update templates to use toApiFormat
   - Issue [#58](https://github.com/SparkPost/node-sparkpost/issues/58) Update recipientLists to use toApiFormat
-  - Issue [#57] Update transmissions to use toApiFormat (@bdeanindy) 
+  - Issue [#57] Update transmissions to use toApiFormat (@bdeanindy)
 
 ### v0.9.0 (2015/05/12) - *breaking*
 - [#49](https://github.com/SparkPost/node-sparkpost/pull/49) Issue [#48](https://github.com/SparkPost/node-sparkpost/issues/48) Add Grunt Bump (@aydrian)
