@@ -8,8 +8,7 @@ This library provides easy access to the [Transmissions](https://www.sparkpost.c
   * `callback` - executed after task is completed. **required**
     * standard `callback(err, data)`
     * `err` - any error that occurred
-    * `data.res` - full response from request client
-    * `data.body` - payload from response
+    * `data` - full response from request client
 * **find(transmissionID, callback)**
   Retrieve the details about a transmission by its ID
   * `transmissionID` - the id of the transmission you want to look up **required**
