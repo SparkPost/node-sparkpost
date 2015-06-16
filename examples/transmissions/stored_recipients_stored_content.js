@@ -5,11 +5,12 @@ var key = 'YOURAPIKEY'
   , client = new SparkPost(key);
 
 var trans = {
-  from: 'From Envelope <from@example.com>',
-  subject: 'Example Email for Stored List and Template',
-  recipient_list: 'example-list',
-  template: 'my-template',
-  recipients: [{ address: { email: 'john.doe@example.com' } }]
+  listId: 'example-list',
+  content: {
+    from: 'From Envelope <from@example.com>',
+    subject: 'Example Email for Stored List and Template',
+    templateId: 'my-template'
+  }
 };
 
 client.transmissions.send({transmissionBody: trans}, function(err, res) {
