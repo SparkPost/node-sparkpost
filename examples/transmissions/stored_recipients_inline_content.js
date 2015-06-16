@@ -18,7 +18,7 @@ var reqObj = {
   }
 };
 
-client.transmissions.send(req, function(err, res) {
+client.transmissions.send(reqObj, function(err, res) {
   if (err) {
     console.log(err);
   } else {
