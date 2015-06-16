@@ -8,8 +8,7 @@ This library provides easy access to the [Recipient Lists](https://www.sparkpost
   * `callback` - executed after task is completed. **required**
     * standard `callback(err, data)`
     * `err` - any error that occurred
-    * `data.res` - full response from request client
-    * `data.body` - payload from response
+    * `data` - full response from request client
 * **find(options, callback)**
   Retrieve details about a specified recipient list by its id
   * `options.id` - the id of the recipient list you want to look up **required**

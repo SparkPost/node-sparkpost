@@ -9,8 +9,7 @@ This library provides easy access to the [Webhooks](https://www.sparkpost.com/ap
   * `callback` - executed after task is completed. **required**
     * standard `callback(err, data)`
     * `err` - any error that occurred
-    * `data.res` - full response from request client
-    * `data.body` - payload from response
+    * `data` - full response from request client
 * **describe(options, callback)**
   Retrieve details about a specified webhook by its id
   * `options.id` - the id of the webhook you want to describe **required**
