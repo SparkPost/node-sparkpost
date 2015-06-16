@@ -4,15 +4,21 @@ var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key);
 
-var trans = {
-  from: 'From Envelope <from@example.com>',
-  recipient_list: 'example-list',
-  subject: 'Example Email for Stored List and Inline Content',
-  html: '<html><body><p>Hello World</p></body></html>',
-  text: 'Hello World!'
+var reqObj = {
+  transmissionBody: {
+    recipients: {
+      list_id: 'example-list'
+    },
+    content: {
+      from: 'From Envelope <from@example.com>',
+      subject: 'Example Email for Stored List and Inline Content',
+      html: '<html><body><p>Hello World</p></body></html>',
+      text: 'Hello World!'
+    }
+  }
 };
 
-client.transmissions.send({transmissionBody: trans}, function(err, res) {
+client.transmissions.send(reqObj, function(err, res) {
   if (err) {
     console.log(err);
   } else {

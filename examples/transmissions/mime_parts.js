@@ -4,17 +4,23 @@ var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key);
 
-var trans = {
-  from: 'From Envelope <from@example.com>',
-  recipients: [{ address: { email: 'john.doe@example.com' } }],
-  subject: 'Example Email for MIME Parts',
-  html: '<html><body><p>Hello World!</p></body></html>',
-  text: 'Hello World!',
-  trackOpens: true,
-  trackClicks: true
+var reqObj = {
+  transmissionBody: {
+    recipients: [{ address: { email: 'john.doe@example.com' } }],
+    content: {
+      from: 'From Envelope <from@example.com>',
+      subject: 'Example Email for MIME Parts',
+      html: '<html><body><p>Hello World!</p></body></html>',
+      text: 'Hello World!'
+    },
+    options: {
+      open_tracking: true,
+      click_tracking: true
+    }
+  }
 };
 
-client.transmissions.send({transmissionBody: trans}, function(err, res) {
+client.transmissions.send(reqObj, function(err, res) {
   if (err) {
     console.log(err);
   } else {
