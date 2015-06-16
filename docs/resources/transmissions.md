@@ -28,25 +28,21 @@ This library provides easy access to the [Transmissions](https://www.sparkpost.c
 var SparkPost = require('sparkpost')
   , client = new SparkPost('YOUR API KEY');
 
-var trans = {
-  content: {}
+var reqObj = {
+  transmissionBody: {
+    campaignId: 'first-mailing',
+    content: {
+      from: 'you@your-company.com',
+      subject: 'First SDK Mailing',
+      html: '<html><body><h1>Congratulations, {{name}}!</h1><p>You just sent your very first mailing!</p></body></html>',
+      text: 'Congratulations, {{name}}!! You just sent your very first mailing!'
+    }
+    substitutionData: {name: 'YOUR FIRST NAME'},
+    recipients: [{ address: { name: 'YOUR FULL NAME', email: 'YOUR EMAIL ADDRESS' } }]
+  }
 };
 
-// Set some metadata for your email
-trans.campaignId = 'first-mailing';
-trans.content.from = 'you@your-company.com';
-trans.content.subject = 'First SDK Mailing';
-
-// Add some content to your email
-trans.content.html = '<html><body><h1>Congratulations, {{name}}!</h1><p>You just sent your very first mailing!</p></body></html>';
-trans.content.text = 'Congratulations, {{name}}!! You just sent your very first mailing!';
-trans.substitutionData = {name: 'YOUR FIRST NAME'};
-
-// Pick someone to receive your email
-trans.recipients = [{ address: { name: 'YOUR FULL NAME', email: 'YOUR EMAIL ADDRESS' } }];
-
-// Send it off into the world!
-client.transmissions.send({transmissionBody: trans}, function(err, res) {
+client.transmissions.send(reqObj, function(err, res) {
   if (err) {
     console.log('Whoops! Something went wrong');
     console.log(err);
