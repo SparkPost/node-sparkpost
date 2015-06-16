@@ -7,7 +7,7 @@ var key = 'YOURAPIKEY'
 var reqObj = {
   transmissionBody: {
     recipients: {
-      listId: 'example-list'
+      list_id: 'example-list'
     },
     content: {
       from: 'From Envelope <from@example.com>',

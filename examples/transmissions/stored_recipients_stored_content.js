@@ -7,12 +7,12 @@ var key = 'YOURAPIKEY'
 var reqOpts = {
   transmissionBody: {
     recipients: {
-      listId: 'example-list'
+      list_id: 'example-list'
     },
     content: {
       from: 'From Envelope <from@example.com>',
       subject: 'Example Email for Stored List and Template',
-      templateId: 'my-template'
+      template_id: 'my-template'
     }
   }
 };

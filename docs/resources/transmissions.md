@@ -36,7 +36,7 @@ var reqObj = {
       subject: 'First SDK Mailing',
       html: '<html><body><h1>Congratulations, {{name}}!</h1><p>You just sent your very first mailing!</p></body></html>',
       text: 'Congratulations, {{name}}!! You just sent your very first mailing!'
-    }
+    },
     substitutionData: {name: 'YOUR FIRST NAME'},
     recipients: [{ address: { name: 'YOUR FULL NAME', email: 'YOUR EMAIL ADDRESS' } }]
   }
