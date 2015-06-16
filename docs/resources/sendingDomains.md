@@ -9,17 +9,17 @@ This library provides easy access to the [Sending Domains](https://www.sparkpost
     * standard `callback(err, data)`
     * `err` - any error that occurred
     * `data` - full response from request client
-* **find(domainName, callback)**
+* **find(domain, callback)**
   Retrieve a sending domain by its domain name
   * `domain` - the name of the domain you want to look up **required**
   * `callback` - see all function
 * **create(domainBody, callback)**
   Create a new sending domain
-  * `domainBody` - see object description below **required**
+  * `domainBody` - a sending domain object **required**
   * `callback` - see all function
 * **update(domainBody, callback)**
   Update an existing sending domain
-  * `domainBody` - see object description below **required**
+  * `domainBody` - a sending domain object **required**
   * `callback` - see all function
 * **verify(options, callback)**
   Validate the specified verification field types for a sending domain
