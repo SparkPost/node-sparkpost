@@ -4,7 +4,7 @@ var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key)
   , options = {
-    events: 'bounces'
+    events: 'bounce'
   };
 
 client.webhooks.getSamples(options, function(err, res) {
