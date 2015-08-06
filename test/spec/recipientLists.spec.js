@@ -102,6 +102,51 @@ describe('Recipient Lists Library', function() {
     });
   });
 
+  describe('update Method', function() {
+    var test_list = [
+      {
+        address: {
+          email: 'test@test.com',
+          name: 'test'
+        }
+      }
+    ];
+
+    it('should call client put method with the appropriate uri', function(done) {
+      var options = {
+        id: 'test_list',
+        recipients: test_list
+      };
+
+      recipientLists.update(options, function(err, data) {
+        expect(client.put.firstCall.args[0].uri).to.equal('recipient-lists/' + options.id);
+        done();
+      });
+    });
+
+    it('should throw an error if id is missing', function(done) {
+      recipientLists.update(null, function(err) {
+        expect(err.message).to.equal('recipients list id is required');
+        expect(client.put).not.to.have.been.called;
+        done();
+      });
+    });
+
+    it('should allow num_rcpt_errors to be set in options', function(done) {
+      var options = {
+        id: 'test_list',
+        recipients: test_list,
+        num_rcpt_errors: 3
+      };
+
+      recipientLists.update(options, function(err, data) {
+        expect(client.put.firstCall.args[0].qs).to.deep.equal({num_rcpt_errors: 3});
+        done();
+      });
+    });
+
+  });
+
   describe('delete Method', function() {
     it('should call client delete method with the appropriate uri', function(done) {
       recipientLists.delete('test', function(err, data) {

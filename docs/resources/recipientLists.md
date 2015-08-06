@@ -19,6 +19,12 @@ This library provides easy access to the [Recipient Lists](https://www.sparkpost
   * `options.recipients` - an array of recipients to add to the list **required**
   * `options.num_rcpt_errors` - limit the number of recipient errors returned
   * `callback` - see all function
+* **update(options, callback)**
+  Update an existing recipient list
+  * `options.id` - the id of the recipient list you want to update **required**
+  * `options.recipients` - an array of recipients to add to the list **required**
+  * `options.num_rcpt_errors` - limit the number of recipient errors returned
+  * `callback` - see all function
 * **delete(id, callback)**
   Delete an existing recipient list
   * `id` - the id of the recipient list you want to delete **required**
