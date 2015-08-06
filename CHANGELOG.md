@@ -1,5 +1,13 @@
 ## Change Log
 
+### v1.0.1 (2015/08/06)
+- [#88](https://github.com/SparkPost/node-sparkpost/pull/88) Modified toApiFormat spec test file to fit standard naming convention. Added tests for code coverage. (@aydrian)
+- [#87](https://github.com/SparkPost/node-sparkpost/pull/87) Removed dependency for snake-case (@aydrian)
+- [#83](https://github.com/SparkPost/node-sparkpost/pull/83) Make sure to support sending with a stored recipient list or template, while also leaving headers and substitution data alone. (@bdeanindy)
+- [#80](https://github.com/SparkPost/node-sparkpost/pull/80) Updated transmission docs and examples. (@aydrian)
+- [#78](https://github.com/SparkPost/node-sparkpost/pull/78) Update Sending Domains docs and examples. (@aydrian)
+- [#70](https://github.com/SparkPost/node-sparkpost/pull/70) Update examples for newly added toApiFormat (@bdeanindy)
+
 ### v1.0.0 (2015/06/06) - *breaking*
 - [#68](https://github.com/SparkPost/node-sparkpost/pull/68) Added keywords for searching in npm (@nornholdj)
 - [#67](https://github.com/SparkPost/node-sparkpost/pull/67) Created a change log as CHANGELOG.md (@aydrian)
