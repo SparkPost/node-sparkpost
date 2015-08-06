@@ -219,4 +219,41 @@ describe('Webhooks Library', function() {
       });
     });
   });
+
+  describe('getDocumentation Method', function() {
+    it('should call client get method with the appropriate uri', function(done) {
+      var options = {
+        id: 'test'
+      };
+
+      webhooks.getDocumentation(function(err, data) {
+        expect(client.get.firstCall.args[0].uri).to.equal('webhooks/events/documentation');
+        done();
+      });
+    });
+  });
+
+  describe('getSamples Method', function() {
+    it('should call client get method with the appropriate uri', function(done) {
+      var options = {
+        id: 'test'
+      };
+
+      webhooks.getSamples(function(err, data) {
+        expect(client.get.firstCall.args[0].uri).to.equal('webhooks/events/samples');
+        done();
+      });
+    });
+
+    it('should allow events to be set in options', function(done) {
+      var options = {
+        events: 'bounces'
+      };
+
+      webhooks.getSamples(options, function(err, data) {
+        expect(client.get.firstCall.args[0].qs).to.deep.equal({events: 'bounces'});
+        done();
+      });
+    });
+  });
 });

@@ -37,6 +37,13 @@ This library provides easy access to the [Webhooks](https://www.sparkpost.com/ap
   * `options.id` - the id of the webhook you want to get status on **required**
   * `options.limit` - `number` maximum number of results to return Default: `1000`
   * `callback` - see all function
+* **getDocumentation(callback)**
+  Lists descriptions of the events, event types, and event fields that could be included in a Webhooks post to your target URL.
+  * `callback` - see all function
+* **getSamples(options, callback)**
+  List an example of the event data that will be posted by a Webhook for the specified events.
+  * `options.events` - `String` event types for which to get a sample payload Defaults to all event types
+  * `callback` - see all function
 
 ## Examples
 
