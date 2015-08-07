@@ -52,6 +52,14 @@ module.exports = function(grunt) {
           failOnError : true
         }
       }
+    },
+    coveralls: {
+      options: {
+        force: true
+      },
+      grunt_coveralls_coverage: {
+        src: 'test/reports/lcov.info'
+      }
     }
   });
 
