@@ -1,5 +1,10 @@
 ## Change Log
 
+### v1.1.0 (2015/08/13)
+- [#92](https://github.com/SparkPost/node-sparkpost/pull/92) Added Coveralls.io (@aydrian)
+- [#91](https://github.com/SparkPost/node-sparkpost/pull/91) Added Recipient List Update method, Docs, and Examples (@aydrian)
+- [#85](https://github.com/SparkPost/node-sparkpost/pull/85) Added getDocumentation and getSamples functions to Webhooks resource (@aydrian)
+
 ### v1.0.1 (2015/08/06)
 - [#88](https://github.com/SparkPost/node-sparkpost/pull/88) Modified toApiFormat spec test file to fit standard naming convention. Added tests for code coverage. (@aydrian)
 - [#87](https://github.com/SparkPost/node-sparkpost/pull/87) Removed dependency for snake-case (@aydrian)
@@ -12,17 +17,16 @@
 - [#68](https://github.com/SparkPost/node-sparkpost/pull/68) Added keywords for searching in npm (@nornholdj)
 - [#67](https://github.com/SparkPost/node-sparkpost/pull/67) Created a change log as CHANGELOG.md (@aydrian)
 - [#66](https://github.com/SparkPost/node-sparkpost/pull/66) Issue [#51](https://github.com/SparkPost/node-sparkpost/issues/51) Modify the base object to handle non 2XX status and simplify second callback param (@aydrian)
-- [#64](
 - [#56](https://github.com/SparkPost/node-sparkpost/pull/56) Issue [#46](https://github.com/SparkPost/node-sparkpost/issues/46) Updates to Transmissions library (@aydrian)
 - [#55](https://github.com/SparkPost/node-sparkpost/pull/55) Fix doc about using process.env.SPARKPOST_API_KEY (@bizob2828)
 - [#54](https://github.com/SparkPost/node-sparkpost/pull/54) fixed link to transmissions in readme (@bizob2828)
-- [#45](https://github.com/SparkPost/node-sparkpost/pull/45) Issue [#45](https://github.com/SparkPost/node-sparkpost/issues/44) Accept camelCase or native API format seamlessly
+- [#45](https://github.com/SparkPost/node-sparkpost/pull/45) Issue [#45](https://github.com/SparkPost/node-sparkpost/issues/44) Accept camelCase or native API format seamlessly (@bdeanindy)
   - Issue [#64](https://github.com/SparkPost/node-sparkpost/issues/64) Update webhooks to use toApiFormat
   - Issue [#63](https://github.com/SparkPost/node-sparkpost/issues/63) Updated suppressionlists to use toApiFormat
   - Issue [#61](https://github.com/SparkPost/node-sparkpost/issues/61) Update sending domains to use toApiFormat
   - Issue [#60](https://github.com/SparkPost/node-sparkpost/issues/60) Update templates to use toApiFormat
   - Issue [#58](https://github.com/SparkPost/node-sparkpost/issues/58) Update recipientLists to use toApiFormat
-  - Issue [#57] Update transmissions to use toApiFormat (@bdeanindy)
+  - Issue [#57](https://github.com/SparkPost/node-sparkpost/issues/58) Update transmissions to use toApiFormat
 
 ### v0.9.0 (2015/05/12) - *breaking*
 - [#49](https://github.com/SparkPost/node-sparkpost/pull/49) Issue [#48](https://github.com/SparkPost/node-sparkpost/issues/48) Add Grunt Bump (@aydrian)
