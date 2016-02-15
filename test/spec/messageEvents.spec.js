@@ -19,20 +19,20 @@ describe('Message Events Library', function() {
   describe('search Method', function() {
     it('should call client get method with the appropriate parameters', function(done) {
       var options = {
-        bounce_classes: [10, 50],
+        bounce_classes: '10,50',
         campaign_ids: 'test_campaign',
-        events: ['bounce'],
-        friendly_froms: ['bob@example.com'],
+        events: 'bounce',
+        friendly_froms: 'bob@example.com',
         from: '2015-11-14T16:15',
-        message_ids: ['0e0d94b7-9085-4e3c-ab30-e3f2cd9c273e'],
+        message_ids: '0e0d94b7-9085-4e3c-ab30-e3f2cd9c273e',
         page: 1,
         per_page: 5,
         reason: '%5.2.0%',
-        recipients: ['jim@example.com'],
-        template_ids: ['newsletter_template'],
+        recipients: 'jim@example.com',
+        template_ids: 'newsletter_template',
         timezone: 'America/New_York',
         to: '2016-11-14T16:15',
-        transmission_ids: ['65832150921904138']
+        transmission_ids: '65832150921904138'
       };
       messageEvents.search(options, function(err, data) {
         Object.keys(options).forEach(function(key) {
