@@ -2,6 +2,7 @@ var chai = require('chai')
   , expect = chai.expect
   , sinon = require('sinon')
   , sinonChai = require('sinon-chai')
+  , zlib = require('zlib')
   , nock = require('nock')
   , SparkPost = require('../../lib/sparkpost');
 
@@ -160,6 +161,59 @@ describe('SparkPost Library', function() {
 
       client.request(options, function(err, data) {
         expect(data.request.uri.href).to.equal('https://test.sparkpost.com/test');
+
+        // finish async test
+        done();
+      });
+    });
+
+    it('should accept gzipped responses', function(done) {
+      var TEST_MESSAGE = 'This is a compressible test and it is full of compressible test stuff.'
+        , compressedMsg = zlib.gzipSync(TEST_MESSAGE + TEST_MESSAGE)
+        , gzipNock = nock('https://test.sparkpost.com', {
+            reqheaders: {
+              'accept-encoding': 'gzip'
+            }
+          })
+          .get('/test')
+          .reply(200, compressedMsg, {
+            'X-Transfer-Length': String(compressedMsg.length)
+            , 'Content-Length': undefined
+            , 'Content-Encoding': 'gzip'
+          })
+        , options = {
+          method: 'GET'
+          , uri: 'https://test.sparkpost.com/test'
+          };
+
+      client.request(options, function(err, data) {
+        expect(err).to.be.null;
+        expect(data.statusCode).to.equal(200);
+        expect(data.body).to.equal(TEST_MESSAGE + TEST_MESSAGE);
+ 
+        // finish async test
+        done();
+      });
+    });
+
+    it('should support explicitly disabled gzip option', function(done) {
+      var TEST_MESSAGE = 'This is an uncompressed test message';
+
+      nock('https://test.sparkpost.com')
+        .get('/test')
+        .reply(200, TEST_MESSAGE);
+
+      var options = {
+        method: 'GET'
+        , uri: 'https://test.sparkpost.com/test'
+        , gzip: false
+      };
+
+      client.request(options, function(err, data) {
+        expect(err).to.be.null;
+        expect(data.statusCode).to.equal(200);
+        expect(data.body).to.equal(TEST_MESSAGE);
+        expect(data.headers).not.to.have.property('content-encoding');
 
         // finish async test
         done();
