@@ -169,8 +169,17 @@ describe('SparkPost Library', function() {
 
     it('should accept gzipped responses', function(done) {
       var TEST_MESSAGE = 'This is a compressible test and it is full of compressible test stuff.'
-        , compressedMsg = zlib.gzipSync(TEST_MESSAGE + TEST_MESSAGE)
-        , gzipNock = nock('https://test.sparkpost.com', {
+        , compressedMsg
+        , gzipNock
+        , options = {
+          method: 'GET'
+          , uri: 'https://test.sparkpost.com/test'
+          };
+
+      zlib.gzip(TEST_MESSAGE+TEST_MESSAGE, function(err, gzipped) {
+        expect(err).to.be.null;
+        compressedMsg = gzipped;
+        gzipNock = nock('https://test.sparkpost.com', {
             reqheaders: {
               'accept-encoding': 'gzip'
             }
@@ -180,19 +189,15 @@ describe('SparkPost Library', function() {
             'X-Transfer-Length': String(compressedMsg.length)
             , 'Content-Length': undefined
             , 'Content-Encoding': 'gzip'
-          })
-        , options = {
-          method: 'GET'
-          , uri: 'https://test.sparkpost.com/test'
-          };
-
-      client.request(options, function(err, data) {
-        expect(err).to.be.null;
-        expect(data.statusCode).to.equal(200);
-        expect(data.body).to.equal(TEST_MESSAGE + TEST_MESSAGE);
+          });
+        client.request(options, function(err, data) {
+          expect(err).to.be.null;
+          expect(data.statusCode).to.equal(200);
+          expect(data.body).to.equal(TEST_MESSAGE + TEST_MESSAGE);
  
-        // finish async test
-        done();
+          // finish async test
+          done();
+        });
       });
     });
 
