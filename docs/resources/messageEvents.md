@@ -1,4 +1,4 @@
-# Sending Domains
+# Message Events
 
 This library provides easy access to the [Message Events](https://www.sparkpost.com/api#/reference/message-events/) resource.
 
