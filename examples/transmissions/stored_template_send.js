@@ -8,9 +8,7 @@ var reqOpts = {
   transmissionBody: {
     recipients: [{ address: { email: 'john.doe@example.com' } }],
     content: {
-      template_id: 'my-template',
-      from: 'From Envelope <example@sparkpostbox.com>',
-      subject: 'Example Email for Stored Template'
+      template_id: 'my-template'
     }
   }
 };
