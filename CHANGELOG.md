@@ -1,5 +1,14 @@
 ## Change Log
 
+### v1.2.0 (2016/03/14)
+- [#109](https://github.com/SparkPost/node-sparkpost/pull/109) README updates (@aydrian)
+- [#108](https://github.com/SparkPost/node-sparkpost/pull/108) removes from and subject from transmission stored template send example (@colestrode)
+- [#106](https://github.com/SparkPost/node-sparkpost/pull/106) correcting send_transmission_all_fields.js example (@lfreneda)
+- [#104](https://github.com/SparkPost/node-sparkpost/pull/104) Added a mocha test task to the default grunt task (@ewandennis)
+- [#101](https://github.com/SparkPost/node-sparkpost/pull/101) Added gzipped response support (@ewandennis)
+- [#100](https://github.com/SparkPost/node-sparkpost/pull/100) Added message events wrapper (@ewandennis)
+- [#97](https://github.com/SparkPost/node-sparkpost/pull/97) Add nodejs versions to TravisCI (@richleland)
+
 ### v1.1.0 (2015/08/13)
 - [#92](https://github.com/SparkPost/node-sparkpost/pull/92) Added Coveralls.io (@aydrian)
 - [#91](https://github.com/SparkPost/node-sparkpost/pull/91) Added Recipient List Update method, Docs, and Examples (@aydrian)
