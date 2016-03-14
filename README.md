@@ -2,11 +2,11 @@
 
 [Sign up](https://app.sparkpost.com/sign-up?src=Dev-Website&sfdcid=70160000000pqBb) for a SparkPost account and visit our [Developer Hub](https://developers.sparkpost.com) for even more content.
 
-# Node.js SDK
+# Node.js Client Library
 
-[![Travis CI](https://travis-ci.org/SparkPost/node-sparkpost.svg?branch=master)](https://travis-ci.org/SparkPost/node-sparkpost) [![Coverage Status](https://coveralls.io/repos/SparkPost/node-sparkpost/badge.svg?branch=master&service=github)](https://coveralls.io/github/SparkPost/node-sparkpost?branch=master) [![Slack Status](http://slack.sparkpost.com/badge.svg)](http://slack.sparkpost.com)
+[![Travis CI](https://travis-ci.org/SparkPost/node-sparkpost.svg?branch=master)](https://travis-ci.org/SparkPost/node-sparkpost) [![Coverage Status](https://coveralls.io/repos/SparkPost/node-sparkpost/badge.svg?branch=master&service=github)](https://coveralls.io/github/SparkPost/node-sparkpost?branch=master) [![NPM version](https://badge.fury.io/js/sparkpost.png)](http://badge.fury.io/js/sparkpost) [![Slack Status](http://slack.sparkpost.com/badge.svg)](http://slack.sparkpost.com)
 
-The official Node.js binding for your favorite [SparkPost APIs](https://www.sparkpost.com/api)!
+The official Node.js binding for your favorite [SparkPost APIs](https://developers.sparkpost.com/api)!
 
 ## Prerequisites
 
@@ -79,9 +79,9 @@ var options = {
 var client = new SparkPost('YOUR_API_KEY', options);
 ```
 
-## Using the Node SDK Base Object
-We may not wrap every resource available in the SparkPost SDK, for example the Node SDK does not wrap the Metrics resource,
-but you can use the Node SDK Base Object to form requests to these unwrapped resources. Here is an example request using the
+## Using the Node Client Library Base Object
+We may not wrap every resource available in the SparkPost Client Library, for example the Node Client Library does not wrap the Metrics resource,
+but you can use the Node Client Library Base Object to form requests to these unwrapped resources. Here is an example request using the
 base object to make requests to the Metrics resource. Here is an example request using the base object to make requests to
 the Metrics resource.
 
@@ -101,9 +101,10 @@ client.get(options, function(err, data) {
 });
 ```
 
-## SparkPost API Resources Supported in Node SDK
+## SparkPost API Resources Supported in Node Client Library
 Click on the desired API to see usage and more information
 
+* [Message Events](/docs/resources/messageEvents.md) - `client.messageEvents` ([examples](/examples/messageEvents))
 * [Recipient Lists](/docs/resources/recipientLists.md) - `client.recipientLists` ([examples](/examples/recipientLists))
 * [Sending Domains](/docs/resources/sendingDomains.md) - `client.sendingDomains` ([examples](/examples/sendingDomains))
 * [Suppression List](/docs/resources/suppressionList.md) - `client.suppressionList` ([examples](/examples/suppressionList))
