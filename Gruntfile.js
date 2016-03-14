@@ -45,12 +45,15 @@ module.exports = function(grunt) {
       }
     },
     shell: {
-      test: {
+      coverage: {
         command : '<%= config.binPath %>/istanbul cover --report lcov --dir test/reports/ <%= config.binPath %>/_mocha test/spec -- --reporter ' + reporter,
         options : {
           stdout : true,
           failOnError : true
         }
+      },
+      test: {
+        command: '<%= config.binPath %>/_mocha test/spec'
       }
     },
     coveralls: {
@@ -69,7 +72,8 @@ module.exports = function(grunt) {
   // grunt test - runs linting and then our unit tests
   grunt.registerTask('test', [
     'lint',
-    'shell:test'
+    'shell:test',
+    'shell:coverage'
   ]);
 
   // register default grunt command as grunt test
