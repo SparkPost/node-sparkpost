@@ -6,10 +6,12 @@ var key = 'YOURAPIKEY'
 
 var reqOpts = {
   transmissionBody: {
-    recipients: [{ address: { email: 'john.doe@example.com' } }],
+    campaignId: 'ricks-campaign',
     content: {
-      template_id: 'my-template'
-    }
+      template_id: 'ricks-template'
+    },
+    'num_rcpt_errors': 3,
+    recipients: [{ address: { email: 'rick.sanchez@rickandmorty100years.com', name: 'Rick Sanchez' } }]
   }
 };
 
@@ -18,6 +20,6 @@ client.transmissions.send(reqOpts, function(err, res) {
     console.log(err);
   } else {
     console.log(res.body);
-    console.log('Congrats you can use our SDK!');
+    console.log('What up my glib globs! SparkPost!');
   }
 });
