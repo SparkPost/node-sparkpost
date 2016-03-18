@@ -15,11 +15,11 @@ var reqOpts = {
   }
 };
 
-client.transmissions.send(reqOpts, function(err, res) {
+client.transmissions.send(reqOpts, function(err, data) {
   if (err) {
     console.log(err);
   } else {
-    console.log(res.body);
+    console.log(data);
     console.log('What up my glib globs! SparkPost!');
   }
 });
