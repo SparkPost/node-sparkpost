@@ -116,7 +116,7 @@ sp.transmissions.send({
       html:'<html><body><p>Testing SparkPost - the world\'s most awesomest email service!</p></body></html>'
     },
     recipients: [
-      {address: 'developers+nodejs@sparkpost.com'}
+      {address: '<YOUR EMAIL ADDRESS>'}
     ]
   }
 }, function(err, res) {
