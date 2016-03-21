@@ -12,7 +12,8 @@ describe('Sending Domains Library', function() {
     client = {
       get: sinon.stub().yields(),
       post: sinon.stub().yields(),
-      put: sinon.stub().yields()
+      put: sinon.stub().yields(),
+      'delete': sinon.stub().yields()
     };
 
     sendingDomains = require('../../lib/sendingDomains')(client);
@@ -121,6 +122,31 @@ describe('Sending Domains Library', function() {
       sendingDomains.update({}, function(err){
         expect(err.message).to.equal('domain is required in the domainBody');
         expect(client.put).not.to.have.been.called;
+        done();
+      });
+    });
+  });
+
+  describe('delete Method', function() {
+    it('should call client delete method with the appropriate uri', function(done) {
+      sendingDomains['delete']('test', function(err, data) {
+        expect(client['delete'].firstCall.args[0].uri).to.equal('sending-domains/test');
+        done();
+      });
+    });
+
+    it('should throw an error if domain is null', function(done) {
+      sendingDomains['delete'](null, function(err) {
+        expect(err.message).to.equal('domain is required');
+        expect(client['delete']).not.to.have.been.called;
+        done();
+      });
+    });
+
+    it('should throw an error if domain is missing', function(done) {
+      sendingDomains['delete'](function(err) {
+        expect(err.message).to.equal('domain is required');
+        expect(client['delete']).not.to.have.been.called;
         done();
       });
     });
