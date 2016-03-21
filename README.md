@@ -101,6 +101,34 @@ client.get(options, function(err, data) {
 });
 ```
 
+## Send An Email "Hello World" Example
+Below is an example of how to send a simple email. Sending an email is known as a *transmission*. By using the send method on the transmissions service that's available from the SparkPost object you instatiate, you can pass in a *transmissionBody* object with all the information relevant to the email being sent. The send method also takes a callback method that will let you know if the email was sent successful and if not information about the error that ocurred.
+
+```javascript
+var SparkPost = require('sparkpost');
+var sp = new SparkPost('<YOUR API KEY>');
+
+sp.transmissions.send({
+  transmissionBody: {
+    content: {
+      from: 'testing@sparkpostbox.com',
+      subject: 'Hello, World!',
+      html:'<html><body><p>Testing SparkPost - the world\'s most awesomest email service!</p></body></html>'
+    },
+    recipients: [
+      {address: 'developers+nodejs@sparkpost.com'}
+    ]
+  }
+}, function(err, res) {
+  if (err) {
+    console.log('Whoops! Something went wrong');
+    console.log(err);
+  } else {
+    console.log('Woohoo! You just sent your first mailing!');
+  }
+});
+```
+
 ## SparkPost API Resources Supported in Node Client Library
 Click on the desired API to see usage and more information
 
