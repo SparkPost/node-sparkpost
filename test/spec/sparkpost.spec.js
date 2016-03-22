@@ -349,7 +349,7 @@ describe('SparkPost Library', function() {
       client = new SparkPost(key, options);
     });
 
-    it('should deliever a PUT/UPDATE', function(done) {
+    it('should deliver a PUT/UPDATE', function(done) {
       var requestSpy = sinon.spy(SparkPost.prototype, 'request');
 
       nock('https://api.sparkpost.com')
@@ -410,7 +410,7 @@ describe('SparkPost Library', function() {
       client = new SparkPost(key, options);
     });
 
-    it('should deliever a DELETE', function(done) {
+    it('should deliver a DELETE', function(done) {
       var requestSpy = sinon.spy(SparkPost.prototype, 'request');
 
       nock('https://api.sparkpost.com')
