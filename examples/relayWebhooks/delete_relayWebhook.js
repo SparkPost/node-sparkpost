@@ -3,9 +3,9 @@
 var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key)
-  , webhookId = '123456789';
+  , relayWebhookId = '123456789';
 
-client.relayWebhooks['delete'](webhookId, function(err, res) {
+client.relayWebhooks.delete(relayWebhookId, function(err, res) {
   if (err) {
     console.log(err);
   } else {

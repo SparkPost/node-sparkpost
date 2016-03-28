@@ -13,7 +13,7 @@ describe('Relay Webhooks Library', function() {
       get: sinon.stub().yields(),
       post: sinon.stub().yields(),
       put: sinon.stub().yields(),
-      'delete': sinon.stub().yields()
+      delete: sinon.stub().yields()
     };
 
     relayWebhooks = require('../../lib/relayWebhooks')(client);
@@ -36,17 +36,17 @@ describe('Relay Webhooks Library', function() {
       });
     });
 
-    it('should throw an error if webhookId is null', function(done) {
+    it('should throw an error if relayWebhookId is null', function(done) {
       relayWebhooks.find(null, function(err) {
-        expect(err.message).to.equal('webhookId is required');
+        expect(err.message).to.equal('relayWebhookId is required');
         expect(client.get).not.to.have.been.called;
         done();
       });
     });
 
-    it('should throw an error if webhookId is missing', function(done) {
+    it('should throw an error if relayWebhookId is missing', function(done) {
       relayWebhooks.find(function(err) {
-        expect(err.message).to.equal('webhookId is required');
+        expect(err.message).to.equal('relayWebhookId is required');
         expect(client.get).not.to.have.been.called;
         done();
       });
@@ -102,7 +102,7 @@ describe('Relay Webhooks Library', function() {
   describe('update Method', function() {
     it('should call client put method with the appropriate uri', function(done) {
       var options = {
-        webhookId: "test"
+        relayWebhookId: "test"
       };
 
       relayWebhooks.update(options, function(err, data) {
@@ -127,9 +127,9 @@ describe('Relay Webhooks Library', function() {
       });
     });
 
-    it('should throw an error if webhookId is missing from options', function(done) {
+    it('should throw an error if relayWebhookId is missing from options', function(done) {
       relayWebhooks.update({}, function(err) {
-        expect(err.message).to.equal('webhookId is required in options');
+        expect(err.message).to.equal('relayWebhookId is required in options');
         expect(client.put).not.to.have.been.called;
         done();
       });
@@ -138,24 +138,24 @@ describe('Relay Webhooks Library', function() {
 
   describe('delete Method', function() {
     it('should call client delete method with the appropriate uri', function(done) {
-      relayWebhooks['delete']('test', function(err, data) {
-        expect(client['delete'].firstCall.args[0].uri).to.equal('relay-webhooks/test');
+      relayWebhooks.delete('test', function(err, data) {
+        expect(client.delete.firstCall.args[0].uri).to.equal('relay-webhooks/test');
         done();
       });
     });
 
-    it('should throw an error if webhookId is null', function(done) {
-      relayWebhooks['delete'](null, function(err) {
-        expect(err.message).to.equal('webhookId is required');
-        expect(client['delete']).not.to.have.been.called;
+    it('should throw an error if relayWebhookId is null', function(done) {
+      relayWebhooks.delete(null, function(err) {
+        expect(err.message).to.equal('relayWebhookId is required');
+        expect(client.delete).not.to.have.been.called;
         done();
       });
     });
 
-    it('should throw an error if webhookId is missing', function(done) {
-      relayWebhooks['delete'](function(err) {
-        expect(err.message).to.equal('webhookId is required');
-        expect(client['delete']).not.to.have.been.called;
+    it('should throw an error if relayWebhookId is missing', function(done) {
+      relayWebhooks.delete(function(err) {
+        expect(err.message).to.equal('relayWebhookId is required');
+        expect(client.delete).not.to.have.been.called;
         done();
       });
     });
