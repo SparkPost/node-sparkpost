@@ -12,7 +12,7 @@ describe('Inbound Domains Library', function() {
     client = {
       get: sinon.stub().yields(),
       post: sinon.stub().yields(),
-      'delete': sinon.stub().yields()
+      delete: sinon.stub().yields()
 
     };
 
@@ -80,24 +80,24 @@ describe('Inbound Domains Library', function() {
 
   describe('delete Method', function() {
     it('should call client delete method with the appropriate uri', function(done) {
-      inboundDomains['delete']('test', function(err, data) {
-        expect(client['delete'].firstCall.args[0].uri).to.equal('inbound-domains/test');
+      inboundDomains.delete('test', function(err, data) {
+        expect(client.delete.firstCall.args[0].uri).to.equal('inbound-domains/test');
         done();
       });
     });
 
     it('should throw an error if domain is null', function(done) {
-      inboundDomains['delete'](null, function(err) {
+      inboundDomains.delete(null, function(err) {
         expect(err.message).to.equal('domain is required');
-        expect(client['delete']).not.to.have.been.called;
+        expect(client.delete).not.to.have.been.called;
         done();
       });
     });
 
     it('should throw an error if domain is missing', function(done) {
-      inboundDomains['delete'](function(err) {
+      inboundDomains.delete(function(err) {
         expect(err.message).to.equal('domain is required');
-        expect(client['delete']).not.to.have.been.called;
+        expect(client.delete).not.to.have.been.called;
         done();
       });
     });

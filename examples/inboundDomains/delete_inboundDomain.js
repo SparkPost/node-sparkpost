@@ -4,7 +4,7 @@ var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key);
 
-client.inboundDomains['delete']('example1.com', function(err, res) {
+client.inboundDomains.delete('example1.com', function(err, res) {
   if (err) {
     console.log(err);
   } else {
