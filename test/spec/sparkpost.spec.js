@@ -231,11 +231,18 @@ describe('SparkPost Library', function() {
   });
 
   describe('get method', function() {
+    var client;
+
+    before(function() {
+      // setting up a client for all tests to use
+      var key = '12345678901234567890';
+      var options = {};
+
+      client = new SparkPost(key, options);
+    });
+
     it('should deliver a GET + response', function(done) {
       var requestSpy = sinon.spy(SparkPost.prototype, 'request');
-
-      var key = '12345678901234567890';
-      var client = new SparkPost(key);
 
       nock('https://api.sparkpost.com')
         .get('/api/v1/get/test')
@@ -252,14 +259,41 @@ describe('SparkPost Library', function() {
         done();
       });
     });
+
+    it('should return a parsed JSON object', function(done) {
+      nock('https://test.sparkpost.com')
+        .get('/test')
+        .reply(200, '{ "ok": true }');
+
+      var options = {
+        method: 'GET'
+        , uri: 'https://test.sparkpost.com/test'
+      };
+
+      client.request(options, function(err, data) {
+        expect(data).to.not.be.a('string');
+        expect(data).to.be.an('object');
+        expect(data).to.deep.equal({ok: true});
+
+        // finish async test
+        done();
+      });
+    });
   });
 
   describe('post method', function() {
+    var client;
+
+    before(function() {
+      // setting up a client for all tests to use
+      var key = '12345678901234567890';
+      var options = {};
+
+      client = new SparkPost(key, options);
+    });
+
     it('should deliver a POST', function(done) {
       var requestSpy = sinon.spy(SparkPost.prototype, 'request');
-
-      var key = '12345678901234567890';
-      var client = new SparkPost(key);
 
       nock('https://api.sparkpost.com')
         .post('/api/v1/post/test')
@@ -284,14 +318,44 @@ describe('SparkPost Library', function() {
         done();
       });
     });
+
+    it('should return a parsed JSON object', function(done) {
+      nock('https://test.sparkpost.com')
+        .post('/test')
+        .reply(200, '{ "ok": true }');
+
+      var options = {
+        method: 'POST'
+        , uri: 'https://test.sparkpost.com/test'
+        , json: {
+          testingData: 'test data'
+        }
+      };
+
+      client.request(options, function(err, data) {
+        expect(data).to.not.be.a('string');
+        expect(data).to.be.an('object');
+        expect(data).to.deep.equal({ok: true});
+
+        // finish async test
+        done();
+      });
+    });
   });
 
   describe('put method', function() {
-    it('should deliever a PUT/UPDATE', function(done) {
-      var requestSpy = sinon.spy(SparkPost.prototype, 'request');
+    var client;
 
+    before(function() {
+      // setting up a client for all tests to use
       var key = '12345678901234567890';
-      var client = new SparkPost(key);
+      var options = {};
+
+      client = new SparkPost(key, options);
+    });
+
+    it('should deliver a PUT/UPDATE', function(done) {
+      var requestSpy = sinon.spy(SparkPost.prototype, 'request');
 
       nock('https://api.sparkpost.com')
         .put('/api/v1/put/test')
@@ -316,14 +380,44 @@ describe('SparkPost Library', function() {
         done();
       });
     });
+
+    it('should return a parsed JSON object', function(done) {
+      nock('https://test.sparkpost.com')
+        .put('/test')
+        .reply(200, '{ "ok": true }');
+
+      var options = {
+        method: 'PUT'
+        , uri: 'https://test.sparkpost.com/test'
+        , json: {
+          testingData: 'test data'
+        }
+      };
+
+      client.request(options, function(err, data) {
+        expect(data).to.not.be.a('string');
+        expect(data).to.be.an('object');
+        expect(data).to.deep.equal({ok: true});
+
+        // finish async test
+        done();
+      });
+    });
   });
 
   describe('delete method', function() {
-    it('should deliever a DELETE', function(done) {
-      var requestSpy = sinon.spy(SparkPost.prototype, 'request');
+    var client;
 
+    before(function() {
+      // setting up a client for all tests to use
       var key = '12345678901234567890';
-      var client = new SparkPost(key);
+      var options = {};
+
+      client = new SparkPost(key, options);
+    });
+
+    it('should deliver a DELETE', function(done) {
+      var requestSpy = sinon.spy(SparkPost.prototype, 'request');
 
       nock('https://api.sparkpost.com')
         .delete('/api/v1/delete/test')
@@ -345,6 +439,29 @@ describe('SparkPost Library', function() {
         expect(data.debug.request.method).to.equal('DELETE');
 
         SparkPost.prototype.request.restore(); // restoring function
+        done();
+      });
+    });
+
+    it('should return a parsed JSON object', function(done) {
+      nock('https://test.sparkpost.com')
+        .delete('/test')
+        .reply(200, '{ "ok": true }');
+
+      var options = {
+        method: 'DELETE'
+        , uri: 'https://test.sparkpost.com/test'
+        , json: {
+          testingData: 'test data'
+        }
+      };
+
+      client.request(options, function(err, data) {
+        expect(data).to.not.be.a('string');
+        expect(data).to.be.an('object');
+        expect(data).to.deep.equal({ok: true});
+
+        // finish async test
         done();
       });
     });

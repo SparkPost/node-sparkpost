@@ -21,6 +21,10 @@ This library provides easy access to the [Sending Domains](https://www.sparkpost
   Update an existing sending domain
   * `domainBody` - a sending domain object **required**
   * `callback` - see all function
+* **delete(domain, callback)**
+  Delete an existing sending domain
+  * `domain` - the name of the domain you want to delete **required**
+  * `callback` - see all function
 * **verify(options, callback)**
   Validate the specified verification field types for a sending domain
   * `options.domain` - the name of the domain you want to verify **required**
