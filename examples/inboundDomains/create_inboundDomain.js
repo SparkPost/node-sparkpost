@@ -4,11 +4,11 @@ var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key);
 
-client.sendingDomains.delete('example1.com', function(err, data) {
+client.inboundDomains.create('example1.com', function(err, res) {
   if (err) {
     console.log(err);
   } else {
-    console.log(data);
+    console.log(res.body);
     console.log('Congrats you can use our client library!');
   }
 });
