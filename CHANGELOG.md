@@ -1,5 +1,13 @@
 ## Change Log
 
+### v1.3.0 (2016/04/01)
+- [#129](https://github.com/SparkPost/node-sparkpost/pull/129) Added support for subaccounts (@coldacid)
+- [#126](https://github.com/SparkPost/node-sparkpost/pull/126) body might be undefined (@mstdokumaci)
+- [#121](https://github.com/SparkPost/node-sparkpost/pull/121) Added support for Relay Webhooks (@aydrian)
+- [#119](https://github.com/SparkPost/node-sparkpost/pull/119) Added support for inbound domains (@aydrian)
+- [#118](https://github.com/SparkPost/node-sparkpost/pull/118) Added support for deleting a sending domain (@aydrian)
+- [#115](https://github.com/SparkPost/node-sparkpost/pull/115) ReadMe "Hello World" Example (@JimTheMan)
+
 ### v1.2.0 (2016/03/14)
 - [#109](https://github.com/SparkPost/node-sparkpost/pull/109) README updates (@aydrian)
 - [#108](https://github.com/SparkPost/node-sparkpost/pull/108) removes from and subject from transmission stored template send example (@colestrode)
