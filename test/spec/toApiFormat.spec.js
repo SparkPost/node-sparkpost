@@ -24,6 +24,9 @@ describe('toApiFormat', function() {
         {name: 'John Doe', address: 'j.doe@sparkpost.com'}
         , {name: 'Sam Jones', address: 's.jones@sparkpost.com'}
       ]
+      , content: {
+        email_rfc822: 'a message'
+      }
       , fizzArr: [
         {
           buzzInga: "buzz"
@@ -53,6 +56,9 @@ describe('toApiFormat', function() {
         {name: 'John Doe', address: 'j.doe@sparkpost.com'}
         , {name: 'Sam Jones', address: 's.jones@sparkpost.com'}
       ]
+      , content: {
+        email_rfc822: 'a message'
+      }
       , fizz_arr: [
         {
           buzz_inga: "buzz"
