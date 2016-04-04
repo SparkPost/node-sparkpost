@@ -155,4 +155,30 @@ describe('toApiFormat', function() {
 
     done();
   });
+
+  it('should ignore allow camelCase exclude list entries', function(done) {
+    var testObj = {
+      simpleString: "foo"
+      , substitutionData: {
+        key1: 'value1',
+        key_2: 'value_2',
+        keyThree: 'valueThree'
+      }
+    };
+
+    var validationObj = {
+      simple_string: "foo"
+      , substitution_data: {
+        key1: 'value1',
+        key_2: 'value_2',
+        keyThree: 'valueThree'
+      }
+    };
+
+    var out = toApiFormat(testObj);
+
+    expect(out).to.deep.equal(validationObj);
+
+    done();
+  });
 });
