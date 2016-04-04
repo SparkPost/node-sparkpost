@@ -156,7 +156,7 @@ describe('toApiFormat', function() {
     done();
   });
 
-  it('should ignore allow camelCase exclude list entries', function(done) {
+  it('should allow camelCase exclusion list entries', function(done) {
     var testObj = {
       simpleString: "foo"
       , substitutionData: {
