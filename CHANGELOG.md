@@ -1,5 +1,8 @@
 ## Change Log
 
+### v1.3.1 (2016/04/01)
+- [#130](https://github.com/SparkPost/node-sparkpost/pull/130) Refactored toApiFormat.js to use json-pointer (@orval)
+
 ### v1.3.0 (2016/04/01)
 - [#129](https://github.com/SparkPost/node-sparkpost/pull/129) Added support for subaccounts (@coldacid)
 - [#126](https://github.com/SparkPost/node-sparkpost/pull/126) body might be undefined (@mstdokumaci)
