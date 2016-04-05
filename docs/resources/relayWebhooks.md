@@ -14,7 +14,7 @@ This library provides easy access to the [Relay Webhooks](https://www.sparkpost.
   * `webhookId` - the id of the relay webhook you want to look up **required**
   * `callback` - see all function
 * **create(options, callback)**
-  Create a new recipient list
+  Create a new relay webhook
   * `options.target` - url of the target to which to POST relay batches **required**
   * `options.domain` - inbound domain associated with this webhook **required**
   * `options.name` - user-friendly name
