@@ -122,6 +122,61 @@ describe('Subaccounts Library', function () {
         done();
       });
     });
+
+    it('should not set key_valid_ips in request if keyValidIps is missing from options', function(done) {
+      var options = {
+        name: 'test',
+        keyLabel: 'test',
+        keyGrants: []
+      };
+
+      subaccounts.create(options, function(err, data) {
+        expect(client.post.firstCall.args[0].json.key_valid_ips).to.be.undefined;
+        done();
+      })
+    });
+
+    it('should not set key_valid_ips in request if keyValidIps is empty array', function(done) {
+      var options = {
+        name: 'test',
+        keyLabel: 'test',
+        keyGrants: [],
+        keyValidIps: []
+      };
+
+      subaccounts.create(options, function(err, data) {
+        expect(client.post.firstCall.args[0].json.key_valid_ips).to.be.undefined;
+        done();
+      })
+    });
+
+    it('should set key_valid_ips in request if keyValidIps is in options and is a non-empty array', function(done) {
+      var options = {
+        name: 'test',
+        keyLabel: 'test',
+        keyGrants: [],
+        keyValidIps: ['127.0.0.1']
+      };
+
+      subaccounts.create(options, function(err, data) {
+        expect(client.post.firstCall.args[0].json.key_valid_ips).to.eql(['127.0.0.1']);
+        done();
+      })
+    });
+
+    it('should set key_valid_ips in request if keyValidIps is in options and is not an array', function(done) {
+      var options = {
+        name: 'test',
+        keyLabel: 'test',
+        keyGrants: [],
+        keyValidIps: '127.0.0.1'
+      };
+
+      subaccounts.create(options, function(err, data) {
+        expect(client.post.firstCall.args[0].json.key_valid_ips).to.eql(['127.0.0.1']);
+        done();
+      })
+    });
   });
 
   describe('update Method', function() {
