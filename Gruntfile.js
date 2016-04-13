@@ -1,5 +1,6 @@
 var matchdep = require('matchdep')
-  , gruntTimer = require('time-grunt');
+  , gruntTimer = require('time-grunt')
+  , path = require('path');
 
 module.exports = function(grunt) {
   // Dynamically load any preexisting grunt tasks/modules
@@ -9,7 +10,7 @@ module.exports = function(grunt) {
   gruntTimer(grunt);
 
   var config = {
-    binPath: './node_modules/.bin'
+    binPath: path.join('.', 'node_modules', '.bin'),
   };
 
   var reporter = grunt.option('reporter') || 'xunit-file';
@@ -46,14 +47,14 @@ module.exports = function(grunt) {
     },
     shell: {
       coverage: {
-        command : '<%= config.binPath %>/istanbul cover --report lcov --dir test/reports/ <%= config.binPath %>/_mocha test/spec -- --reporter ' + reporter,
+        command : path.join(config.binPath, 'istanbul') + ' cover --report lcov --dir test/reports/ node_modules/mocha/bin/_mocha test/spec -- --reporter ' + reporter,
         options : {
           stdout : true,
           failOnError : true
         }
       },
       test: {
-        command: '<%= config.binPath %>/_mocha test/spec'
+        command: path.join(config.binPath, '_mocha') + ' test/spec'
       }
     },
     coveralls: {
