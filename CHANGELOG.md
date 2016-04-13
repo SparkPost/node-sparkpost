@@ -1,5 +1,11 @@
 ## Change Log
 
+### v1.3.2 (2016/04/13)
+- [#139](https://github.com/SparkPost/node-sparkpost/pull/139) Make Gruntfile.js cross-platform friendly (@coldacid)
+- [#137](https://github.com/SparkPost/node-sparkpost/pull/137) Fix missing `subaccounts` property in SparkPost class (@coldacid)
+- [#134](https://github.com/SparkPost/node-sparkpost/pull/134) Let inboundDomains.create() use a domain name as per the docs (@orval)
+- [#132](https://github.com/SparkPost/node-sparkpost/pull/132) Some docs erroneously refer to recipient lists (@orval)
+
 ### v1.3.1 (2016/04/01)
 - [#130](https://github.com/SparkPost/node-sparkpost/pull/130) Refactored toApiFormat.js to use json-pointer (@orval)
 
