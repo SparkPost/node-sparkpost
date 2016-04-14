@@ -16,7 +16,7 @@ This library provides easy access to the [Webhooks](https://www.sparkpost.com/ap
   * `options.timezone` - `String` Standard timezone identification Default: `UTC`
   * `callback` - see all function
 * **create(webhook, callback)**
-  Create a new recipient list
+  Create a new webhook
   * `webhook` - a webhook object **required**
   * `callback` - see all function
 * **update(webhook, callback)**

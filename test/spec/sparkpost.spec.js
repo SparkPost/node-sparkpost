@@ -149,6 +149,28 @@ describe('SparkPost Library', function() {
       });
     });
 
+    it('should return an error if statusCode not 2XX and there is no body', function(done) {
+      // simulate a timeout
+      nock('https://api.sparkpost.com')
+        .post('/api/v1/post/test/fail')
+        .reply(422);
+
+      var options = {
+        method: 'POST'
+        , uri: 'post/test/fail'
+      };
+
+      client.request(options, function(err, data) {
+        expect(data).to.be.defined;
+        expect(err).to.be.defined;
+
+        expect(err.errors).to.be.undefined;
+
+        // finish async test
+        done();
+      });
+    });
+
     it('should use a full URI if provided', function(done) {
       nock('https://test.sparkpost.com')
         .get('/test')

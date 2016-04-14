@@ -1,5 +1,22 @@
 ## Change Log
 
+### v1.3.2 (2016/04/13)
+- [#139](https://github.com/SparkPost/node-sparkpost/pull/139) Make Gruntfile.js cross-platform friendly (@coldacid)
+- [#137](https://github.com/SparkPost/node-sparkpost/pull/137) Fix missing `subaccounts` property in SparkPost class (@coldacid)
+- [#134](https://github.com/SparkPost/node-sparkpost/pull/134) Let inboundDomains.create() use a domain name as per the docs (@orval)
+- [#132](https://github.com/SparkPost/node-sparkpost/pull/132) Some docs erroneously refer to recipient lists (@orval)
+
+### v1.3.1 (2016/04/01)
+- [#130](https://github.com/SparkPost/node-sparkpost/pull/130) Refactored toApiFormat.js to use json-pointer (@orval)
+
+### v1.3.0 (2016/04/01)
+- [#129](https://github.com/SparkPost/node-sparkpost/pull/129) Added support for subaccounts (@coldacid)
+- [#126](https://github.com/SparkPost/node-sparkpost/pull/126) body might be undefined (@mstdokumaci)
+- [#121](https://github.com/SparkPost/node-sparkpost/pull/121) Added support for Relay Webhooks (@aydrian)
+- [#119](https://github.com/SparkPost/node-sparkpost/pull/119) Added support for inbound domains (@aydrian)
+- [#118](https://github.com/SparkPost/node-sparkpost/pull/118) Added support for deleting a sending domain (@aydrian)
+- [#115](https://github.com/SparkPost/node-sparkpost/pull/115) ReadMe "Hello World" Example (@JimTheMan)
+
 ### v1.2.0 (2016/03/14)
 - [#109](https://github.com/SparkPost/node-sparkpost/pull/109) README updates (@aydrian)
 - [#108](https://github.com/SparkPost/node-sparkpost/pull/108) removes from and subject from transmission stored template send example (@colestrode)
