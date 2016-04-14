@@ -108,5 +108,20 @@ describe('Transmissions Library', function() {
         done();
       });
     });
+
+    it('should leave email_rfc822 content keys intact', function(done) {
+      var options = {
+        transmissionBody: {
+          content: {
+            email_rfc822: 'Content-Type: text/plain\nFrom: From Envelope <from@example.com>\nSubject: Example Email\n\nHello World'
+          }
+        }
+      };
+
+      transmission.send(options, function(err, data) {
+        expect(client.post.firstCall.args[0].json.content).to.have.property('email_rfc822');
+        done();
+      });
+    });
   });
 });

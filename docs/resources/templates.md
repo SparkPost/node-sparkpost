@@ -15,7 +15,7 @@ This library provides easy access to the [Templates](https://www.sparkpost.com/a
   * `options.draft` - specifies a draft or published template
   * `callback` - see all function
 * **create(options, callback)**
-  Create a new recipient list
+  Create a new template
   * `options.template` - a template object **required**
   * `callback` - see all function
 * **delete(id, callback)**
