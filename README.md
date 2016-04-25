@@ -50,7 +50,7 @@ npm install sparkpost
       * standard `callback(err, data)`
       * `err` - any error that occurred
       * `data` - results from API call
-      * `data.debug` - full response from request client
+      * `data.debug` - full response from request client when `options.debug` is `true`
 * **get | post | put | delete(options, callback)**
     * `options` - see request options
     * `callback` - see request options
