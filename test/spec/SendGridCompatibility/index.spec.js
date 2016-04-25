@@ -128,7 +128,7 @@ describe('SendGrid Compatibility', function() {
 
     it('should respond when the test succeeds', function(done) {
       sendgrid.send({}, function(err, res) {
-        expect(res.body.ok).to.be.true;
+        expect(res.ok).to.be.true;
         expect(err).to.equal(null);
         done();
       });

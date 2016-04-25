@@ -6,8 +6,8 @@ This library provides easy access to the [Message Events](https://www.sparkpost.
 * **search(params, callback)**
   Search for message events using the given parameters (NOTE: all params are optional):
   * `params.bounce_classes` - list of [bounce classes](https://support.sparkpost.com/customer/portal/articles/1929896)
-  * `params.campaign_ids` - campaign IDs 
-  * `params.events` - event types 
+  * `params.campaign_ids` - campaign IDs
+  * `params.events` - event types
   * `params.friendly_froms` - 'friendly' from addressess
   * `params.from` - time lower bound  (see below for date/time format details)
   * `params.message_ids` - message IDs
@@ -52,7 +52,7 @@ client.messageEvents.search(searchParams, function(err, res) {
     return;
   }
 
-  console.log(data.body);
+  console.log(data);
 });
 
 ```

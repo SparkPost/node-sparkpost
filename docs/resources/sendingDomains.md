@@ -43,7 +43,7 @@ client.sendingDomains.all(function(err, data) {
     return;
   }
 
-  console.log(data.body);
+  console.log(data);
 });
 
 ```

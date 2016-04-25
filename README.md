@@ -45,11 +45,12 @@ npm install sparkpost
 * **request(options, callback)**
     * `options` - [see request modules options](https://github.com/mikeal/request#requestoptions-callback)
     * `options.uri` - can either be a full url or a path that is appended to `options.origin` used at initialization ([url.resolve](http://nodejs.org/api/url.html#url_url_resolve_from_to))
+    * `options.debug` - setting to `true` includes full response from request client for debugging purposes
     * `callback` - executed after task is completed. **required**
       * standard `callback(err, data)`
       * `err` - any error that occurred
-      * `data.res` - full response from request client
-      * `data.body` - payload from response
+      * `data` - results from API call
+      * `data.debug` - full response from request client when `options.debug` is `true`
 * **get | post | put | delete(options, callback)**
     * `options` - see request options
     * `callback` - see request options
@@ -97,7 +98,7 @@ client.get(options, function(err, data) {
     return;
   }
 
-  console.log(data.body);
+  console.log(data);
 });
 ```
 

@@ -94,11 +94,12 @@ describe('SparkPost Library', function() {
       var options = {
         method: 'GET'
         , uri: 'get/test'
+        , debug: true
       };
 
       client.request(options, function(err, data) {
         // making sure original request was GET
-        expect(data.request.method).to.equal('GET');
+        expect(data.debug.request.method).to.equal('GET');
 
         // finish async test
         done();
@@ -179,10 +180,11 @@ describe('SparkPost Library', function() {
       var options = {
         method: 'GET'
         , uri: 'https://test.sparkpost.com/test'
+        , debug: true
       };
 
       client.request(options, function(err, data) {
-        expect(data.request.uri.href).to.equal('https://test.sparkpost.com/test');
+        expect(data.debug.request.uri.href).to.equal('https://test.sparkpost.com/test');
 
         // finish async test
         done();
@@ -196,9 +198,10 @@ describe('SparkPost Library', function() {
         , options = {
           method: 'GET'
           , uri: 'https://test.sparkpost.com/test'
-          };
+          , debug: true
+        };
 
-      zlib.gzip(TEST_MESSAGE+TEST_MESSAGE, function(err, gzipped) {
+      zlib.gzip(JSON.stringify({ msg: TEST_MESSAGE+TEST_MESSAGE }), function(err, gzipped) {
         expect(err).to.be.null;
         compressedMsg = gzipped;
         gzipNock = nock('https://test.sparkpost.com', {
@@ -214,8 +217,8 @@ describe('SparkPost Library', function() {
           });
         client.request(options, function(err, data) {
           expect(err).to.be.null;
-          expect(data.statusCode).to.equal(200);
-          expect(data.body).to.equal(TEST_MESSAGE + TEST_MESSAGE);
+          expect(data.debug.statusCode).to.equal(200);
+          expect(data.msg).to.equal(TEST_MESSAGE + TEST_MESSAGE);
 
           // finish async test
           done();
@@ -228,19 +231,20 @@ describe('SparkPost Library', function() {
 
       nock('https://test.sparkpost.com')
         .get('/test')
-        .reply(200, TEST_MESSAGE);
+        .reply(200, { msg: TEST_MESSAGE });
 
       var options = {
         method: 'GET'
         , uri: 'https://test.sparkpost.com/test'
         , gzip: false
+        , debug: true
       };
 
       client.request(options, function(err, data) {
         expect(err).to.be.null;
-        expect(data.statusCode).to.equal(200);
-        expect(data.body).to.equal(TEST_MESSAGE);
-        expect(data.headers).not.to.have.property('content-encoding');
+        expect(data.debug.statusCode).to.equal(200);
+        expect(data.msg).to.equal(TEST_MESSAGE);
+        expect(data.debug.headers).not.to.have.property('content-encoding');
 
         // finish async test
         done();
@@ -266,12 +270,12 @@ describe('SparkPost Library', function() {
         .get('/api/v1/get/test')
         .reply(200, { ok: true });
 
-      client.get({uri: 'get/test'}, function(err, data) {
+      client.get({uri: 'get/test', debug: true}, function(err, data) {
         // need to make sure we called request method
         expect(requestSpy.calledOnce).to.be.true;
 
         // making sure original request was GET
-        expect(data.request.method).to.equal('GET');
+        expect(data.debug.request.method).to.equal('GET');
 
         SparkPost.prototype.request.restore(); // restoring function
         done();
@@ -289,9 +293,9 @@ describe('SparkPost Library', function() {
       };
 
       client.request(options, function(err, data) {
-        expect(data.body).to.not.be.a('string');
-        expect(data.body).to.be.an('object');
-        expect(data.body).to.deep.equal({ok: true});
+        expect(data).to.not.be.a('string');
+        expect(data).to.be.an('object');
+        expect(data).to.deep.equal({ok: true});
 
         // finish async test
         done();
@@ -322,6 +326,7 @@ describe('SparkPost Library', function() {
         , json: {
           testingData: 'test data'
         }
+        , debug: true
       };
 
       client.post(reqOptions, function(err, data) {
@@ -329,7 +334,7 @@ describe('SparkPost Library', function() {
         expect(requestSpy.calledOnce).to.be.true;
 
         // making sure original request was POST
-        expect(data.request.method).to.equal('POST');
+        expect(data.debug.request.method).to.equal('POST');
 
         SparkPost.prototype.request.restore(); // restoring function
         done();
@@ -350,9 +355,9 @@ describe('SparkPost Library', function() {
       };
 
       client.request(options, function(err, data) {
-        expect(data.body).to.not.be.a('string');
-        expect(data.body).to.be.an('object');
-        expect(data.body).to.deep.equal({ok: true});
+        expect(data).to.not.be.a('string');
+        expect(data).to.be.an('object');
+        expect(data).to.deep.equal({ok: true});
 
         // finish async test
         done();
@@ -383,6 +388,7 @@ describe('SparkPost Library', function() {
         , json: {
           testingData: 'test data'
         }
+        , debug: true
       };
 
       client.put(reqOptions, function(err, data) {
@@ -390,7 +396,7 @@ describe('SparkPost Library', function() {
         expect(requestSpy.calledOnce).to.be.true;
 
         // making sure original request was PUT
-        expect(data.request.method).to.equal('PUT');
+        expect(data.debug.request.method).to.equal('PUT');
 
         SparkPost.prototype.request.restore(); // restoring function
         done();
@@ -411,9 +417,9 @@ describe('SparkPost Library', function() {
       };
 
       client.request(options, function(err, data) {
-        expect(data.body).to.not.be.a('string');
-        expect(data.body).to.be.an('object');
-        expect(data.body).to.deep.equal({ok: true});
+        expect(data).to.not.be.a('string');
+        expect(data).to.be.an('object');
+        expect(data).to.deep.equal({ok: true});
 
         // finish async test
         done();
@@ -444,6 +450,7 @@ describe('SparkPost Library', function() {
         , json: {
           testingData: 'test data'
         }
+        , debug: true
       };
 
       client.delete(reqOptions, function(err, data) {
@@ -451,7 +458,7 @@ describe('SparkPost Library', function() {
         expect(requestSpy.calledOnce).to.be.true;
 
         // making sure original request was DELETE
-        expect(data.request.method).to.equal('DELETE');
+        expect(data.debug.request.method).to.equal('DELETE');
 
         SparkPost.prototype.request.restore(); // restoring function
         done();
@@ -472,9 +479,9 @@ describe('SparkPost Library', function() {
       };
 
       client.request(options, function(err, data) {
-        expect(data.body).to.not.be.a('string');
-        expect(data.body).to.be.an('object');
-        expect(data.body).to.deep.equal({ok: true});
+        expect(data).to.not.be.a('string');
+        expect(data).to.be.an('object');
+        expect(data).to.deep.equal({ok: true});
 
         // finish async test
         done();
