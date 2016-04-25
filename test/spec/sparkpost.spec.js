@@ -198,6 +198,7 @@ describe('SparkPost Library', function() {
         , options = {
           method: 'GET'
           , uri: 'https://test.sparkpost.com/test'
+          , gzip: true
           , debug: true
         };
 
@@ -206,7 +207,7 @@ describe('SparkPost Library', function() {
         compressedMsg = gzipped;
         gzipNock = nock('https://test.sparkpost.com', {
             reqheaders: {
-              'accept-encoding': 'gzip'
+              'accept-encoding': /gzip/
             }
           })
           .get('/test')
