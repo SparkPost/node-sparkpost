@@ -1,5 +1,8 @@
 ## Change Log
 
+### v1.3.3 (2016/04/25)
+- [#142](https://github.com/SparkPost/node-sparkpost/pull/142) Upgrade request to 2.72.0 and fix affected test (@artlogic)
+
 ### v1.3.2 (2016/04/13)
 - [#139](https://github.com/SparkPost/node-sparkpost/pull/139) Make Gruntfile.js cross-platform friendly (@coldacid)
 - [#137](https://github.com/SparkPost/node-sparkpost/pull/137) Fix missing `subaccounts` property in SparkPost class (@coldacid)
