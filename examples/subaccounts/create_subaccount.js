@@ -17,6 +17,6 @@ client.subaccounts.create(options, function(err, res) {
     console.log(err);
   } else {
     console.log(res);
-    console.log('Congrats you can use our SDK!');
+    console.log('Congrats you can use our client library!');
   }
 });
