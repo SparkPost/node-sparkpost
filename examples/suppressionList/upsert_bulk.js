@@ -29,6 +29,6 @@ client.suppressionList.upsert(recipients, function(err, res) {
     console.log(err);
   } else {
     console.log(res.body);
-    console.log('Congrats you can use our SDK!');
+    console.log('Congrats you can use our client library!');
   }
 });
