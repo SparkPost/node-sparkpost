@@ -1,5 +1,8 @@
 ## Change Log
 
+### v1.3.4 (2016/05/10)
+- [#144](https://github.com/SparkPost/node-sparkpost/pull/144) Updated bulk suppression list upsert payload (@aydrian)
+
 ### v1.3.3 (2016/04/25)
 - [#142](https://github.com/SparkPost/node-sparkpost/pull/142) Upgrade request to 2.72.0 and fix affected test (@artlogic)
 
