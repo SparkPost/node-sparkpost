@@ -79,7 +79,7 @@ describe('Suppression List Library', function() {
   });
 
   describe('upsert Method', function() {
-    it('should accept an array of recipients for bulk upsert', function(done) {
+    it('should accept an array of recipients', function(done) {
       var recipients = [
         { email: 'test1@test.com' },
         { email: 'test2@test.com' }
@@ -103,14 +103,6 @@ describe('Suppression List Library', function() {
     it('should throw an error if recipient is missing', function(done) {
       suppressionList.upsert(function(err) {
         expect(err.message).to.equal('recipient is required');
-        expect(client.put).not.to.have.been.called;
-        done();
-      });
-    });
-
-    it('should throw an error if email is missing on any of the recipient', function(done) {
-      suppressionList.upsert([ { name: 'test' }, { name: 'test1@test1.com' } ], function(err, data) {
-        expect(err.message).to.equal('email is requiered for each recipient object');
         expect(client.put).not.to.have.been.called;
         done();
       });
