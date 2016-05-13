@@ -20,7 +20,7 @@ var reqOpts = {
         address: {
           email: "cc.recipient@example.com",
           name: "Carbon Copy Recipient",
-          header_to: '"Original Recipient" <original.recipient@example.com>'
+          header_to: "'Original Recipient' <original.recipient@example.com>"
         },
         substitution_data: {
           recipient_type: "CC"
@@ -33,7 +33,7 @@ var reqOpts = {
         email: "from@example.com"
       },
       headers: {
-        "CC": '"Carbon Copy Recipient" <cc.recipient@example.com>'
+        "CC": "'Carbon Copy Recipient' <cc.recipient@example.com>"
       },
       subject: "Example email using cc",
       text: "An example email using cc with SparkPost to the {{recipient_type}} recipient.",

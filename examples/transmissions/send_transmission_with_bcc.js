@@ -19,7 +19,7 @@ var reqOpts = {
       {
         address: {
           email: "bcc.recipient@example.com",
-          header_to: '"Original Recipient" <original.recipient@example.com>'
+          header_to: "'Original Recipient' <original.recipient@example.com>"
         },
         substitution_data: {
           recipient_type: "BCC"
