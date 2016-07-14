@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
+## [1.3.6] - 2016-07-14
+- [#148](https://github.com/SparkPost/node-sparkpost/pull/148) Preserve array/object structure of API data (@gpittarelli)
+
 ## [1.3.5] - 2016-05-13
 - [#146](https://github.com/SparkPost/node-sparkpost/pull/146) Single recipient suppression list upserts now use the bulk update endpoint (@jgzamora)
 
