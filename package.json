@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "json-pointer": "^0.5.0",
-    "lodash": "^3.9.3",
+    "lodash": "^4.13.1",
     "request": "^2.72.0"
   }
 }
