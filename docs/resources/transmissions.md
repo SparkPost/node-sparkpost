@@ -30,14 +30,14 @@ var SparkPost = require('sparkpost')
 
 var reqObj = {
   transmissionBody: {
-    campaignId: 'first-mailing',
+    campaign_id: 'first-mailing',
     content: {
       from: 'you@your-company.com',
       subject: 'First SDK Mailing',
       html: '<html><body><h1>Congratulations, {{name}}!</h1><p>You just sent your very first mailing!</p></body></html>',
       text: 'Congratulations, {{name}}!! You just sent your very first mailing!'
     },
-    substitutionData: {name: 'YOUR FIRST NAME'},
+    substitution_data: {name: 'YOUR FIRST NAME'},
     recipients: [{ address: { name: 'YOUR FULL NAME', email: 'YOUR EMAIL ADDRESS' } }]
   }
 };
