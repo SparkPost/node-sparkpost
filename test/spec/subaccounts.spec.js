@@ -1,7 +1,9 @@
 var chai = require('chai')
   , expect = chai.expect
   , sinon = require('sinon')
-  , sinonChai = require('sinon-chai');
+  , sinonChai = require('sinon-chai')
+  /* global -Promise */
+  , Promise = require('bluebird');
 
 chai.use(sinonChai);
 
@@ -10,9 +12,9 @@ describe('Subaccounts Library', function () {
 
   beforeEach(function() {
     client = {
-      get: sinon.stub().yields(),
-      post: sinon.stub().yields(),
-      put: sinon.stub().yields()
+      get: sinon.stub().returns(Promise.resolve({})),
+      post: sinon.stub().returns(Promise.resolve({})),
+      put: sinon.stub().returns(Promise.resolve({}))
     };
 
     subaccounts = require('../../lib/subaccounts')(client);
