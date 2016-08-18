@@ -1,16 +1,18 @@
 var chai = require('chai')
   , expect = chai.expect
   , sinon = require('sinon')
-  , sinonChai = require('sinon-chai');
+  , sinonChai = require('sinon-chai')
+  /* global -Promise */
+  , Promise = require('bluebird');
 
 chai.use(sinonChai);
 
 describe('Message Events Library', function() {
-  var client, templates;
+  var client;
 
   beforeEach(function() {
     client = {
-      get: sinon.stub().yields()
+      get: sinon.stub().returns(Promise.resolve({}))
     };
 
     messageEvents = require('../../lib/messageEvents')(client);
