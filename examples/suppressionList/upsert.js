@@ -24,7 +24,7 @@ var key = 'YOURAPIKEY'
     }
   ];
 
-client.suppressionList.upsert(recipient, function(err, data) {
+client.suppressionList.upsert(recipients, function(err, data) {
   if (err) {
     console.log(err);
   } else {

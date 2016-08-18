@@ -42,7 +42,7 @@ var reqObj = {
   }
 };
 
-client.transmissions.send(reqObj, function(err, res) {
+client.transmissions.send(reqObj, function(err, data) {
   if (err) {
     console.log('Whoops! Something went wrong');
     console.log(err);
