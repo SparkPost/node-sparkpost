@@ -79,21 +79,15 @@ describe('Suppression List Library', function() {
   });
 
   describe('upsert Method', function() {
-    it('should call client put method with the appropriate uri', function(done) {
-      suppressionList.upsert({email: 'test@test.com'}, function(err, data) {
-        expect(client.put.firstCall.args[0].uri).to.equal('suppression-list/test@test.com');
-        done();
-      });
-    });
-
-    it('should accept an array of recipients for bulk upsert', function(done) {
+    it('should accept an array of recipients', function(done) {
       var recipients = [
-        {email: 'test1@test.com'}
-        , {email: 'test2@test.com'}
+        { email: 'test1@test.com' },
+        { email: 'test2@test.com' }
       ];
 
       suppressionList.upsert(recipients, function(err, data) {
         expect(client.put.firstCall.args[0].uri).to.equal('suppression-list');
+        expect(client.put.firstCall.args[0].json.recipients).to.deep.equal(recipients);
         done();
       });
     });
@@ -114,10 +108,10 @@ describe('Suppression List Library', function() {
       });
     });
 
-    it('should throw an error if email is missing on recipient object', function(done) {
-      suppressionList.upsert({name: 'test'}, function(err, data) {
-        expect(err.message).to.equal('email is required in the recipient object');
-        expect(client.put).not.to.have.been.called;
+    it('should upsert a single recipient as an array', function(done) {
+      var recipient = { email: 'test1@test.com' };
+      suppressionList.upsert(recipient, function(err, data) {
+        expect(client.put.firstCall.args[0].json.recipients).to.deep.equal([recipient]);
         done();
       });
     });

@@ -155,4 +155,30 @@ describe('toApiFormat', function() {
 
     done();
   });
+
+  it('should preserve objects with number properties', function(done) {
+    var testObj = {
+      array: [ 0, 1, , , , 5, 6]
+      , object: {
+        "0": 0,
+        "1": 1,
+        "5": 5,
+        "6": 6
+      }
+      , substitution_data: {
+        "0": 0,
+        "1": 1,
+        "5": 5,
+        "6": 6
+      }
+      , tags: [ 0, 1, , , , 5, 6]
+    };
+
+
+    var out = toApiFormat(_.clone(testObj));
+
+    expect(out).to.deep.equal(testObj);
+
+    done();
+  });
 });
