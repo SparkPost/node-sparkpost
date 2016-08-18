@@ -1,7 +1,9 @@
 var chai = require('chai')
   , expect = chai.expect
   , sinon = require('sinon')
-  , sinonChai = require('sinon-chai');
+  , sinonChai = require('sinon-chai')
+  /* global -Promise */
+  , Promise = require('bluebird');
 
 chai.use(sinonChai);
 
@@ -10,10 +12,10 @@ describe('Sending Domains Library', function() {
 
   beforeEach(function() {
     client = {
-      get: sinon.stub().yields(),
-      post: sinon.stub().yields(),
-      put: sinon.stub().yields(),
-      delete: sinon.stub().yields()
+      get: sinon.stub().returns(Promise.resolve({})),
+      post: sinon.stub().returns(Promise.resolve({})),
+      put: sinon.stub().returns(Promise.resolve({})),
+      delete: sinon.stub().returns(Promise.resolve({}))
     };
 
     sendingDomains = require('../../lib/sendingDomains')(client);
@@ -21,7 +23,7 @@ describe('Sending Domains Library', function() {
 
   describe('all Method', function() {
     it('should call client get method with the appropriate uri', function(done) {
-      sendingDomains.all(function() {
+      sendingDomains.all().then(function() {
         expect(client.get.firstCall.args[0]).to.deep.equal({uri:'sending-domains'});
         done();
       });
@@ -30,14 +32,14 @@ describe('Sending Domains Library', function() {
 
   describe('find Method', function() {
     it('should call client get method with the appropriate uri', function(done) {
-      sendingDomains.find('test', function() {
+      sendingDomains.find('test').then(function() {
         expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'sending-domains/test'});
         done();
       });
     });
 
     it('should throw an error if domain is null', function(done) {
-      sendingDomains.find(null, function(err) {
+      sendingDomains.find(null).catch(function(err) {
         expect(err.message).to.equal('domain is required');
         expect(client.get).not.to.have.been.called;
         done();
@@ -59,7 +61,7 @@ describe('Sending Domains Library', function() {
         domain: "test"
       };
 
-      sendingDomains.create(domainBody, function(err, data) {
+      sendingDomains.create(domainBody).then(function(data) {
         expect(client.post.firstCall.args[0].uri).to.equal('sending-domains');
         done();
       });
