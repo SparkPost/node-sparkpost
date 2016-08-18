@@ -140,10 +140,7 @@ describe('SparkPost Library', function() {
       };
 
       client.request(options, function(err, data) {
-        expect(data).to.be.defined;
         expect(err).to.be.defined;
-
-        expect(err.errors).to.deep.equal(data.body.errors);
 
         // finish async test
         done();
