@@ -3,7 +3,7 @@ var chai = require('chai')
   , sinon = require('sinon')
   , sinonChai = require('sinon-chai')
   /* global -Promise */
-  , Promise = require('bluebird');
+  , Promise = require('../../lib/Promise');
 
 chai.use(sinonChai);
 
