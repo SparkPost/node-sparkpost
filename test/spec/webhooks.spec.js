@@ -1,7 +1,9 @@
 var chai = require('chai')
   , expect = chai.expect
   , sinon = require('sinon')
-  , sinonChai = require('sinon-chai');
+  , sinonChai = require('sinon-chai')
+  /* global -Promise */
+  , Promise = require('../../lib/Promise');
 
 chai.use(sinonChai);
 
@@ -10,10 +12,10 @@ describe('Webhooks Library', function() {
 
   beforeEach(function() {
     client = {
-      get: sinon.stub().yields(),
-      post: sinon.stub().yields(),
-      put: sinon.stub().yields(),
-      'delete': sinon.stub().yields()
+      get: sinon.stub().returns(Promise.resolve({})),
+      post: sinon.stub().returns(Promise.resolve({})),
+      put: sinon.stub().returns(Promise.resolve({})),
+      delete: sinon.stub().returns(Promise.resolve({}))
     };
 
     webhooks = require('../../lib/webhooks')(client);
