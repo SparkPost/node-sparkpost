@@ -4,7 +4,7 @@
   "description": "A Node.js wrapper for interfacing with your favorite SparkPost APIs",
   "main": "./lib/sparkpost.js",
   "scripts": {
-    "lint": "./node_modules/.bin/eslint --fix lib/**",
+    "lint": "eslint --fix lib/**",
     "test": "grunt",
     "ci": "grunt && grunt coveralls:grunt_coveralls_coverage"
   },
