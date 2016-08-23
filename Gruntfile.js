@@ -19,17 +19,6 @@ module.exports = function(grunt) {
   grunt.initConfig({
     config: config,
     pkg: grunt.file.readJSON('package.json'),
-    jshint: {
-      files: [
-        'index.js',
-        'lib/{,*/}*.js',
-        'examples/{,*/}*.js'
-      ],
-      options: {
-        reporter: require('jshint-stylish'),
-        jshintrc: './.jshintrc'
-      }
-    },
     bump: {
       options: {
         files: [ 'package.json' ]
@@ -46,6 +35,9 @@ module.exports = function(grunt) {
       }
     },
     shell: {
+      lint: {
+        command: 'npm run lint'
+      },
       coverage: {
         command : path.join(config.binPath, 'istanbul') + ' cover --report lcov --dir test/reports/ node_modules/mocha/bin/_mocha test/spec -- --reporter ' + reporter,
         options : {
@@ -68,7 +60,7 @@ module.exports = function(grunt) {
   });
 
   // grunt lint - leverages grunt-contrib-jshint command, lints our code
-  grunt.registerTask('lint', [ 'jshint' ]);
+  grunt.registerTask('lint', [ 'shell:lint' ]);
 
   // grunt test - runs linting and then our unit tests
   grunt.registerTask('test', [
