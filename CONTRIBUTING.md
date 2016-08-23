@@ -13,6 +13,6 @@ Current milestone Pull Requests will receive priority review for merging.
 3. Write corresponding tests and code (only what is needed to satisfy the issue and tests please)
     * Include your tests in the 'test' directory in an appropriate test file
     * Write code to satisfy the tests
-    * Run tests using ```grunt test```
+    * Run tests using ```npm test```
 5. Ensure automated tests pass
-6. Submit a new Pull Request applying your feature/fix branch to the develop branch of the SparkPost SDK
+6. Submit a new Pull Request applying your feature/fix branch to the develop branch of the SparkPost client library
