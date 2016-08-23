@@ -39,22 +39,14 @@ module.exports = function(grunt) {
         command: 'npm run lint'
       },
       coverage: {
-        command : path.join(config.binPath, 'istanbul') + ' cover --report lcov --dir test/reports/ node_modules/mocha/bin/_mocha test/spec -- --reporter ' + reporter,
-        options : {
-          stdout : true,
-          failOnError : true
+        command: path.join(config.binPath, 'istanbul') + ' cover --report lcov --dir test/reports/ node_modules/mocha/bin/_mocha test/spec -- --reporter ' + reporter,
+        options: {
+          stdout: true,
+          failOnError: true
         }
       },
       test: {
         command: path.join(config.binPath, '_mocha') + ' test/spec'
-      }
-    },
-    coveralls: {
-      options: {
-        force: true
-      },
-      grunt_coveralls_coverage: {
-        src: 'test/reports/lcov.info'
       }
     }
   });
