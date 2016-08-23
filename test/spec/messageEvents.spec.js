@@ -2,7 +2,6 @@ var chai = require('chai')
   , expect = chai.expect
   , sinon = require('sinon')
   , sinonChai = require('sinon-chai')
-  /* global -Promise */
   , Promise = require('../../lib/Promise');
 
 chai.use(sinonChai);

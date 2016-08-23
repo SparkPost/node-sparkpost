@@ -1,7 +1,6 @@
 var chai = require('chai')
   , expect = chai.expect
   , sinon = require('sinon')
-  /* global -Promise */
   , Promise = require('../../lib/Promise');
 
 require('sinon-as-promised');
