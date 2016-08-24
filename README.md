@@ -148,17 +148,15 @@ Click on the desired API to see usage and more information
 ## Development
 
 ### Setup
-We use [Grunt](http://gruntjs.com/) for our task runner, so you will also have to install Grunt globally `npm install -g grunt-cli`
-
 Run `npm install` inside the repository to install all the dev dependencies.
 
 ### Testing
-Once all the dependencies are installed, you can execute the unit tests using `grunt test`
+Once all the dependencies are installed, you can execute the unit tests using `npm test`
 
 ### Contributing
-[Guidelines for adding issues](docs/ADDING_ISSUES.markdown)
+[Guidelines for adding issues](docs/ADDING_ISSUES.md)
 
-[Our coding standards](docs/CODE_STYLE_GUIDE.markdown)
+[Our coding standards](docs/CODE_STYLE_GUIDE.md)
 
 [Submitting pull requests](CONTRIBUTING.md)
 
