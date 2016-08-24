@@ -1,3 +1,5 @@
+'use strict';
+
 var chai = require('chai')
   , expect = chai.expect
   , sinon = require('sinon')
@@ -21,7 +23,13 @@ describe('Transmissions Library', function() {
   });
 
   describe('all Method', function() {
-    it('should call client get method with the appropriate uri', function(done) {
+    it('should call client get method with the appropriate uri', function() {
+      transmissions.all().then(() => {
+        expect(client.get.firstCall.args[0].uri).to.equal('transmissions');
+      });
+    });
+
+    it('should call client get method with the appropriate uri using callback', function(done) {
       transmissions.all(function() {
         expect(client.get.firstCall.args[0].uri).to.equal('transmissions');
         done();
