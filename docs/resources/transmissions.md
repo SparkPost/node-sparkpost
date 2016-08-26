@@ -3,24 +3,25 @@
 This library provides easy access to the [Transmissions](https://developers.sparkpost.com/api/transmissions) Resource.
 
 ## Methods
-* **all(options, callback)**
+* **all(options[, callback]) &rarr; `{Promise}`**<br />
   List an overview of all transmissions in the account
   * `options.campaign_id` - id of the campaign used by the transmission
   * `options.template_id` - id of the template used by the transmission
-  * `callback` - executed after task is completed if provided
+  * `callback` - executed after task is completed if provided*
     * standard `callback(err, data)`
     * `err` - any error that occurred
     * `data` - results returned by the api
-* **find(id, callback)**
+* **find(id[, callback]) &rarr; `{Promise}`**<br />
   Retrieve the details about a transmission by its ID
   * `id` - id of the transmission you want to look up **required**
   * `callback` - see all function
-* **send(options, callback)**
+* **send(options[, callback]) &rarr; `{Promise}`**<br />
   Sends a message by creating a new transmission
   * `options` - an object of [transmission attributes](https://developers.sparkpost.com/api/transmissions#header-transmission-attributes)
   * `options.num_rcpt_errors` - maximum number of recipient errors returned
   * `callback` - see all function
 
+*callback is optional because all methods return a Promise.
 
 ## Getting Started: Your First Mailing
 

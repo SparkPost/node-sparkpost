@@ -22,7 +22,7 @@ npm install sparkpost
 ```
 
 ## Initialization
-**new SparkPost(apiKey, options)** - Initialization
+**new SparkPost(apiKey[, options])** - Initialization
 
 * `apiKey`
     * Required: yes (unless key is stored in `SPARKPOST_API_KEY` environment variable)
@@ -42,19 +42,21 @@ npm install sparkpost
     * set headers that apply to all requests
 
 ## Methods
-* **request(options, callback)**
+* **request(options[, callback]) &rarr; `{Promise}`**
     * `options` - [see request modules options](https://github.com/mikeal/request#requestoptions-callback)
     * `options.uri` - can either be a full url or a path that is appended to `options.origin` used at initialization ([url.resolve](http://nodejs.org/api/url.html#url_url_resolve_from_to))
     * `options.debug` - setting to `true` includes full response from request client for debugging purposes
-    * `callback` - executed after task is completed if provided
+    * `callback` - executed after task is completed if provided*
       * standard `callback(err, data)`
       * `err` - any error that occurred
       * `data` - results from API call
       * `data.debug` - full response from request client when `options.debug` is `true`
-* **get | post | put | delete(options, callback)**
+* **get | post | put | delete(options[, callback]) &rarr; `{Promise}`**
     * `options` - see request options
     * `callback` - see request options
     * Request method will be overwritten and set to the same value as the name of these methods.
+
+*callback is optional because all methods return a Promise.
 
 ## Creating a SparkPost Client
 
