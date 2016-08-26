@@ -1,6 +1,6 @@
 {
   "name": "sparkpost",
-  "version": "1.3.7",
+  "version": "1.3.8",
   "description": "A Node.js wrapper for interfacing with your favorite SparkPost APIs",
   "main": "./lib/sparkpost.js",
   "scripts": {
