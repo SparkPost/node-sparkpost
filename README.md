@@ -22,7 +22,7 @@ npm install sparkpost
 ```
 
 ## Initialization
-**new SparkPost(apiKey, options)** - Initialization
+**new SparkPost(apiKey[, options])** - Initialization
 
 * `apiKey`
     * Required: yes (unless key is stored in `SPARKPOST_API_KEY` environment variable)
@@ -42,19 +42,21 @@ npm install sparkpost
     * set headers that apply to all requests
 
 ## Methods
-* **request(options, callback)**
+* **request(options[, callback]) &rarr; `{Promise}`**
     * `options` - [see request modules options](https://github.com/mikeal/request#requestoptions-callback)
     * `options.uri` - can either be a full url or a path that is appended to `options.origin` used at initialization ([url.resolve](http://nodejs.org/api/url.html#url_url_resolve_from_to))
     * `options.debug` - setting to `true` includes full response from request client for debugging purposes
-    * `callback` - executed after task is completed. **required**
+    * `callback` - executed after task is completed if provided*
       * standard `callback(err, data)`
       * `err` - any error that occurred
       * `data` - results from API call
       * `data.debug` - full response from request client when `options.debug` is `true`
-* **get | post | put | delete(options, callback)**
+* **get | post | put | delete(options[, callback]) &rarr; `{Promise}`**
     * `options` - see request options
     * `callback` - see request options
     * Request method will be overwritten and set to the same value as the name of these methods.
+
+*callback is optional because all methods return a Promise.
 
 ## Creating a SparkPost Client
 
@@ -92,25 +94,27 @@ var options = {
   uri: 'metrics/domains'
 };
 
-client.get(options, function(err, data) {
-  if(err) {
+client.get(options)
+  .then(data => {
+    console.log(data);
+  })
+  .catch(err => {
     console.log(err);
-    return;
-  }
-
-  console.log(data);
-});
+  });
 ```
 
 ## Send An Email "Hello World" Example
-Below is an example of how to send a simple email. Sending an email is known as a *transmission*. By using the send method on the transmissions service that's available from the SparkPost object you instatiate you can pass in a *transmissionBody* object with all the information relevant to the email being sent. The send method also takes a callback method that will let you know if the email was sent successful and if not information about the error that ocurred.
+Below is an example of how to send a simple email. Sending an email is known as a *transmission*. By using the send 
+method on the transmissions service that's available from the SparkPost object you instantiate, you can pass in an 
+object with all the [transmission attributes](https://developers.sparkpost.com/api/transmissions#header-transmission-attributes) 
+relevant to the email being sent. The send method will return a promise that will let you know if the email was sent 
+successful and if not information about the error that occurred. If a callback is passed, it will be executed.
 
 ```javascript
 var SparkPost = require('sparkpost');
-var sp = new SparkPost('<YOUR API KEY>');
+var client = new SparkPost('<YOUR API KEY>');
 
-sp.transmissions.send({
-  transmissionBody: {
+client.transmissions.send({
     content: {
       from: 'testing@sparkpostbox.com',
       subject: 'Hello, World!',
@@ -119,15 +123,15 @@ sp.transmissions.send({
     recipients: [
       {address: '<YOUR EMAIL ADDRESS>'}
     ]
-  }
-}, function(err, res) {
-  if (err) {
+  })
+  .then(data => {
+    console.log('Woohoo! You just sent your first mailing!');
+    console.log(data);
+  })
+  .catch(err => {
     console.log('Whoops! Something went wrong');
     console.log(err);
-  } else {
-    console.log('Woohoo! You just sent your first mailing!');
-  }
-});
+  });
 ```
 
 ## SparkPost API Resources Supported in Node Client Library
