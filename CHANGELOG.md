@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
+## [1.3.8] - 2016-08-26
+- [#165](https://github.com/SparkPost/node-sparkpost/pull/165) Updated webhook update method to not send id in request (@aydrian)
+
 ## [1.3.7] - 2016-07-28
 - [#150](https://github.com/SparkPost/node-sparkpost/pull/150) Upgrade lodash version to 4 (@rnzo)
 
@@ -107,7 +110,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## 0.1.0 - 2014-11-10
 - First Release!
 
-[unreleased]: https://github.com/sparkpost/node-sparkpost/compare/1.3.5...HEAD
+[unreleased]: https://github.com/sparkpost/node-sparkpost/compare/1.3.8...HEAD
+[1.3.8]: https://github.com/sparkpost/node-sparkpost/compare/1.3.7...1.3.8
+[1.3.7]: https://github.com/sparkpost/node-sparkpost/compare/1.3.6...1.3.7
+[1.3.6]: https://github.com/sparkpost/node-sparkpost/compare/1.3.5...1.3.6
 [1.3.5]: https://github.com/sparkpost/node-sparkpost/compare/1.3.4...1.3.5
 [1.3.4]: https://github.com/sparkpost/node-sparkpost/compare/1.3.3...1.3.4
 [1.3.3]: https://github.com/sparkpost/node-sparkpost/compare/1.3.2...1.3.3
