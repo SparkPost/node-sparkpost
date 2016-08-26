@@ -13,7 +13,7 @@ describe('Webhooks Library', function() {
       get: sinon.stub().yields(),
       post: sinon.stub().yields(),
       put: sinon.stub().yields(),
-      'delete': sinon.stub().yields()
+      delete: sinon.stub().yields()
     };
 
     webhooks = require('../../lib/webhooks')(client);
@@ -124,28 +124,36 @@ describe('Webhooks Library', function() {
         done();
       });
     });
+
+    it('should throw an error if webhook.id is missing', function(done) {
+      webhooks.update({}, function (err) {
+        expect(err.message).to.equal('webhook.id is required');
+        expect(client.post).not.to.have.been.called;
+        done();
+      });
+    });
   });
 
   describe('delete Method', function() {
     it('should call client delete method with the appropriate uri', function(done) {
-      webhooks['delete']('test', function(err, data) {
-        expect(client['delete'].firstCall.args[0].uri).to.equal('webhooks/test');
+      webhooks.delete('test', function(err, data) {
+        expect(client.delete.firstCall.args[0].uri).to.equal('webhooks/test');
         done();
       });
     });
 
     it('should throw an error if id is null', function(done) {
-      webhooks['delete'](null, function(err) {
+      webhooks.delete(null, function(err) {
         expect(err.message).to.equal('id is required');
-        expect(client['delete']).not.to.have.been.called;
+        expect(client.delete).not.to.have.been.called;
         done();
       });
     });
 
     it('should throw an error if id is missing', function(done) {
-      webhooks['delete'](function(err) {
+      webhooks.delete(function(err) {
         expect(err.message).to.equal('id is required');
-        expect(client['delete']).not.to.have.been.called;
+        expect(client.delete).not.to.have.been.called;
         done();
       });
     });
