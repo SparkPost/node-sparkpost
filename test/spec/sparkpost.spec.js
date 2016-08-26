@@ -94,6 +94,7 @@ describe('SparkPost Library', function() {
       var options = {
         method: 'GET'
         , uri: 'get/test'
+        , json: true
         , debug: true
       };
 
@@ -177,6 +178,7 @@ describe('SparkPost Library', function() {
       var options = {
         method: 'GET'
         , uri: 'https://test.sparkpost.com/test'
+        , json: true
         , debug: true
       };
 
@@ -196,6 +198,7 @@ describe('SparkPost Library', function() {
           method: 'GET'
           , uri: 'https://test.sparkpost.com/test'
           , gzip: true
+          , json: true
           , debug: true
         };
 
@@ -235,6 +238,7 @@ describe('SparkPost Library', function() {
         method: 'GET'
         , uri: 'https://test.sparkpost.com/test'
         , gzip: false
+        , json: true
         , debug: true
       };
 
@@ -286,11 +290,10 @@ describe('SparkPost Library', function() {
         .reply(200, '{ "ok": true }');
 
       var options = {
-        method: 'GET'
-        , uri: 'https://test.sparkpost.com/test'
+        uri: 'https://test.sparkpost.com/test'
       };
 
-      client.request(options, function(err, data) {
+      client.get(options, function(err, data) {
         expect(data).to.not.be.a('string');
         expect(data).to.be.an('object');
         expect(data).to.deep.equal({ok: true});
@@ -345,14 +348,13 @@ describe('SparkPost Library', function() {
         .reply(200, '{ "ok": true }');
 
       var options = {
-        method: 'POST'
-        , uri: 'https://test.sparkpost.com/test'
+        uri: 'https://test.sparkpost.com/test'
         , json: {
           testingData: 'test data'
         }
       };
 
-      client.request(options, function(err, data) {
+      client.post(options, function(err, data) {
         expect(data).to.not.be.a('string');
         expect(data).to.be.an('object');
         expect(data).to.deep.equal({ok: true});
@@ -407,14 +409,13 @@ describe('SparkPost Library', function() {
         .reply(200, '{ "ok": true }');
 
       var options = {
-        method: 'PUT'
-        , uri: 'https://test.sparkpost.com/test'
+        uri: 'https://test.sparkpost.com/test'
         , json: {
           testingData: 'test data'
         }
       };
 
-      client.request(options, function(err, data) {
+      client.put(options, function(err, data) {
         expect(data).to.not.be.a('string');
         expect(data).to.be.an('object');
         expect(data).to.deep.equal({ok: true});
@@ -469,14 +470,13 @@ describe('SparkPost Library', function() {
         .reply(200, '{ "ok": true }');
 
       var options = {
-        method: 'DELETE'
-        , uri: 'https://test.sparkpost.com/test'
+        uri: 'https://test.sparkpost.com/test'
         , json: {
           testingData: 'test data'
         }
       };
 
-      client.request(options, function(err, data) {
+      client.delete(options, function(err, data) {
         expect(data).to.not.be.a('string');
         expect(data).to.be.an('object');
         expect(data).to.deep.equal({ok: true});
