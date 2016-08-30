@@ -1,49 +1,63 @@
 # Sending Domains
 
-This library provides easy access to the [Sending Domains](https://www.sparkpost.com/api#/reference/sending-domains/) Resource.
+This library provides easy access to the [Sending Domains](https://developers.sparkpost.com/api/sending-domains) Resource.
 
 ## Methods
-* **all(callback)**
+* **all([callback]) &rarr; `{Promise}`**<br />
   List an overview of all sending domains in the account.
-  * `callback` - executed after task is completed. **required**
+  * `callback` - executed after task is completed if provided*
     * standard `callback(err, data)`
     * `err` - any error that occurred
     * `data` - full response from request client
-* **find(domain, callback)**
+* **find(domain[, callback]) &rarr; `{Promise}`**<br />
   Retrieve a sending domain by its domain name
   * `domain` - the name of the domain you want to look up **required**
   * `callback` - see all function
-* **create(domainBody, callback)**
+* **create(sendingDomain[, callback]) &rarr; `{Promise}`**<br />
   Create a new sending domain
-  * `domainBody` - a sending domain object **required**
+  * `sendingDomain` - an object of [sending domain attributes](https://developers.sparkpost.com/api/sending-domains#header-sending-domain-attributes) **required**
   * `callback` - see all function
-* **update(domainBody, callback)**
+* **update(sendingDomain[, callback]) &rarr; `{Promise}`**<br />
   Update an existing sending domain
-  * `domainBody` - a sending domain object **required**
+  * `sendingDomain` - an object of [sending domain attributes](https://developers.sparkpost.com/api/sending-domains#header-sending-domain-attributes) **required**
   * `callback` - see all function
-* **delete(domain, callback)**
+* **delete(domain[, callback]) &rarr; `{Promise}`**<br />
   Delete an existing sending domain
   * `domain` - the name of the domain you want to delete **required**
   * `callback` - see all function
-* **verify(options, callback)**
+* **verify(options[, callback]) &rarr; `{Promise}`**<br />
   Validate the specified verification field types for a sending domain
   * `options.domain` - the name of the domain you want to verify **required**
   * `options.verifyDKIM` - initiates a check against the DKIM record default: `true`
   * `options.verifySPF` - initiates a check against the SPF record default: `true`
 
+*callback is optional because all methods return a Promise.
+
 ## Examples
 
-```js
-var SparkPost = require('sparkpost');
-var client = new SparkPost('YOUR_API_KEY');
+```javascript
+var SparkPost = require('sparkpost')
+  , client = new SparkPost('YOUR_API_KEY');
 
+client.sendingDomains.all()
+  .then(data => {
+    console.log('Woohoo! It worked!');
+    console.log(data);
+  })
+  .catch(err => {
+    console.log('Whoops! Something went wrong');
+    console.log(err);
+  });
+
+// Using a callback
 client.sendingDomains.all(function(err, data) {
   if(err) {
+    console.log('Whoops! Something went wrong');
     console.log(err);
-    return;
+  } else {
+    console.log('Woohoo! It worked!');
+    console.log(data);
   }
-
-  console.log(data);
 });
 
 ```
