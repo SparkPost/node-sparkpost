@@ -1,120 +1,89 @@
+'use strict';
+
 var chai = require('chai')
   , expect = chai.expect
-  , sinon = require('sinon')
-  , sinonChai = require('sinon-chai')
-  , Promise = require('../../lib/Promise');
+  , sinon = require('sinon');
 
-chai.use(sinonChai);
+require('sinon-as-promised');
+
+chai.use(require('sinon-chai'));
+chai.use(require('chai-as-promised'));
 
 describe('Suppression List Library', function() {
   var client, suppressionList;
 
   beforeEach(function() {
     client = {
-      get: sinon.stub().returns(Promise.resolve({})),
-      post: sinon.stub().returns(Promise.resolve({})),
-      put: sinon.stub().returns(Promise.resolve({})),
-      delete: sinon.stub().returns(Promise.resolve({}))
+      get: sinon.stub().resolves({}),
+      post: sinon.stub().resolves({}),
+      put: sinon.stub().resolves({}),
+      delete: sinon.stub().resolves({})
     };
 
     suppressionList = require('../../lib/suppressionList')(client);
   });
 
   describe('search Method', function() {
-    it('should call client get method with the appropriate uri', function(done) {
-      suppressionList.search({limit: 5}, function(err, data) {
-        expect(client.get.firstCall.args[0].uri).to.equal('suppression-list');
-        done();
-      });
+    it('should call client get method with the appropriate uri', function() {
+      suppressionList.search({limit: 5})
+        .then(function() {
+          expect(client.get.firstCall.args[0].uri).to.equal('suppression-list');
+        });
     });
   });
 
   describe('checkStatus Method', function() {
-    it('should call client get method with the appropriate uri', function(done) {
-      suppressionList.checkStatus('test@test.com', function(err, data) {
-        expect(client.get.firstCall.args[0].uri).to.equal('suppression-list/test@test.com');
-        done();
-      });
+    it('should call client get method with the appropriate uri', function() {
+      suppressionList.checkStatus('test@test.com')
+        .then(function() {
+          expect(client.get.firstCall.args[0].uri).to.equal('suppression-list/test@test.com');
+        });
     });
 
-    it('should throw an error if email is null', function(done) {
-      suppressionList.checkStatus(null, function(err) {
-        expect(err.message).to.equal('email is required');
-        expect(client.get).not.to.have.been.called;
-        done();
-      });
-    });
-
-    it('should throw an error if email is missing', function(done) {
-      suppressionList.checkStatus(function(err) {
-        expect(err.message).to.equal('email is required');
-        expect(client.get).not.to.have.been.called;
-        done();
-      });
+    it('should throw an error if email is missing', function() {
+      return expect(suppressionList.checkStatus()).to.be.rejectedWith('email is required');
     });
   });
 
   describe('removeStatus Method', function() {
-    it('should call client delete method with the appropriate uri', function(done) {
-      suppressionList.removeStatus('test@test.com', function(err, data) {
-        expect(client['delete'].firstCall.args[0].uri).to.equal('suppression-list/test@test.com');
-        done();
-      });
+    it('should call client delete method with the appropriate uri', function() {
+      suppressionList.removeStatus('test@test.com')
+        .then(function() {
+          expect(client.delete.firstCall.args[0].uri).to.equal('suppression-list/test@test.com');
+        });
     });
 
-    it('should throw an error if email is null', function(done) {
-      suppressionList.removeStatus(null, function(err) {
-        expect(err.message).to.equal('email is required');
-        expect(client['delete']).not.to.have.been.called;
-        done();
-      });
-    });
-
-    it('should throw an error if email is missing', function(done) {
-      suppressionList.removeStatus(function(err) {
-        expect(err.message).to.equal('email is required');
-        expect(client['delete']).not.to.have.been.called;
-        done();
-      });
+    it('should throw an error if email is missing', function() {
+      return expect(suppressionList.removeStatus()).to.be.rejectedWith('email is required');
     });
   });
 
   describe('upsert Method', function() {
-    it('should accept an array of recipients', function(done) {
-      var recipients = [
+    it('should accept a single list entry', function() {
+      var listEntry = { email: 'test@test.com' };
+
+      suppressionList.upsert(listEntry)
+        .then(function() {
+          expect(client.put.firstCall.args[0].uri).to.equal('suppression-list');
+          expect(client.put.firstCall.args[0].json.recipients).to.deep.equal([listEntry]);
+        });
+    });
+
+    it('should accept an array of list entries', function() {
+      var listEntries = [
         { email: 'test1@test.com' },
         { email: 'test2@test.com' }
       ];
 
-      suppressionList.upsert(recipients, function(err, data) {
-        expect(client.put.firstCall.args[0].uri).to.equal('suppression-list');
-        expect(client.put.firstCall.args[0].json.recipients).to.deep.equal(recipients);
-        done();
-      });
+      suppressionList.upsert(listEntries)
+        .then(function() {
+          expect(client.put.firstCall.args[0].uri).to.equal('suppression-list');
+          expect(client.put.firstCall.args[0].json.recipients).to.deep.equal(listEntries);
+        });
     });
 
-    it('should throw an error if recipient is null', function(done) {
-      suppressionList.upsert(null, function(err) {
-        expect(err.message).to.equal('recipient is required');
-        expect(client.put).not.to.have.been.called;
-        done();
-      });
-    });
-
-    it('should throw an error if recipient is missing', function(done) {
-      suppressionList.upsert(function(err) {
-        expect(err.message).to.equal('recipient is required');
-        expect(client.put).not.to.have.been.called;
-        done();
-      });
-    });
-
-    it('should upsert a single recipient as an array', function(done) {
-      var recipient = { email: 'test1@test.com' };
-      suppressionList.upsert(recipient, function(err, data) {
-        expect(client.put.firstCall.args[0].json.recipients).to.deep.equal([recipient]);
-        done();
-      });
+    it('should throw an error if recipient is missing', function() {
+      return expect(suppressionList.upsert()).to.be.rejectedWith('list entries is required');
     });
   });
 });
