@@ -1,167 +1,126 @@
+'use strict';
+
 var chai = require('chai')
   , expect = chai.expect
-  , sinon = require('sinon')
-  , sinonChai = require('sinon-chai')
-  , Promise = require('../../lib/Promise');
+  , sinon = require('sinon');
 
-chai.use(sinonChai);
+require('sinon-as-promised');
+
+chai.use(require('sinon-chai'));
+chai.use(require('chai-as-promised'));
 
 describe('Webhooks Library', function() {
   var client, webhooks;
 
   beforeEach(function() {
     client = {
-      get: sinon.stub().returns(Promise.resolve({})),
-      post: sinon.stub().returns(Promise.resolve({})),
-      put: sinon.stub().returns(Promise.resolve({})),
-      delete: sinon.stub().returns(Promise.resolve({}))
+      get: sinon.stub().resolves({}),
+      post: sinon.stub().resolves({}),
+      put: sinon.stub().resolves({}),
+      delete: sinon.stub().resolves({})
     };
 
     webhooks = require('../../lib/webhooks')(client);
   });
 
   describe('all Method', function() {
-    it('should call client get method with the appropriate uri', function(done) {
-      webhooks.all(function(err, data) {
-        expect(client.get.firstCall.args[0].uri).to.equal('webhooks');
-        done();
-      });
+    it('should call client get method with the appropriate uri', function() {
+      webhooks.all()
+        .then(function() {
+          expect(client.get.firstCall.args[0].uri).to.equal('webhooks');
+        });
     });
 
-    it('should allow timezone to be set in options', function(done) {
+    it('should allow timezone to be set in options', function() {
       var options = {
         timezone: 'America/New_York'
       };
 
-      webhooks.all(options, function(err, data) {
-        expect(client.get.firstCall.args[0].qs).to.deep.equal({timezone: 'America/New_York'});
-        done();
-      });
+      webhooks.all(options)
+        .then(function() {
+          expect(client.get.firstCall.args[0].qs).to.deep.equal({timezone: 'America/New_York'});
+        });
     });
   });
 
   describe('describe Method', function() {
-    it('should call client get method with the appropriate uri', function(done) {
+    it('should call client get method with the appropriate uri', function() {
       var options = {
         id: 'test'
       };
 
-      webhooks.describe(options, function(err, data) {
-        expect(client.get.firstCall.args[0].uri).to.equal('webhooks/test');
-        done();
-      });
+      webhooks.describe(options)
+        .then(function() {
+          expect(client.get.firstCall.args[0].uri).to.equal('webhooks/test');
+        });
     });
 
-    it('should throw an error if id is missing', function(done) {
-      webhooks.describe(null, function(err) {
-        expect(err.message).to.equal('id is required');
-        expect(client.get).not.to.have.been.called;
-        done();
-      });
+    it('should throw an error if id is missing', function() {
+      return expect(webhooks.describe()).to.be.rejectedWith('id is required');
     });
 
-    it('should allow timezone to be set in options', function(done) {
+    it('should allow timezone to be set in options', function() {
       var options = {
         id: 'test',
         timezone: 'America/New_York'
       };
 
-      webhooks.describe(options, function(err, data) {
-        expect(client.get.firstCall.args[0].qs).to.deep.equal({timezone: 'America/New_York'});
-        done();
-      });
+      webhooks.describe(options)
+        .then(function() {
+          expect(client.get.firstCall.args[0].qs).to.deep.equal({timezone: 'America/New_York'});
+        });
     });
   });
 
   describe('create Method', function() {
-    it('should call client post method with the appropriate uri', function(done) {
-      webhooks.create({}, function(err, data) {
-        expect(client.post.firstCall.args[0].uri).to.equal('webhooks');
-        done();
-      });
+    it('should call client post method with the appropriate uri', function() {
+      webhooks.create({})
+        .then(function() {
+          expect(client.post.firstCall.args[0].uri).to.equal('webhooks');
+        });
     });
 
-    it('should throw an error if webhook is null', function(done) {
-      webhooks.create(null, function(err) {
-        expect(err.message).to.equal('webhook object is required');
-        expect(client.post).not.to.have.been.called;
-        done();
-      });
-    });
-
-    it('should throw an error if webhook is missing', function(done) {
-      webhooks.create(function(err) {
-        expect(err.message).to.equal('webhook object is required');
-        expect(client.post).not.to.have.been.called;
-        done();
-      });
+    it('should throw an error if webhook is missing', function() {
+      return expect(webhooks.create()).to.be.rejectedWith('webhook object is required');
     });
   });
 
   describe('update Method', function() {
-    it('should call client put method with the appropriate uri', function(done) {
+    it('should call client put method with the appropriate uri', function() {
       var webhook = {
-        id: "test"
+        id: 'test'
       };
 
-      webhooks.update(webhook, function(err, data) {
-        expect(client.put.firstCall.args[0].uri).to.equal('webhooks/test');
-        done();
-      });
+      webhooks.update(webhook)
+        .then(function() {
+          expect(client.put.firstCall.args[0].uri).to.equal('webhooks/test');
+        });
     });
 
-    it('should throw an error if webhook is null', function(done) {
-      webhooks.update(null, function(err) {
-        expect(err.message).to.equal('webhook object is required');
-        expect(client.put).not.to.have.been.called;
-        done();
-      });
+    it('should throw an error if webhook is missing', function() {
+      return expect(webhooks.update()).to.be.rejectedWith('webhook object is required');
     });
 
-    it('should throw an error if webhook is missing', function(done) {
-      webhooks.update(function(err) {
-        expect(err.message).to.equal('webhook object is required');
-        expect(client.put).not.to.have.been.called;
-        done();
-      });
-    });
-
-    it('should throw an error if webhook.id is missing', function(done) {
-      webhooks.update({}, function (err) {
-        expect(err.message).to.equal('webhook.id is required');
-        expect(client.post).not.to.have.been.called;
-        done();
-      });
+    it('should throw an error if webhook.id is missing', function() {
+      return expect(webhooks.update({})).to.be.rejectedWith('webhook.id is required');
     });
   });
 
   describe('delete Method', function() {
-    it('should call client delete method with the appropriate uri', function(done) {
-      webhooks.delete('test', function(err, data) {
-        expect(client.delete.firstCall.args[0].uri).to.equal('webhooks/test');
-        done();
-      });
+    it('should call client delete method with the appropriate uri', function() {
+      webhooks.delete('test')
+        .then(function() {
+          expect(client.delete.firstCall.args[0].uri).to.equal('webhooks/test');
+        });
     });
 
-    it('should throw an error if id is null', function(done) {
-      webhooks.delete(null, function(err) {
-        expect(err.message).to.equal('id is required');
-        expect(client.delete).not.to.have.been.called;
-        done();
-      });
-    });
-
-    it('should throw an error if id is missing', function(done) {
-      webhooks.delete(function(err) {
-        expect(err.message).to.equal('id is required');
-        expect(client.delete).not.to.have.been.called;
-        done();
-      });
+    it('should throw an error if id is missing', function() {
+      return expect(webhooks.delete()).to.be.rejectedWith('id is required');
     });
   });
 
   describe('validate Method', function() {
-    it('should call client post method with the appropriate uri', function(done) {
+    it('should call client post method with the appropriate uri', function() {
       var options = {
         id: 'test',
         message: {
@@ -169,100 +128,80 @@ describe('Webhooks Library', function() {
         }
       };
 
-      webhooks.validate(options, function(err, data) {
-        expect(client.post.firstCall.args[0].uri).to.equal('webhooks/test/validate');
-        done();
-      });
+      webhooks.validate(options)
+        .then(function() {
+          expect(client.post.firstCall.args[0].uri).to.equal('webhooks/test/validate');
+        });
     });
 
-    it('should throw an error if id is missing', function(done) {
-      webhooks.validate(null, function (err) {
-        expect(err.message).to.equal('id is required');
-        expect(client.post).not.to.have.been.called;
-        done();
-      });
+    it('should throw an error if id is missing', function() {
+      return expect(webhooks.validate()).to.be.rejectedWith('id is required');
     });
 
-    it('should throw an error if message is missing', function(done) {
+    it('should throw an error if message is missing', function() {
       var options = {
         id: 'test'
       };
 
-      webhooks.validate(options, function (err) {
-        expect(err.message).to.equal('message is required');
-        expect(client.post).not.to.have.been.called;
-        done();
-      });
+      return expect(webhooks.validate(options)).to.be.rejectedWith('message is required');
     });
   });
 
   describe('getBatchStatus Method', function() {
-    it('should call client get method with the appropriate uri', function(done) {
+    it('should call client get method with the appropriate uri', function() {
       var options = {
         id: 'test'
       };
 
-      webhooks.getBatchStatus(options, function(err, data) {
-        expect(client.get.firstCall.args[0].uri).to.equal('webhooks/test/batch-status');
-        done();
-      });
+      webhooks.getBatchStatus(options)
+        .then(function() {
+          expect(client.get.firstCall.args[0].uri).to.equal('webhooks/test/batch-status');
+        });
     });
 
-    it('should throw an error if id is missing', function(done) {
-      webhooks.getBatchStatus(null, function (err) {
-        expect(err.message).to.equal('id is required');
-        expect(client.get).not.to.have.been.called;
-        done();
-      });
+    it('should throw an error if id is missing', function() {
+      return expect(webhooks.getBatchStatus()).to.be.rejectedWith('id is required');
     });
 
-    it('should allow limit to be set in options', function(done) {
+    it('should allow limit to be set in options', function() {
       var options = {
         id: 'test',
         limit: 1000
       };
 
-      webhooks.getBatchStatus(options, function(err, data) {
-        expect(client.get.firstCall.args[0].qs).to.deep.equal({limit: 1000});
-        done();
-      });
+      webhooks.getBatchStatus(options)
+        .then(function() {
+          expect(client.get.firstCall.args[0].qs).to.deep.equal({limit: 1000});
+        });
     });
   });
 
   describe('getDocumentation Method', function() {
-    it('should call client get method with the appropriate uri', function(done) {
-      var options = {
-        id: 'test'
-      };
-
-      webhooks.getDocumentation(function(err, data) {
-        expect(client.get.firstCall.args[0].uri).to.equal('webhooks/events/documentation');
-        done();
-      });
+    it('should call client get method with the appropriate uri', function() {
+      webhooks.getDocumentation()
+        .then(function() {
+          expect(client.get.firstCall.args[0].uri).to.equal('webhooks/events/documentation');
+        });
     });
   });
 
   describe('getSamples Method', function() {
-    it('should call client get method with the appropriate uri', function(done) {
-      var options = {
-        id: 'test'
-      };
-
-      webhooks.getSamples(function(err, data) {
-        expect(client.get.firstCall.args[0].uri).to.equal('webhooks/events/samples');
-        done();
-      });
+    it('should call client get method with the appropriate uri', function() {
+      webhooks.getSamples()
+        .then(function() {
+          expect(client.get.firstCall.args[0].uri).to.equal('webhooks/events/samples');
+        });
     });
 
-    it('should allow events to be set in options', function(done) {
+    it('should allow events to be set in options', function() {
       var options = {
         events: 'bounces'
       };
 
-      webhooks.getSamples(options, function(err, data) {
-        expect(client.get.firstCall.args[0].qs).to.deep.equal({events: 'bounces'});
-        done();
-      });
+      webhooks.getSamples(options)
+        .then(function() {
+          expect(client.get.firstCall.args[0].qs).to.deep.equal({events: 'bounces'});
+        });
     });
   });
 });
