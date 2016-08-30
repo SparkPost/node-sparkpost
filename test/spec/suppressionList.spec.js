@@ -32,29 +32,29 @@ describe('Suppression List Library', function() {
     });
   });
 
-  describe('checkStatus Method', function() {
+  describe('getEntry Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      suppressionList.checkStatus('test@test.com')
+      suppressionList.getEntry('test@test.com')
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('suppression-list/test@test.com');
         });
     });
 
     it('should throw an error if email is missing', function() {
-      return expect(suppressionList.checkStatus()).to.be.rejectedWith('email is required');
+      return expect(suppressionList.getEntry()).to.be.rejectedWith('email is required');
     });
   });
 
-  describe('removeStatus Method', function() {
+  describe('deleteEntry Method', function() {
     it('should call client delete method with the appropriate uri', function() {
-      suppressionList.removeStatus('test@test.com')
+      suppressionList.deleteEntry('test@test.com')
         .then(function() {
           expect(client.delete.firstCall.args[0].uri).to.equal('suppression-list/test@test.com');
         });
     });
 
-    it('should throw an error if email is missing', function() {
-      return expect(suppressionList.removeStatus()).to.be.rejectedWith('email is required');
+    it('should throw an error if email deleteEntry missing', function() {
+      return expect(suppressionList.deleteEntry()).to.be.rejectedWith('email is required');
     });
   });
 

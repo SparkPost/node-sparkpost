@@ -10,13 +10,16 @@ This library provides easy access to the [Suppression List](https://developers.s
     * standard `callback(err, data)`
     * `err` - any error that occurred
     * `data` - full response from request client
-* **checkStatus(email[, callback]) &rarr; `{Promise}`**<br />
+* **getEntry(email[, callback]) &rarr; `{Promise}`**<br />
+  Retrieve an entry by recipient email.
     * `email` - `String` email address to check **required**
     * `callback` - see search function
-* **removeStatus(email[, callback]) &rarr; `{Promise}`**<br />
+* **deleteEntry(email[, callback]) &rarr; `{Promise}`**<br />
+  Remove an entry by recipient email.
     * `email` - `String` email address to remove **required**
     * `callback` - see search function
 * **upsert(listEntries[, callback]) &rarr; `{Promise}`**<br />
+  Insert or update one or many entries.
     * `listEntries` - an object [entry list attributes](https://developers.sparkpost.com/api/suppression-list#header-list-entry-attributes) or `Array` of entry list attribute objects
     * `callback` - see search function
 
