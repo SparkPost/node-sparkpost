@@ -1,47 +1,66 @@
 # Templates
 
-This library provides easy access to the [Templates](https://www.sparkpost.com/api#/reference/templates/) Resource.
+This library provides easy access to the [Templates](https://developers.sparkpost.com/api/templates) Resource.
 
 ## Methods
-* **all(callback)**
+* **all([callback]) &rarr; `{Promise}`**<br />
   List a summary of all templates.
-  * `callback` - executed after task is completed. **required**
+  * `callback` - executed after task is completed if provided*
     * standard `callback(err, data)`
     * `err` - any error that occurred
     * `data` - full response from request client
-* **find(options, callback)**
+* **find(options[, callback]) &rarr; `{Promise}`**<br />
   Retrieve details about a specified template by its id
   * `options.id` - the id of the template you want to look up **required**
   * `options.draft` - specifies a draft or published template
   * `callback` - see all function
-* **create(options, callback)**
+* **create(template[, callback]) &rarr; `{Promise}`**<br />
   Create a new template
-  * `options.template` - a template object **required**
+  * `template` - an object of [template attributes](https://developers.sparkpost.com/api/templates#header-template-attributes) **required**
   * `callback` - see all function
-* **delete(id, callback)**
+* **update(template[, callback]) &rarr; `{Promise}`**<br />
+  Update an existing template
+  * `template` - an object of [template attributes](https://developers.sparkpost.com/api/templates#header-template-attributes) **required**
+  * `template.id` - the id of the template you want to update **required**
+  * `callback` - see all function
+* **delete(id[, callback]) &rarr; `{Promise}`**<br />
   Delete an existing template
   * `id` - the id of the template you want to delete **required**
   * `callback` - see all function
-* **preview(options, callback)**
+* **preview(options[, callback]) &rarr; `{Promise}`**<br />
   Preview the most recent version of an existing template by id
   * `options.id` - the id of the template you want to look up **required**
-  * `options.data` - Object of substitution data
+  * `options.substitution_data` - Object of substitution data
   * `options.draft` - specifies a draft or published template
   * `callback` - see all function
 
+*callback is optional because all methods return a Promise.
+
 ## Examples
 
-```js
-var SparkPost = require('sparkpost');
-var client = new SparkPost('YOUR_API_KEY');
+```javascript
+var SparkPost = require('sparkpost')
+  , client = new SparkPost('YOUR_API_KEY');
 
+client.templates.all()
+  .then(data => {
+    console.log('Congrats you can use our client library!');
+    console.log(data);
+  })
+  .catch(err => {
+    console.log('Whoops! Something went wrong');
+    console.log(err);
+  });
+
+// Using a callback
 client.templates.all(function(err, data) {
   if(err) {
+    console.log('Whoops! Something went wrong');
     console.log(err);
-    return;
+  } else {
+    console.log('Congrats you can use our client library!');
+    console.log(data);
   }
-
-  console.log(data);
 });
 
 ```
