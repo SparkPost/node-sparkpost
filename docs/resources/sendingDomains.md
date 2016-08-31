@@ -27,9 +27,8 @@ This library provides easy access to the [Sending Domains](https://developers.sp
   * `callback` - see all function
 * **verify(options[, callback]) &rarr; `{Promise}`**<br />
   Validate the specified verification field types for a sending domain
+  * `options` - an object of [verify attributes](https://developers.sparkpost.com/api/sending-domains#header-verify-attributes)
   * `options.domain` - the name of the domain you want to verify **required**
-  * `options.verifyDKIM` - initiates a check against the DKIM record default: `true`
-  * `options.verifySPF` - initiates a check against the SPF record default: `true`
 
 *callback is optional because all methods return a Promise.
 

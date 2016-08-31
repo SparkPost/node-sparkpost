@@ -122,19 +122,5 @@ describe('Sending Domains Library', function() {
           expect(client.post.firstCall.args[0].json.spf_verify).to.be.true;
         });
     });
-
-    it('should allow a user to set verifyDKIM and verifySPF', function() {
-      var options = {
-        domain: 'test',
-        verifyDKIM: false,
-        verifySPF: false
-      };
-
-      sendingDomains.verify(options)
-        .then(function() {
-          expect(client.post.firstCall.args[0].json.dkim_verify).to.be.false;
-          expect(client.post.firstCall.args[0].json.spf_verify).to.be.false;
-        });
-    });
   });
 });
