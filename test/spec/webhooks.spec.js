@@ -1,6 +1,7 @@
 'use strict';
 
-var chai = require('chai')
+var _ = require('lodash')
+  , chai = require('chai')
   , expect = chai.expect
   , sinon = require('sinon');
 
@@ -25,7 +26,7 @@ describe('Webhooks Library', function() {
 
   describe('all Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      webhooks.all()
+      return webhooks.all()
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks');
         });
@@ -36,7 +37,7 @@ describe('Webhooks Library', function() {
         timezone: 'America/New_York'
       };
 
-      webhooks.all(options)
+      return webhooks.all(options)
         .then(function() {
           expect(client.get.firstCall.args[0].qs).to.deep.equal({timezone: 'America/New_York'});
         });
@@ -49,7 +50,7 @@ describe('Webhooks Library', function() {
         id: 'test'
       };
 
-      webhooks.describe(options)
+      return webhooks.describe(options)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks/test');
         });
@@ -65,7 +66,7 @@ describe('Webhooks Library', function() {
         timezone: 'America/New_York'
       };
 
-      webhooks.describe(options)
+      return webhooks.describe(options)
         .then(function() {
           expect(client.get.firstCall.args[0].qs).to.deep.equal({timezone: 'America/New_York'});
         });
@@ -73,10 +74,17 @@ describe('Webhooks Library', function() {
   });
 
   describe('create Method', function() {
-    it('should call client post method with the appropriate uri', function() {
-      webhooks.create({})
+    it('should call client post method with the appropriate uri and payload', function() {
+      var webhook = {
+        name: 'Example webhook',
+        target: 'http://client.example.com/example-webhook',
+        events: ['delivery', 'injection', 'open', 'click']
+      };
+
+      return webhooks.create(webhook)
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('webhooks');
+          expect(client.post.firstCall.args[0].json).to.deep.equal(webhook);
         });
     });
 
@@ -88,12 +96,16 @@ describe('Webhooks Library', function() {
   describe('update Method', function() {
     it('should call client put method with the appropriate uri', function() {
       var webhook = {
-        id: 'test'
+        id: 'test',
+        name: 'Renamed webhook',
+        events: ['rejection', 'delay'],
+        auth_type: 'none'
       };
 
-      webhooks.update(webhook)
+      return webhooks.update(webhook)
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('webhooks/test');
+          expect(client.put.firstCall.args[0].json).to.deep.equal(_.omit(webhook, 'id'));
         });
     });
 
@@ -108,7 +120,7 @@ describe('Webhooks Library', function() {
 
   describe('delete Method', function() {
     it('should call client delete method with the appropriate uri', function() {
-      webhooks.delete('test')
+      return webhooks.delete('test')
         .then(function() {
           expect(client.delete.firstCall.args[0].uri).to.equal('webhooks/test');
         });
@@ -128,7 +140,7 @@ describe('Webhooks Library', function() {
         }
       };
 
-      webhooks.validate(options)
+      return webhooks.validate(options)
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('webhooks/test/validate');
         });
@@ -153,7 +165,7 @@ describe('Webhooks Library', function() {
         id: 'test'
       };
 
-      webhooks.getBatchStatus(options)
+      return webhooks.getBatchStatus(options)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks/test/batch-status');
         });
@@ -169,7 +181,7 @@ describe('Webhooks Library', function() {
         limit: 1000
       };
 
-      webhooks.getBatchStatus(options)
+      return webhooks.getBatchStatus(options)
         .then(function() {
           expect(client.get.firstCall.args[0].qs).to.deep.equal({limit: 1000});
         });
@@ -178,7 +190,7 @@ describe('Webhooks Library', function() {
 
   describe('getDocumentation Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      webhooks.getDocumentation()
+      return webhooks.getDocumentation()
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks/events/documentation');
         });
@@ -187,7 +199,7 @@ describe('Webhooks Library', function() {
 
   describe('getSamples Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      webhooks.getSamples()
+      return webhooks.getSamples()
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks/events/samples');
         });
@@ -198,7 +210,7 @@ describe('Webhooks Library', function() {
         events: 'bounces'
       };
 
-      webhooks.getSamples(options)
+      return webhooks.getSamples(options)
         .then(function() {
           expect(client.get.firstCall.args[0].qs).to.deep.equal({events: 'bounces'});
         });
