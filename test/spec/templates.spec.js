@@ -1,6 +1,7 @@
 'use strict';
 
-var chai = require('chai')
+var _ = require('lodash')
+  , chai = require('chai')
   , expect = chai.expect
   , sinon = require('sinon');
 
@@ -25,7 +26,7 @@ describe('Templates Library', function() {
 
   describe('all Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      templates.all()
+      return templates.all()
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('templates');
         });
@@ -37,7 +38,7 @@ describe('Templates Library', function() {
       var options = {
         id: 'test'
       };
-      templates.find(options)
+      return templates.find(options)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('templates/test');
         });
@@ -53,7 +54,7 @@ describe('Templates Library', function() {
         draft: true
       };
 
-      templates.find(options)
+      return templates.find(options)
         .then(function() {
           expect(client.get.firstCall.args[0].qs).to.deep.equal({draft: true});
         });
@@ -61,14 +62,15 @@ describe('Templates Library', function() {
   });
 
   describe('create Method', function() {
-    it('should call client post method with the appropriate uri', function() {
+    it('should call client post method with the appropriate uri and payload', function() {
       var template = {
         id: 'test'
       };
 
-      templates.create(template)
+      return templates.create(template)
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('templates');
+          expect(client.post.firstCall.args[0].json).to.deep.equal(template);
         });
     });
 
@@ -78,14 +80,16 @@ describe('Templates Library', function() {
   });
 
   describe('update Method', function() {
-    it('should call client put method with the appropriate uri', function() {
+    it('should call client put method with the appropriate uri and payload', function() {
       var template = {
-        id: 'test'
+        id: 'test',
+        name: 'A new name!'
       };
 
-      templates.update(template)
+      return templates.update(template)
         .then(function() {
-          expect(client.put.firstCall.args[0].uri).to.equal('templates/test');
+          expect(client.put.firstCall.args[0].uri).to.equal('templates/test')
+          expect(client.put.firstCall.args[0].json).to.deep.equal(_.omit(template, 'id'));
         });
     });
 
@@ -103,7 +107,7 @@ describe('Templates Library', function() {
         update_published: true
       };
 
-      templates.update(template)
+      return templates.update(template)
         .then(function() {
           expect(client.put.firstCall.args[0].qs).to.deep.equal({update_published: true});
         });
@@ -112,7 +116,7 @@ describe('Templates Library', function() {
 
   describe('delete Method', function() {
     it('should call client delete method with the appropriate uri', function() {
-      templates.delete('test')
+      return templates.delete('test')
         .then(function() {
           expect(client.delete.firstCall.args[0].uri).to.equal('templates/test');
         });
@@ -124,13 +128,19 @@ describe('Templates Library', function() {
   });
 
   describe('preview Method', function() {
-    it('should call client post method with the appropriate uri', function() {
+    it('should call client post method with the appropriate uri and payload', function() {
       var options = {
-        id: 'test'
+        id: 'test',
+        substitution_data: {
+          'name': 'Natalie',
+          'age': 35,
+          'member': true
+        }
       };
-      templates.preview(options)
+      return templates.preview(options)
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('templates/test/preview');
+          expect(client.post.firstCall.args[0].json).to.deep.equal(_.omit(options, 'id'));
         });
     });
 
@@ -144,7 +154,7 @@ describe('Templates Library', function() {
         draft: true
       };
 
-      templates.preview(options)
+      return templates.preview(options)
         .then(function() {
           expect(client.post.firstCall.args[0].qs).to.deep.equal({draft: true});
         });
