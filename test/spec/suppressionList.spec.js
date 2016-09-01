@@ -25,7 +25,7 @@ describe('Suppression List Library', function() {
 
   describe('search Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      suppressionList.search({limit: 5})
+      return suppressionList.search({limit: 5})
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('suppression-list');
         });
@@ -34,7 +34,7 @@ describe('Suppression List Library', function() {
 
   describe('getEntry Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      suppressionList.getEntry('test@test.com')
+      return suppressionList.getEntry('test@test.com')
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('suppression-list/test@test.com');
         });
@@ -47,7 +47,7 @@ describe('Suppression List Library', function() {
 
   describe('deleteEntry Method', function() {
     it('should call client delete method with the appropriate uri', function() {
-      suppressionList.deleteEntry('test@test.com')
+      return suppressionList.deleteEntry('test@test.com')
         .then(function() {
           expect(client.delete.firstCall.args[0].uri).to.equal('suppression-list/test@test.com');
         });
@@ -62,7 +62,7 @@ describe('Suppression List Library', function() {
     it('should accept a single list entry', function() {
       var listEntry = { email: 'test@test.com' };
 
-      suppressionList.upsert(listEntry)
+      return suppressionList.upsert(listEntry)
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('suppression-list');
           expect(client.put.firstCall.args[0].json.recipients).to.deep.equal([listEntry]);
@@ -75,7 +75,7 @@ describe('Suppression List Library', function() {
         { email: 'test2@test.com' }
       ];
 
-      suppressionList.upsert(listEntries)
+      return suppressionList.upsert(listEntries)
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('suppression-list');
           expect(client.put.firstCall.args[0].json.recipients).to.deep.equal(listEntries);
