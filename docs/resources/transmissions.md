@@ -15,10 +15,10 @@ This library provides easy access to the [Transmissions](https://developers.spar
   Retrieve the details about a transmission by its ID
   * `id` - id of the transmission you want to look up **required**
   * `callback` - see all function
-* **send(options[, callback]) &rarr; `{Promise}`**<br />
+* **send(transmission[, callback]) &rarr; `{Promise}`**<br />
   Sends a message by creating a new transmission
-  * `options` - an object of [transmission attributes](https://developers.sparkpost.com/api/transmissions#header-transmission-attributes)
-  * `options.num_rcpt_errors` - maximum number of recipient errors returned
+  * `transmission` - an object of [transmission attributes](https://developers.sparkpost.com/api/transmissions#header-transmission-attributes)
+  * `transmission.num_rcpt_errors` - maximum number of recipient errors returned
   * `callback` - see all function
 
 *callback is optional because all methods return a Promise.
