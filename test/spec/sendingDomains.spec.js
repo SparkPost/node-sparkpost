@@ -1,6 +1,7 @@
 'use strict';
 
-var chai = require('chai')
+var _ = require('lodash')
+  , chai = require('chai')
   , expect = chai.expect
   , sinon = require('sinon');
 
@@ -25,7 +26,7 @@ describe('Sending Domains Library', function() {
 
   describe('all Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      sendingDomains.all()
+      return sendingDomains.all()
         .then(function() {
           expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'sending-domains'});
         });
@@ -34,7 +35,7 @@ describe('Sending Domains Library', function() {
 
   describe('find Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      sendingDomains.find('test')
+      return sendingDomains.find('test')
         .then(function() {
           expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'sending-domains/test'});
         });
@@ -46,13 +47,14 @@ describe('Sending Domains Library', function() {
   });
 
   describe('create Method', function() {
-    it('should call client post method with the appropriate uri', function() {
+    it('should call client post method with the appropriate uri and payload', function() {
       var sendingDomain = {
         domain: 'test'
       };
 
-      sendingDomains.create(sendingDomain).then(function() {
+      return sendingDomains.create(sendingDomain).then(function() {
         expect(client.post.firstCall.args[0].uri).to.equal('sending-domains');
+        expect(client.post.firstCall.args[0].json).to.deep.equal(sendingDomain);
       });
     });
 
@@ -62,14 +64,16 @@ describe('Sending Domains Library', function() {
   });
 
   describe('update Method', function() {
-    it('should call client put method with the appropriate uri', function() {
+    it('should call client put method with the appropriate uri and payload', function() {
       var sendingDomain = {
-        domain: 'test'
+        domain: 'test',
+        tracking_domain: 'click.example1.com'
       };
 
-      sendingDomains.update(sendingDomain)
+      return sendingDomains.update(sendingDomain)
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('sending-domains/test');
+          expect(client.put.firstCall.args[0].json).to.deep.equal(_.omit(sendingDomain, 'domain'));
         });
     });
 
@@ -84,7 +88,7 @@ describe('Sending Domains Library', function() {
 
   describe('delete Method', function() {
     it('should call client delete method with the appropriate uri', function() {
-      sendingDomains.delete('test')
+      return sendingDomains.delete('test')
         .then(function() {
           expect(client.delete.firstCall.args[0].uri).to.equal('sending-domains/test');
         });
@@ -96,31 +100,22 @@ describe('Sending Domains Library', function() {
   });
 
   describe('verify Method', function() {
-    it('should call client post method with the appropriate uri', function() {
+    it('should call client post method with the appropriate uri and payload', function() {
       var options = {
-        domain: 'test'
+        domain: 'test',
+        dkim_verify: true,
+        spf_verify: true
       };
 
-      sendingDomains.verify(options)
+      return sendingDomains.verify(options)
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('sending-domains/test/verify');
+          expect(client.post.firstCall.args[0].json).to.deep.equal(_.omit(options, 'domain'));
         });
     });
 
     it('should throw an error if domain is missing', function() {
       return expect(sendingDomains.verify({})).to.be.rejectedWith('domain is required');
-    });
-
-    it('should default verifyDKIM and verifySPF to be true', function() {
-      var options = {
-        domain: 'test'
-      };
-
-      sendingDomains.verify(options)
-        .then(function() {
-          expect(client.post.firstCall.args[0].json.dkim_verify).to.be.true;
-          expect(client.post.firstCall.args[0].json.spf_verify).to.be.true;
-        });
     });
   });
 });
