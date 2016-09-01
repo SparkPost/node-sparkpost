@@ -1,9 +1,9 @@
 'use strict';
 
-var chai = require('chai')
+var _ = require('lodash')
+  , chai = require('chai')
   , expect = chai.expect
-  , sinon = require('sinon')
-  , Promise = require('../../lib/Promise');
+  , sinon = require('sinon');
 
 require('sinon-as-promised');
 
@@ -26,7 +26,7 @@ describe('Recipient Lists Library', function() {
 
   describe('all Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      recipientLists.all()
+      return recipientLists.all()
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('recipient-lists');
         });
@@ -38,7 +38,7 @@ describe('Recipient Lists Library', function() {
       var options = {
         id: 'test'
       };
-      recipientLists.find(options)
+      return recipientLists.find(options)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('recipient-lists/test');
         });
@@ -54,7 +54,7 @@ describe('Recipient Lists Library', function() {
         show_recipients: true
       };
 
-      recipientLists.find(options)
+      return recipientLists.find(options)
         .then(function() {
           expect(client.get.firstCall.args[0].qs).to.deep.equal({show_recipients: true});
         });
@@ -63,10 +63,10 @@ describe('Recipient Lists Library', function() {
 
   describe('create Method', function() {
 
-    it('should call client post method with the appropriate uri', function() {
+    it('should call client post method with the appropriate uri and payload', function() {
       var testList = {
         id: 'test_list',
-        recipient: [
+        recipients: [
           {
             address: {
               email: 'test@test.com',
@@ -76,9 +76,10 @@ describe('Recipient Lists Library', function() {
         ]
       };
 
-      recipientLists.create(testList)
+      return recipientLists.create(testList)
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('recipient-lists');
+          expect(client.post.firstCall.args[0].json).to.deep.equal(testList);
         });
     });
 
@@ -89,7 +90,7 @@ describe('Recipient Lists Library', function() {
     it('should allow num_rcpt_errors to be set in options', function() {
       var testList = {
         id: 'test_list',
-        recipient: [
+        recipients: [
           {
             address: {
               email: 'test@test.com',
@@ -100,7 +101,7 @@ describe('Recipient Lists Library', function() {
         num_rcpt_errors: 3
       };
 
-      recipientLists.create(testList)
+      return recipientLists.create(testList)
         .then(function() {
           expect(client.post.firstCall.args[0].qs).to.deep.equal({num_rcpt_errors: 3});
         });
@@ -109,10 +110,10 @@ describe('Recipient Lists Library', function() {
 
   describe('update Method', function() {
 
-    it('should call client put method with the appropriate uri', function() {
+    it('should call client put method with the appropriate uri and payload', function() {
       var testList = {
         id: 'test_list',
-        recipient: [
+        recipients: [
           {
             address: {
               email: 'test@test.com',
@@ -122,9 +123,10 @@ describe('Recipient Lists Library', function() {
         ]
       };
 
-      recipientLists.update(testList)
+      return recipientLists.update(testList)
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('recipient-lists/' + testList.id);
+          expect(client.put.firstCall.args[0].json).to.deep.equal(_.omit(testList, 'id'));
         });
     });
 
@@ -150,7 +152,7 @@ describe('Recipient Lists Library', function() {
         num_rcpt_errors: 3
       };
 
-      recipientLists.update(testList)
+      return recipientLists.update(testList)
         .then(function() {
           expect(client.put.firstCall.args[0].qs).to.deep.equal({num_rcpt_errors: 3});
         });
@@ -160,7 +162,7 @@ describe('Recipient Lists Library', function() {
 
   describe('delete Method', function() {
     it('should call client delete method with the appropriate uri', function() {
-      recipientLists.delete('test')
+      return recipientLists.delete('test')
         .then(function() {
           expect(client.delete.firstCall.args[0].uri).to.equal('recipient-lists/test');
         });
