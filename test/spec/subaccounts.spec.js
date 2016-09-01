@@ -1,6 +1,7 @@
 'use strict';
 
-var chai = require('chai')
+var _ = require('lodash')
+  , chai = require('chai')
   , expect = chai.expect
   , sinon = require('sinon');
 
@@ -24,7 +25,7 @@ describe('Subaccounts Library', function() {
 
   describe('all Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      subaccounts.all()
+      return subaccounts.all()
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('subaccounts');
         });
@@ -33,7 +34,7 @@ describe('Subaccounts Library', function() {
 
   describe('find Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      subaccounts.find('test')
+      return subaccounts.find('test')
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('subaccounts/test');
         });
@@ -52,9 +53,10 @@ describe('Subaccounts Library', function() {
         key_grants: []
       };
 
-      subaccounts.create(subaccount)
+      return subaccounts.create(subaccount)
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('subaccounts');
+          expect(client.post.firstCall.args[0].json).to.deep.equal(subaccount);
         });
     });
 
@@ -66,12 +68,16 @@ describe('Subaccounts Library', function() {
   describe('update Method', function() {
     it('should call client put method with the appropriate uri', function() {
       var subaccount = {
-        id: 'test'
+        id: 'test',
+        name: 'Hey Joe! Garage and Parts',
+        status: 'suspended',
+        ip_pool: ''
       };
 
-      subaccounts.update(subaccount)
+      return subaccounts.update(subaccount)
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('subaccounts/test');
+          expect(client.put.firstCall.args[0].json).to.deep.equal(_.omit(subaccount, 'id'));
         });
     });
 
