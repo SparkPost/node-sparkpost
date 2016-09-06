@@ -4,7 +4,7 @@ var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key);
 
-client.subaccounts.all()
+client.subaccounts.list()
   .then(data => {
     console.log('Congrats you can use our client library!');
     console.log(data);
@@ -15,7 +15,7 @@ client.subaccounts.all()
   });
 
 // Using a callback
-client.subaccounts.all(function(err, data) {
+client.subaccounts.list(function(err, data) {
   if (err) {
     console.log('Whoops! Something went wrong');
     console.log(err);

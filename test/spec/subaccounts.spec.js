@@ -1,7 +1,6 @@
 'use strict';
 
-var _ = require('lodash')
-  , chai = require('chai')
+var chai = require('chai')
   , expect = chai.expect
   , sinon = require('sinon');
 
@@ -11,7 +10,7 @@ chai.use(require('sinon-chai'));
 chai.use(require('chai-as-promised'));
 
 describe('Subaccounts Library', function() {
-  var client, subaccounts;
+  let client, subaccounts;
 
   beforeEach(function() {
     client = {
@@ -23,30 +22,30 @@ describe('Subaccounts Library', function() {
     subaccounts = require('../../lib/subaccounts')(client);
   });
 
-  describe('all Method', function() {
+  describe('list Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return subaccounts.all()
+      return subaccounts.list()
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('subaccounts');
         });
     });
   });
 
-  describe('find Method', function() {
+  describe('get Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return subaccounts.find('test')
+      return subaccounts.get('test')
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('subaccounts/test');
         });
     });
 
     it('should throw an error if id is missing', function() {
-      return expect(subaccounts.find()).to.be.rejectedWith('id is required');
+      return expect(subaccounts.get()).to.be.rejectedWith('id is required');
     });
   });
 
   describe('create Method', function() {
-    it('should call client post method with the appropriate uri', function() {
+    it('should call client post method with the appropriate uri and payload', function() {
       var subaccount = {
         name: 'test',
         key_label: 'test',
@@ -66,27 +65,26 @@ describe('Subaccounts Library', function() {
   });
 
   describe('update Method', function() {
-    it('should call client put method with the appropriate uri', function() {
+    it('should call client put method with the appropriate uri and payload', function() {
       var subaccount = {
-        id: 'test',
         name: 'Hey Joe! Garage and Parts',
         status: 'suspended',
         ip_pool: ''
       };
 
-      return subaccounts.update(subaccount)
+      return subaccounts.update('test', subaccount)
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('subaccounts/test');
-          expect(client.put.firstCall.args[0].json).to.deep.equal(_.omit(subaccount, 'id'));
+          expect(client.put.firstCall.args[0].json).to.deep.equal(subaccount);
         });
     });
 
-    it('should throw an error if subaccount object is missing', function() {
-      return expect(subaccounts.update()).to.be.rejectedWith('subaccount object is required');
+    it('should throw an error if subaccount id is missing from options', function() {
+      return expect(subaccounts.update()).to.be.rejectedWith('id is required');
     });
 
-    it('should throw an error if subaccountId is missing from options', function() {
-      return expect(subaccounts.update({})).to.be.rejectedWith('subaccount.id is required');
+    it('should throw an error if subaccount object is missing', function() {
+      return expect(subaccounts.update('test')).to.be.rejectedWith('subaccount object is required');
     });
   });
 });
