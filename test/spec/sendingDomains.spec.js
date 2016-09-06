@@ -24,29 +24,29 @@ describe('Sending Domains Library', function() {
     sendingDomains = require('../../lib/sendingDomains')(client);
   });
 
-  describe('all Method', function() {
+  describe('list', function() {
     it('should call client get method with the appropriate uri', function() {
-      return sendingDomains.all()
+      return sendingDomains.list()
         .then(function() {
           expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'sending-domains'});
         });
     });
   });
 
-  describe('find Method', function() {
+  describe('get', function() {
     it('should call client get method with the appropriate uri', function() {
-      return sendingDomains.find('test')
+      return sendingDomains.get('test')
         .then(function() {
           expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'sending-domains/test'});
         });
     });
 
     it('should throw an error if domain is missing', function() {
-      return expect(sendingDomains.find()).to.be.rejectedWith('domain is required');
+      return expect(sendingDomains.get()).to.be.rejectedWith('domain is required');
     });
   });
 
-  describe('create Method', function() {
+  describe('create', function() {
     it('should call client post method with the appropriate uri and payload', function() {
       var sendingDomain = {
         domain: 'test'
@@ -58,35 +58,34 @@ describe('Sending Domains Library', function() {
       });
     });
 
-    it('should throw an error if sendingDomain is missing', function() {
-      return expect(sendingDomains.create()).to.be.rejectedWith('sending domain is required');
+    it('should throw an error if create options are missing', function() {
+      return expect(sendingDomains.create()).to.be.rejectedWith('create options are required');
     });
   });
 
-  describe('update Method', function() {
+  describe('update', function() {
     it('should call client put method with the appropriate uri and payload', function() {
       var sendingDomain = {
-        domain: 'test',
         tracking_domain: 'click.example1.com'
       };
 
-      return sendingDomains.update(sendingDomain)
+      return sendingDomains.update('test', sendingDomain)
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('sending-domains/test');
           expect(client.put.firstCall.args[0].json).to.deep.equal(_.omit(sendingDomain, 'domain'));
         });
     });
 
-    it('should throw an error if sendingDomain is missing', function() {
-      return expect(sendingDomains.update()).to.be.rejectedWith('sending domain is required');
+    it('should throw an error if update options are missing', function() {
+      return expect(sendingDomains.update('test')).to.be.rejectedWith('update options are required');
     });
 
-    it('should throw an error if domain is missing from sendingDomain', function() {
-      return expect(sendingDomains.update({})).to.be.rejectedWith('sendingDomain.domain is required');
+    it('should throw an error if domain is missing', function() {
+      return expect(sendingDomains.update()).to.be.rejectedWith('domain is required');
     });
   });
 
-  describe('delete Method', function() {
+  describe('delete', function() {
     it('should call client delete method with the appropriate uri', function() {
       return sendingDomains.delete('test')
         .then(function() {
@@ -99,15 +98,14 @@ describe('Sending Domains Library', function() {
     });
   });
 
-  describe('verify Method', function() {
+  describe('verify', function() {
     it('should call client post method with the appropriate uri and payload', function() {
       var options = {
-        domain: 'test',
         dkim_verify: true,
         spf_verify: true
       };
 
-      return sendingDomains.verify(options)
+      return sendingDomains.verify('test', options)
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('sending-domains/test/verify');
           expect(client.post.firstCall.args[0].json).to.deep.equal(_.omit(options, 'domain'));
@@ -115,7 +113,12 @@ describe('Sending Domains Library', function() {
     });
 
     it('should throw an error if domain is missing', function() {
-      return expect(sendingDomains.verify({})).to.be.rejectedWith('domain is required');
+      return expect(sendingDomains.verify()).to.be.rejectedWith('domain is required');
+    });
+
+    it('should not throw an error if 2nd argument is a function (callback)', function() {
+      let fakeCallback = function() {};
+      return expect(sendingDomains.verify('test', fakeCallback)).to.be.fulfilled;
     });
   });
 });
