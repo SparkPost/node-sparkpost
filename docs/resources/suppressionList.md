@@ -1,45 +1,23 @@
 # Suppression List
 
-This library provides easy access to the [Suppression List](https://www.sparkpost.com/api#/reference/suppression-list/) Resource.
+This library provides easy access to the [Suppression List](https://developers.sparkpost.com/api/suppression-list) Resource.
+
+*Note: All methods return promises and accept an optional last argument callback. [Read about how we handle callbacks and promises](/docs/async.md).*
 
 ## Methods
-* **search(parameters, callback)**
-  Perform a filtered search for entries in your suppression list.
-  * `parameters` - Object of [search parameters](https://www.sparkpost.com/api#/reference/suppression-list/search/search-for-suppression-list-entries)
-  * `callback` - executed after task is completed. **required**
-    * standard `callback(err, data)`
-    * `err` - any error that occurred
-    * `data` - full response from request client
-* **checkStatus(email, callback)**
+* **list([parameters])**<br />
+  List all entries in your suppression list, filtered by an optional set of search parameters.
+    * `parameters` - an object of [search parameters](https://developers.sparkpost.com/api/suppression-list#suppression-list-search-get)
+* **get(email)**<br />
+  Retrieve an entry by recipient email.
     * `email` - `String` email address to check **required**
-    * `callback` - see search function
-* **removeStatus(email, callback)**
+* **upsert(listEntries)**<br />
+  Insert or update one or many entries.
+    * `listEntries` - an object [entry list attributes](https://developers.sparkpost.com/api/suppression-list#header-list-entry-attributes) or `Array` of entry list attribute objects
+* **delete(email)**<br />
+  Remove an entry by recipient email.
     * `email` - `String` email address to remove **required**
-    * `callback` - see search function
-* **upsert(recipient, callback)**
-    * `recipient` - [Recipient Object](https://www.sparkpost.com/api#/reference/recipient-lists) or `Array` of Recipient Objects
-    * `callback` - see search function
 
 ## Examples
 
-```js
-var SparkPost = require('sparkpost');
-var client = new SparkPost('YOUR_API_KEY');
-var parameters = {
-  from: '2015-05-07T00:00:00+0000'
-  , to: '2015-05-07T23:59:59+0000'
-  , limit: 5
-};
-
-client.suppressionList.search(parameters, function(err, data) {
-  if(err) {
-    console.log(err);
-    return;
-  }
-
-  console.log(data);
-});
-
-```
-
-Check out all the examples provided [here](/examples/suppressionList).
+Visit our examples section to see all of [our suppression list resource examples](/examples/suppressionList).
