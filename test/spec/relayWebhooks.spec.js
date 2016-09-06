@@ -1,7 +1,6 @@
 'use strict';
 
-var _ = require('lodash')
-  , chai = require('chai')
+var chai = require('chai')
   , expect = chai.expect
   , sinon = require('sinon');
 
@@ -11,7 +10,7 @@ chai.use(require('sinon-chai'));
 chai.use(require('chai-as-promised'));
 
 describe('Relay Webhooks Library', function() {
-  var client, relayWebhooks;
+  let client, relayWebhooks;
 
   beforeEach(function() {
     client = {
@@ -24,31 +23,31 @@ describe('Relay Webhooks Library', function() {
     relayWebhooks = require('../../lib/relayWebhooks')(client);
   });
 
-  describe('all Method', function() {
+  describe('list Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return relayWebhooks.all()
+      return relayWebhooks.list()
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('relay-webhooks');
         });
     });
   });
 
-  describe('find Method', function() {
+  describe('get Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return relayWebhooks.find('test')
+      return relayWebhooks.get('test')
         .then(function() {
           expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'relay-webhooks/test'});
         });
     });
 
     it('should throw an error if id is missing', function() {
-      return expect(relayWebhooks.find()).to.be.rejectedWith('id is required');
+      return expect(relayWebhooks.get()).to.be.rejectedWith('id is required');
     });
   });
 
   describe('create Method', function() {
     it('should call client post method with the appropriate uri and payload', function() {
-      var webhook = {
+      let webhook = {
         target: 'test',
         domain: 'inbound.example.com'
       };
@@ -67,24 +66,23 @@ describe('Relay Webhooks Library', function() {
 
   describe('update Method', function() {
     it('should call client put method with the appropriate uri and payload', function() {
-      var webhook = {
-        id: 'test',
+      let webhook = {
         name: 'New Replies Webhook'
       };
 
-      return relayWebhooks.update(webhook)
+      return relayWebhooks.update('test', webhook)
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('relay-webhooks/test');
-          expect(client.put.firstCall.args[0].json).to.deep.equal(_.omit(webhook, 'id'));
+          expect(client.put.firstCall.args[0].json).to.deep.equal(webhook);
         });
     });
 
-    it('should throw an error if webhook object is missing', function() {
-      return expect(relayWebhooks.update()).to.be.rejectedWith('webhook object is required');
+    it('should throw an error if webhook.id is missing', function() {
+      return expect(relayWebhooks.update()).to.be.rejectedWith('id is required');
     });
 
-    it('should throw an error if webhook.id is missing', function() {
-      return expect(relayWebhooks.update({})).to.be.rejectedWith('webhook.id is required');
+    it('should throw an error if webhook object is missing', function() {
+      return expect(relayWebhooks.update('test')).to.be.rejectedWith('webhook object is required');
     });
   });
 

@@ -3,12 +3,12 @@
 var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key)
-  , webhooks = {
-    id: '123456789',
+  , webhook = {
     target: 'http://client.test.com/test-webhook'
   };
 
-client.relayWebhooks.update(webhooks)
+// Promise
+client.relayWebhooks.update('123456789', webhook)
   .then(data => {
     console.log('Congrats you can use our client library!');
     console.log(data);
@@ -18,8 +18,8 @@ client.relayWebhooks.update(webhooks)
     console.log(err);
   });
 
-// Using a callback
-client.relayWebhooks.update(webhooks, function(err, data) {
+// Callback
+client.relayWebhooks.update('123456789', webhook, function(err, data) {
   if (err) {
     console.log('Whoops! Something went wrong');
     console.log(err);

@@ -4,7 +4,8 @@ var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key);
 
-client.relayWebhooks.find('123456789')
+// Promise
+client.relayWebhooks.delete('123456789')
   .then(data => {
     console.log('Congrats you can use our client library!');
     console.log(data);
@@ -14,8 +15,8 @@ client.relayWebhooks.find('123456789')
     console.log(err);
   });
 
-// Using a callback
-client.relayWebhooks.find('123456789', function(err, data) {
+// Callback
+client.relayWebhooks.delete('123456789', function(err, data) {
   if (err) {
     console.log('Whoops! Something went wrong');
     console.log(err);

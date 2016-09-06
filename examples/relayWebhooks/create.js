@@ -11,6 +11,7 @@ var key = 'YOURAPIKEY'
     }
   };
 
+  // Promise
 client.relayWebhooks.create(webhook)
   .then(data => {
     console.log('Congrats you can use our client library!');
@@ -21,7 +22,7 @@ client.relayWebhooks.create(webhook)
     console.log(err);
   });
 
-// Using a callback
+// Callback
 client.relayWebhooks.create(webhook, function(err, data) {
   if (err) {
     console.log('Whoops! Something went wrong');
