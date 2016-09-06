@@ -7,11 +7,20 @@ var key = 'YOURAPIKEY'
     uri: 'metrics/domains'
   };
 
+client.get(options)
+  .then(data => {
+    console.log(data);
+  })
+  .catch(err => {
+    console.log(err);
+  });
+
+// Using a callback
 client.get(options, function(err, data) {
   if(err) {
     console.log(err);
     return;
   }
 
-  console.log(data.body);
+  console.log(data);
 });

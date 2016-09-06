@@ -1,51 +1,35 @@
 # Sending Domains
 
-This library provides easy access to the [Sending Domains](https://www.sparkpost.com/api#/reference/sending-domains/) Resource.
+This library provides easy access to the [Sending Domains](https://developers.sparkpost.com/api/sending-domains) Resource.
+
+*Note: All methods return promises and accept an optional last argument callback. [Read about how we handle callbacks and promises](/docs/async.md).*
 
 ## Methods
-* **all(callback)**
+* **list()**<br />
   List an overview of all sending domains in the account.
-  * `callback` - executed after task is completed. **required**
-    * standard `callback(err, data)`
-    * `err` - any error that occurred
-    * `data` - full response from request client
-* **find(domain, callback)**
+
+* **get(domain)**<br />
   Retrieve a sending domain by its domain name
-  * `domain` - the name of the domain you want to look up **required**
-  * `callback` - see all function
-* **create(domainBody, callback)**
+  * `domain` - the domain you want to look up **required**
+
+* **create(createOpts)**<br />
   Create a new sending domain
-  * `domainBody` - a sending domain object **required**
-  * `callback` - see all function
-* **update(domainBody, callback)**
+  * `createOpts` - a hash of [sending domain attributes](https://developers.sparkpost.com/api/sending-domains#header-sending-domain-attributes) **required**
+
+* **update(domain, updateOpts)**<br />
   Update an existing sending domain
-  * `domainBody` - a sending domain object **required**
-  * `callback` - see all function
-* **delete(domain, callback)**
+  * `domain` - the domain you want to update **required**
+  * `updateOpts` - a hash of [sending domain attributes](https://developers.sparkpost.com/api/sending-domains#header-sending-domain-attributes) **required**
+
+* **delete(domain)**<br />
   Delete an existing sending domain
-  * `domain` - the name of the domain you want to delete **required**
-  * `callback` - see all function
-* **verify(options, callback)**
+  * `domain` - the domain you want to delete **required**
+
+* **verify(domain[, options])**<br />
   Validate the specified verification field types for a sending domain
-  * `options.domain` - the name of the domain you want to verify **required**
-  * `options.verifyDKIM` - initiates a check against the DKIM record default: `true`
-  * `options.verifySPF` - initiates a check against the SPF record default: `true`
+  * `domain` - the domain you want to verify **required**
+  * `options` - an object of [verify attributes](https://developers.sparkpost.com/api/sending-domains#header-verify-attributes)
 
 ## Examples
 
-```js
-var SparkPost = require('sparkpost');
-var client = new SparkPost('YOUR_API_KEY');
-
-client.sendingDomains.all(function(err, data) {
-  if(err) {
-    console.log(err);
-    return;
-  }
-
-  console.log(data.body);
-});
-
-```
-
-Check out all the examples provided [here](/examples/sendingDomains).
+Visit our examples section to see all of [our sending domains resource examples](/examples/sendingDomains).

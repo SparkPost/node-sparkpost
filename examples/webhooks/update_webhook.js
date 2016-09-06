@@ -12,11 +12,11 @@ var key = 'YOURAPIKEY'
     ]
   };
 
-client.webhooks.update(webhook, function(err, res) {
+client.webhooks.update(webhook, function(err, data) {
   if (err) {
     console.log(err);
   } else {
-    console.log(res.body);
-    console.log('Congrats you can use our SDK!');
+    console.log(data);
+    console.log('Congrats you can use our client library!');
   }
 });

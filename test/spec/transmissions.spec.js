@@ -1,25 +1,36 @@
+'use strict';
+
 var chai = require('chai')
   , expect = chai.expect
   , sinon = require('sinon')
-  , sinonChai = require('sinon-chai');
+  , Promise = require('../../lib/Promise');
 
-chai.use(sinonChai);
+require('sinon-as-promised');
+
+chai.use(require('sinon-chai'));
+chai.use(require('chai-as-promised'));
 
 describe('Transmissions Library', function() {
-  var client, transmission;
+  var client, transmissions;
 
   beforeEach(function() {
     client = {
-      get: sinon.stub().yields(),
-      post: sinon.stub().yields()
+      get: sinon.stub().resolves({}),
+      post: sinon.stub().resolves({})
     };
 
-    transmission = require('../../lib/transmissions')(client);
+    transmissions = require('../../lib/transmissions')(client);
   });
 
   describe('all Method', function() {
-    it('should call client get method with the appropriate uri', function(done) {
-      transmission.all(function() {
+    it('should call client get method with the appropriate uri', function() {
+      transmissions.all().then(() => {
+        expect(client.get.firstCall.args[0].uri).to.equal('transmissions');
+      });
+    });
+
+    it('should call client get method with the appropriate uri using callback', function(done) {
+      transmissions.all(function() {
         expect(client.get.firstCall.args[0].uri).to.equal('transmissions');
         done();
       });
@@ -30,7 +41,7 @@ describe('Transmissions Library', function() {
         campaign_id: 'test-campaign'
       };
 
-      transmission.all(options, function(err, data) {
+      transmissions.all(options, function(err, data) {
         expect(client.get.firstCall.args[0].qs).to.deep.equal({campaign_id: 'test-campaign'});
         done();
       });
@@ -41,7 +52,7 @@ describe('Transmissions Library', function() {
         template_id: 'test-template'
       };
 
-      transmission.all(options, function(err, data) {
+      transmissions.all(options, function(err, data) {
         expect(client.get.firstCall.args[0].qs).to.deep.equal({template_id: 'test-template'});
         done();
       });
@@ -50,60 +61,44 @@ describe('Transmissions Library', function() {
 
   describe('find Method', function() {
     it('should call client get method with the appropriate uri', function(done) {
-      transmission.find('test', function() {
+      transmissions.find('test', function() {
         expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'transmissions/test'});
         done();
       });
     });
 
-    it('should throw an error if transmissionID is null', function(done) {
-      transmission.find(null, function(err) {
-        expect(err.message).to.equal('transmissionID is required');
-        expect(client.get).not.to.have.been.called;
-        done();
-      });
+    it('should throw an error if id is null', function() {
+      return expect(transmissions.find(null)).to.be.rejectedWith('id is required');
     });
 
-    it('should throw an error if transmissionID is missing', function(done) {
-      transmission.find(function(err) {
-        expect(err.message).to.equal('transmissionID is required');
-        expect(client.get).not.to.have.been.called;
-        done();
-      });
+    it('should throw an error if id is missing', function() {
+      return expect(transmissions.find(function() {})).to.be.rejectedWith('id is required');
     });
   });
 
   describe('send Method', function() {
     it('should call client post method with the appropriate uri', function(done) {
       var options = {
-        transmissionBody: {
-          campaign: 'test-campaign'
-        }
+        campaign_id: 'test-campaign'
       };
 
-      transmission.send(options, function() {
+      transmissions.send(options, function() {
         expect(client.post.firstCall.args[0].uri).to.equal('transmissions');
         done();
       });
     });
 
-    it('should throw an error if transmissionBody is missing', function(done) {
-      transmission.send(null, function(err) {
-        expect(err.message).to.equal('transmissionBody is required');
-        expect(client.post).not.to.have.been.called;
-        done();
-      });
+    it('should throw an error if options object is missing', function() {
+      return expect(transmissions.send(function() {})).to.be.rejectedWith('options object is required');
     });
 
     it('should allow num_rcpt_errors to be set in options', function(done) {
       var options = {
-        transmissionBody: {
-          campaign: 'test-campaign'
-        },
+        campaign_id: 'test-campaign',
         num_rcpt_errors: 3
       };
 
-      transmission.send(options, function(err, data) {
+      transmissions.send(options, function(err, data) {
         expect(client.post.firstCall.args[0].qs).to.deep.equal({num_rcpt_errors: 3});
         done();
       });
@@ -111,14 +106,12 @@ describe('Transmissions Library', function() {
 
     it('should leave email_rfc822 content keys intact', function(done) {
       var options = {
-        transmissionBody: {
-          content: {
-            email_rfc822: 'Content-Type: text/plain\nFrom: From Envelope <from@example.com>\nSubject: Example Email\n\nHello World'
-          }
+        content: {
+          email_rfc822: 'Content-Type: text/plain\nFrom: From Envelope <from@example.com>\nSubject: Example Email\n\nHello World'
         }
       };
 
-      transmission.send(options, function(err, data) {
+      transmissions.send(options, function(err, data) {
         expect(client.post.firstCall.args[0].json.content).to.have.property('email_rfc822');
         done();
       });

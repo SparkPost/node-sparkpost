@@ -1,35 +1,34 @@
 # Transmissions
 
-This library provides easy access to the [Transmissions](https://www.sparkpost.com/api#/reference/transmissions/) Resource.
+This library provides easy access to the [Transmissions](https://developers.sparkpost.com/api/transmissions) Resource.
 
 ## Methods
-* **all(options, callback)**
+* **all(options[, callback]) &rarr; `{Promise}`**<br />
   List an overview of all transmissions in the account
   * `options.campaign_id` - id of the campaign used by the transmission
   * `options.template_id` - id of the template used by the transmission
-  * `callback` - executed after task is completed. **required**
+  * `callback` - executed after task is completed if provided*
     * standard `callback(err, data)`
     * `err` - any error that occurred
-    * `data` - full response from request client
-* **find(transmissionID, callback)**
+    * `data` - results returned by the api
+* **find(id[, callback]) &rarr; `{Promise}`**<br />
   Retrieve the details about a transmission by its ID
-  * `transmissionID` - id of the transmission you want to look up **required**
+  * `id` - id of the transmission you want to look up **required**
   * `callback` - see all function
-* **send(options, callback)**
+* **send(options[, callback]) &rarr; `{Promise}`**<br />
   Sends a message by creating a new transmission
-  * `options.transmissionBody` - a transmission object **required**
+  * `options` - an object of [transmission attributes](https://developers.sparkpost.com/api/transmissions#header-transmission-attributes)
   * `options.num_rcpt_errors` - maximum number of recipient errors returned
   * `callback` - see all function
 
+*callback is optional because all methods return a Promise.
 
 ## Getting Started: Your First Mailing
 
 ```javascript
 var SparkPost = require('sparkpost')
-  , client = new SparkPost('YOUR API KEY');
-
-var reqObj = {
-  transmissionBody: {
+  , client = new SparkPost('YOUR API KEY')
+  , options = {
     campaign_id: 'first-mailing',
     content: {
       from: 'you@your-company.com',
@@ -39,15 +38,26 @@ var reqObj = {
     },
     substitution_data: {name: 'YOUR FIRST NAME'},
     recipients: [{ address: { name: 'YOUR FULL NAME', email: 'YOUR EMAIL ADDRESS' } }]
-  }
-};
+  };
 
-client.transmissions.send(reqObj, function(err, res) {
+client.transmissions.send(options)
+  .then(data => {
+    console.log('Woohoo! You just sent your first mailing!');
+    console.log(data);
+  })
+  .catch(err => {
+    console.log('Whoops! Something went wrong');
+    console.log(err);
+  });
+
+// Using a callback
+client.transmissions.send(options, function(err, data) {
   if (err) {
     console.log('Whoops! Something went wrong');
     console.log(err);
   } else {
     console.log('Woohoo! You just sent your first mailing!');
+    console.log(data);
   }
 });
 ```

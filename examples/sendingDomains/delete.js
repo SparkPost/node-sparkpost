@@ -4,21 +4,24 @@ var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key);
 
-client.transmissions.find('YOUR-TRANsMISSION-KEY')
+// Promise
+client.sendingDomains.delete('example1.com')
   .then(data => {
-    console.log(data);
     console.log('Congrats you can use our client library!');
+    console.log(data);
   })
   .catch(err => {
+    console.log('Whoops! Something went wrong');
     console.log(err);
   });
 
-// Using a callback
-client.transmissions.find('YOUR-TRANSMISSION-KEY', function(err, data) {
+// Callback
+client.sendingDomains.delete('example1.com', function(err, data) {
   if (err) {
+    console.log('Whoops! Something went wrong');
     console.log(err);
   } else {
-    console.log(data);
     console.log('Congrats you can use our client library!');
+    console.log(data);
   }
 });
