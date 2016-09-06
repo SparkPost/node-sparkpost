@@ -20,4 +20,4 @@ This library provides easy access to the [Suppression List](https://developers.s
 
 ## Examples
 
-Check out all the examples provided [here](/examples/suppressionList).
+Visit our examples section to see all of [our suppression list resource examples](/examples/suppressionList).
