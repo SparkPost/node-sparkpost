@@ -10,6 +10,7 @@ var key = 'YOURAPIKEY'
     description: 'Test description 1'
   };
 
+// Promise
 client.suppressionList.upsert(listEntry)
   .then(data => {
     console.log('Congrats you can use our client library!');
@@ -20,6 +21,7 @@ client.suppressionList.upsert(listEntry)
     console.log(err);
   });
 
+// Callback
 client.suppressionList.upsert(listEntry, function(err, data) {
   if (err) {
     console.log('Whoops! Something went wrong');
