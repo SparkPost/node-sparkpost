@@ -4,7 +4,8 @@ var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key);
 
-client.sendingDomains.all()
+// Promise
+client.sendingDomains.list()
   .then(data => {
     console.log('Congrats you can use our client library!');
     console.log(data);
@@ -14,8 +15,8 @@ client.sendingDomains.all()
     console.log(err);
   });
 
-// Using a callback
-client.sendingDomains.all(function(err, data) {
+// Callback
+client.sendingDomains.list(function(err, data) {
   if (err) {
     console.log('Whoops! Something went wrong');
     console.log(err);

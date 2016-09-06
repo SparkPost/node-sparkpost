@@ -4,11 +4,14 @@ var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key)
   , options = {
-    domain: 'example1.com',
-    spf_verify: true
+    dkim_verify: true,
+    spf_verify: true,
+    abuse_at_verify: true,
+    postmaster_at_verify: true
   };
 
-client.sendingDomains.verify(options)
+// Promise
+client.sendingDomains.verify('example1.com', options)
   .then(data => {
     console.log('Congrats you can use our client library!');
     console.log(data);
@@ -18,8 +21,8 @@ client.sendingDomains.verify(options)
     console.log(err);
   });
 
-// Using a callback
-client.sendingDomains.verify(options, function(err, data) {
+// Callback
+client.sendingDomains.verify('example1.com', options, function(err, data) {
   if (err) {
     console.log('Whoops! Something went wrong');
     console.log(err);
