@@ -10,7 +10,7 @@ chai.use(require('sinon-chai'));
 chai.use(require('chai-as-promised'));
 
 describe('Suppression List Library', function() {
-  var client, suppressionList;
+  let client, suppressionList;
 
   beforeEach(function() {
     client = {
@@ -23,42 +23,29 @@ describe('Suppression List Library', function() {
     suppressionList = require('../../lib/suppressionList')(client);
   });
 
-  describe('search Method', function() {
+  describe('list', function() {
     it('should call client get method with the appropriate uri', function() {
-      return suppressionList.search({limit: 5})
+      return suppressionList.list({limit: 5})
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('suppression-list');
         });
     });
   });
 
-  describe('getEntry Method', function() {
+  describe('get', function() {
     it('should call client get method with the appropriate uri', function() {
-      return suppressionList.getEntry('test@test.com')
+      return suppressionList.get('test@test.com')
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('suppression-list/test@test.com');
         });
     });
 
     it('should throw an error if email is missing', function() {
-      return expect(suppressionList.getEntry()).to.be.rejectedWith('email is required');
+      return expect(suppressionList.get()).to.be.rejectedWith('email is required');
     });
   });
 
-  describe('deleteEntry Method', function() {
-    it('should call client delete method with the appropriate uri', function() {
-      return suppressionList.deleteEntry('test@test.com')
-        .then(function() {
-          expect(client.delete.firstCall.args[0].uri).to.equal('suppression-list/test@test.com');
-        });
-    });
-
-    it('should throw an error if email deleteEntry missing', function() {
-      return expect(suppressionList.deleteEntry()).to.be.rejectedWith('email is required');
-    });
-  });
-
-  describe('upsert Method', function() {
+  describe('upsert', function() {
     it('should accept a single list entry', function() {
       var listEntry = { email: 'test@test.com' };
 
@@ -86,4 +73,18 @@ describe('Suppression List Library', function() {
       return expect(suppressionList.upsert()).to.be.rejectedWith('list entries is required');
     });
   });
+
+  describe('delete', function() {
+    it('should call client delete method with the appropriate uri', function() {
+      return suppressionList.delete('test@test.com')
+        .then(function() {
+          expect(client.delete.firstCall.args[0].uri).to.equal('suppression-list/test@test.com');
+        });
+    });
+
+    it('should throw an error if email deleteEntry missing', function() {
+      return expect(suppressionList.delete()).to.be.rejectedWith('email is required');
+    });
+  });
+
 });
