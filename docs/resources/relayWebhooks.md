@@ -23,4 +23,4 @@ This library provides easy access to the [Relay Webhooks](https://developers.spa
 
 ## Examples
 
-Check out all the examples provided [here](/examples/relayWebhooks).
+Visit our examples section to see all of [our relay webhook resource examples](/examples/relayWebhooks).
