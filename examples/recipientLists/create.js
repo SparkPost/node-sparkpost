@@ -3,8 +3,8 @@
 var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key)
-  , options = {
-    id: 'EXISTING_TEST_ID'
+  , recipientList = {
+    id: 'UNIQUE_TEST_ID'
     , name: 'Test Recipient List'
     , recipients: [
       {
@@ -25,11 +25,24 @@ var key = 'YOURAPIKEY'
     ]
   };
 
-client.recipientLists.update(options, function(err, data) {
+// Promise
+client.recipientLists.create(recipientList)
+  .then(data => {
+    console.log('Congrats you can use our client library!');
+    console.log(data);
+  })
+  .catch(err => {
+    console.log('Whoops! Something went wrong');
+    console.log(err);
+  });
+
+// Callback
+client.recipientLists.create(recipientList, function(err, data) {
   if (err) {
+    console.log('Whoops! Something went wrong');
     console.log(err);
   } else {
-    console.log(data);
     console.log('Congrats you can use our client library!');
+    console.log(data);
   }
 });
