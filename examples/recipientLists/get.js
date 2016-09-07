@@ -2,9 +2,14 @@
 
 var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
-  , client = new SparkPost(key);
+  , client = new SparkPost(key)
+  , options = {
+    id: 'UNIQUE_TEST_ID'
+    , show_recipients: true
+  };
 
-client.recipientLists.all()
+// Promise
+client.recipientLists.get(options)
   .then(data => {
     console.log('Congrats you can use our client library!');
     console.log(data);
@@ -14,8 +19,8 @@ client.recipientLists.all()
     console.log(err);
   });
 
-// Using a callback
-client.recipientLists.all(function(err, data) {
+// Callback
+client.recipientLists.get(options, function(err, data) {
   if (err) {
     console.log('Whoops! Something went wrong');
     console.log(err);
