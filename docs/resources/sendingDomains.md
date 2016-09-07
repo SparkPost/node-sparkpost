@@ -25,10 +25,10 @@ This library provides easy access to the [Sending Domains](https://developers.sp
   Delete an existing sending domain
   * `domain` - the domain you want to delete **required**
 
-* **verify(domain[, options])**<br />
+* **verify(domain, options)**<br />
   Validate the specified verification field types for a sending domain
   * `domain` - the domain you want to verify **required**
-  * `options` - an object of [verify attributes](https://developers.sparkpost.com/api/sending-domains#header-verify-attributes)
+  * `options` - a hash of [verify attributes](https://developers.sparkpost.com/api/sending-domains#header-verify-attributes) **required**
 
 ## Examples
 

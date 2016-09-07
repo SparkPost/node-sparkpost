@@ -98,7 +98,7 @@ describe('Sending Domains Library', function() {
     });
   });
 
-  describe('verify Method', function() {
+  describe('verify', function() {
     it('should call client post method with the appropriate uri and payload', function() {
       var options = {
         dkim_verify: true,
@@ -115,5 +115,10 @@ describe('Sending Domains Library', function() {
     it('should throw an error if domain is missing', function() {
       return expect(sendingDomains.verify()).to.be.rejectedWith('domain is required');
     });
+
+    it('should throw an error if verification options are missing', function() {
+      return expect(sendingDomains.verify('test')).to.be.rejectedWith('verification options are required');
+    });
   });
+  
 });
