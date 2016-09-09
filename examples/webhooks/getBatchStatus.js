@@ -4,11 +4,11 @@ var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key)
   , options = {
-    id: 'TEST_WEBHOOK_UUID',
     limit: 1000
   };
 
-client.webhooks.getBatchStatus(options)
+// Promise
+client.webhooks.getBatchStatus('TEST_WEBHOOK_UUID', options)
   .then(data => {
     console.log('Congrats you can use our client library!');
     console.log(data);
@@ -18,8 +18,8 @@ client.webhooks.getBatchStatus(options)
     console.log(err);
   });
 
-// Using a callback
-client.webhooks.getBatchStatus(options, function(err, data) {
+// Callback
+client.webhooks.getBatchStatus('TEST_WEBHOOK_UUID', options, function(err, data) {
   if (err) {
     console.log('Whoops! Something went wrong');
     console.log(err);
