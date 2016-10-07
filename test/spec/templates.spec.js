@@ -24,37 +24,36 @@ describe('Templates Library', function() {
     templates = require('../../lib/templates')(client);
   });
 
-  describe('all Method', function() {
+  describe('list Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return templates.all()
+      return templates.list()
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('templates');
         });
     });
   });
 
-  describe('find Method', function() {
+  describe('get Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      var options = {
-        id: 'test'
-      };
-      return templates.find(options)
+      var id = 'test';
+      return templates.get(id)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('templates/test');
         });
     });
 
     it('should throw an error if id is missing', function() {
-      return expect(templates.find()).to.be.rejectedWith('template id is required');
+      return expect(templates.get()).to.be.rejectedWith('template id is required');
     });
 
     it('should allow draft to be set in options', function() {
-      var options = {
-        id: 'test',
-        draft: true
-      };
+      var id = 'test'
+        , options = {
+          draft: true
+        };
 
-      return templates.find(options)
+
+      return templates.get(id, options)
         .then(function() {
           expect(client.get.firstCall.args[0].qs).to.deep.equal({draft: true});
         });
@@ -81,33 +80,33 @@ describe('Templates Library', function() {
 
   describe('update Method', function() {
     it('should call client put method with the appropriate uri and payload', function() {
-      var template = {
-        id: 'test',
-        name: 'A new name!'
-      };
+      var id = 'test'
+        , template = {
+          name: 'A new name!'
+        };
 
-      return templates.update(template)
+      return templates.update(id, template)
         .then(function() {
-          expect(client.put.firstCall.args[0].uri).to.equal('templates/test')
-          expect(client.put.firstCall.args[0].json).to.deep.equal(_.omit(template, 'id'));
+          expect(client.put.firstCall.args[0].uri).to.equal('templates/test');
+          expect(client.put.firstCall.args[0].json).to.deep.equal(template);
         });
     });
 
-    it('should throw an error if template object is missing', function() {
-      return expect(templates.update()).to.be.rejectedWith('template object is required');
+    it('should throw an error if template id is missing', function() {
+      return expect(templates.update()).to.be.rejectedWith('template id is required');
     });
 
-    it('should throw an error if template id is missing', function() {
-      return expect(templates.update({})).to.be.rejectedWith('template id is required');
+    it('should throw an error if template object is missing', function() {
+      return expect(templates.update('test')).to.be.rejectedWith('template object is required');
     });
 
     it('should allow update_published to be set in options', function() {
-      var template = {
-        id: 'test',
-        update_published: true
-      };
+      var id = 'test'
+        , template = {
+          update_published: true
+        };
 
-      return templates.update(template)
+      return templates.update(id, template)
         .then(function() {
           expect(client.put.firstCall.args[0].qs).to.deep.equal({update_published: true});
         });
@@ -129,18 +128,18 @@ describe('Templates Library', function() {
 
   describe('preview Method', function() {
     it('should call client post method with the appropriate uri and payload', function() {
-      var options = {
-        id: 'test',
-        substitution_data: {
-          'name': 'Natalie',
-          'age': 35,
-          'member': true
-        }
-      };
-      return templates.preview(options)
+      var id = 'test'
+        , options = {
+          substitution_data: {
+            'name': 'Natalie',
+            'age': 35,
+            'member': true
+          }
+        };
+      return templates.preview(id, options)
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('templates/test/preview');
-          expect(client.post.firstCall.args[0].json).to.deep.equal(_.omit(options, 'id'));
+          expect(client.post.firstCall.args[0].json).to.deep.equal(options);
         });
     });
 
@@ -148,13 +147,20 @@ describe('Templates Library', function() {
       return expect(templates.preview()).to.be.rejectedWith('template id is required');
     });
 
-    it('should allow draft to be set in options', function() {
-      var options = {
-        id: 'test',
-        draft: true
-      };
+    it('should not throw an error if optional 2nd argument is a function (callback)', function() {
+      let cb = sinon.stub();
+      return templates.preview('test', cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
+    });
 
-      return templates.preview(options)
+    it('should allow draft to be set in options', function() {
+      var id = 'test'
+        , options = {
+          draft: true
+        };
+
+      return templates.preview(id, options)
         .then(function() {
           expect(client.post.firstCall.args[0].qs).to.deep.equal({draft: true});
         });

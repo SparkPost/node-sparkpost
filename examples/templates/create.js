@@ -5,15 +5,16 @@ var key = 'YOURAPIKEY'
   , client = new SparkPost(key)
   , template = {
     id: 'TEST_ID',
+    name: 'Test Template',
     content: {
       from: 'test@test.com',
-      subject: 'Updated Published Test email template!',
-      html: '<b>This is a published test email template! Updated!</b>'
-    },
-    update_published: true
+      subject: 'Test email template!',
+      html: '<b>This is a test email template!</b>'
+    }
   };
 
-client.templates.update(template)
+// Promise
+client.templates.create(template)
   .then(data => {
     console.log('Congrats you can use our client library!');
     console.log(data);
@@ -23,8 +24,8 @@ client.templates.update(template)
     console.log(err);
   });
 
-// Using a callback
-client.templates.update(template, function(err, data) {
+// Callback
+client.templates.create(template, function(err, data) {
   if (err) {
     console.log('Whoops! Something went wrong');
     console.log(err);
