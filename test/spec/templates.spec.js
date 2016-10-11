@@ -100,15 +100,29 @@ describe('Templates Library', function() {
       return expect(templates.update('test')).to.be.rejectedWith('template object is required');
     });
 
+    it('should not throw an error if optional 3nd argument is a function (callback)', function() {
+      let cb = sinon.stub()
+        , id = 'test'
+        , template = {
+          name: 'A new name!'
+        };
+      return templates.update(id, template, cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
+    });
+
     it('should allow update_published to be set in options', function() {
       var id = 'test'
         , template = {
+          name: 'Test Template'
+        }
+        , options = {
           update_published: true
         };
 
-      return templates.update(id, template)
+      return templates.update(id, template, options)
         .then(function() {
-          expect(client.put.firstCall.args[0].qs).to.deep.equal({update_published: true});
+          expect(client.put.firstCall.args[0].qs).to.deep.equal(options);
         });
     });
   });
