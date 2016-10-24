@@ -1,42 +1,22 @@
 # Inbound Domains
 
-This library provides easy access to the [Inbound Domains](https://developers.sparkpost.com/api#/reference/inbound-domains/) Resource.
+This library provides easy access to the [Inbound Domains](https://developers.sparkpost.com/api/inbound-domains) Resource.
+
+*Note: All methods return promises and accept an optional last argument callback. [Read about how we handle callbacks and promises](/docs/async.md).*
 
 ## Methods
-* **all(callback)**
+* **list()**<br />
   List an overview of all inbound domains in the account.
-  * `callback` - executed after task is completed. **required**
-    * standard `callback(err, data)`
-    * `err` - any error that occurred
-    * `data` - full response from request client
-* **find(domain, callback)**
-  Retrieve a inbound domain by its domain name
+* **get(domain)**<br />
+  Get an inbound domain by its domain name
   * `domain` - the name of the domain you want to look up **required**
-  * `callback` - see all function
-* **create(domain, callback)**
+* **create(createOpts)**<br />
   Create a new inbound domain
-  * `domain` - the name of the domain you want to create **required**
-  * `callback` - see all function
-* **delete(domain, callback)**
+  * `createOpts` - a hash of [inbound domain attributes](https://developers.sparkpost.com/api/inbound-domains#header-inbound-domains-attributes) **required**
+* **delete(domain)**<br />
   Delete an existing inbound domain
   * `domain` - the name of the domain you want to delete **required**
-  * `callback` - see all function
 
 ## Examples
 
-```js
-var SparkPost = require('sparkpost');
-var client = new SparkPost('YOUR_API_KEY');
-
-client.inboundDomains.all(function(err, data) {
-  if(err) {
-    console.log(err);
-    return;
-  }
-
-  console.log(data);
-});
-
-```
-
-Check out all the examples provided [here](/examples/inboundDomains).
+Visit our examples section to see all of [our inbound domains resource examples](/examples/inboundDomains).

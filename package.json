@@ -28,7 +28,7 @@
     "chai-as-promised": "^5.3.0",
     "coveralls": "^2.11.12",
     "eslint": "^3.3.1",
-    "eslint-config-sparkpost": "^1.0.1",
+    "eslint-config-sparkpost": "^1.2.0",
     "istanbul": "^0.4.5",
     "mocha": "^3.0.2",
     "nock": "^7.2.2",
