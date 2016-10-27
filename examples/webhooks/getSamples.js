@@ -7,6 +7,7 @@ var key = 'YOURAPIKEY'
     events: 'bounce'
   };
 
+// Promise
 client.webhooks.getSamples(options)
   .then(data => {
     console.log('Congrats you can use our client library!');
@@ -17,7 +18,7 @@ client.webhooks.getSamples(options)
     console.log(err);
   });
 
-// Using a callback
+// Callback
 client.webhooks.getSamples(options, function(err, data) {
   if (err) {
     console.log('Whoops! Something went wrong');

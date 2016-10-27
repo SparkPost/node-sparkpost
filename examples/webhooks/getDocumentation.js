@@ -4,6 +4,7 @@ var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key);
 
+// Promise
 client.webhooks.getDocumentation()
   .then(data => {
     console.log('Congrats you can use our client library!');
@@ -14,7 +15,7 @@ client.webhooks.getDocumentation()
     console.log(err);
   });
 
-// Using a callback
+// Callback
 client.webhooks.getDocumentation(function(err, data) {
   if (err) {
     console.log('Whoops! Something went wrong');
