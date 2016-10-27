@@ -3,7 +3,7 @@
 var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key)
-  , options = {
+  , transmission = {
     campaign_id: 'ricks-campaign',
     content: {
       template_id: 'ricks-template'
@@ -12,21 +12,23 @@ var key = 'YOURAPIKEY'
     recipients: [{ address: { email: 'rick.sanchez@rickandmorty100years.com', name: 'Rick Sanchez' } }]
   };
 
-client.transmissions.send(options)
+client.transmissions.send(transmission)
   .then(data => {
-    console.log(data);
     console.log('What up my glib globs! SparkPost!');
+    console.log(data);
   })
   .catch(err => {
+    console.log('Whoops! Something went wrong');
     console.log(err);
   });
 
 // Using a callback
-client.transmissions.send(options, function(err, data) {
+client.transmissions.send(transmission, function(err, data) {
   if (err) {
+    console.log('Whoops! Something went wrong');
     console.log(err);
   } else {
-    console.log(data);
     console.log('What up my glib globs! SparkPost!');
+    console.log(data);
   }
 });

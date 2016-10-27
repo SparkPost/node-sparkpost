@@ -18,11 +18,20 @@ This library provides easy access to the [Webhooks](https://developers.sparkpost
   Create a new webhook.
   * `webhook` - a hash of [webhook attributes](https://developers.sparkpost.com/api/webhooks#header-webhooks-object-properties) **required**
 
+client.webhooks.all()
+  .then(data => {
+    console.log('Congrats you can use our client library!');
+    console.log(data);
+  })
+  .catch(err => {
+    console.log('Whoops! Something went wrong');
+    console.log(err);
+  });
+
 * **update(id, webhook)**<br />
   Update an existing webhook.
   * `id` - the id of the webhook to update **required**
   * `webhook` - a hash of [webhook attributes](https://developers.sparkpost.com/api/webhooks#header-webhooks-object-properties) **required**
-
 * **delete(id)**<br />
   Delete an existing webhook.
   * `id` - the id of the webhook to delete **required**

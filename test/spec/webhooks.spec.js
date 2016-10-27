@@ -48,6 +48,7 @@ describe('Webhooks Library', function() {
     it('should call client get method with the appropriate uri', function() {
       return webhooks.get('test')
         .then(function() {
+        .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks/test');
         });
     });
@@ -93,6 +94,7 @@ describe('Webhooks Library', function() {
       var webhook = {
         name: 'Renamed webhook',
         events: ['rejection', 'delay'],
+        auth_type: 'none'
         auth_type: 'none'
       };
 
@@ -152,6 +154,7 @@ describe('Webhooks Library', function() {
   describe('getBatchStatus Method', function() {
     it('should call client get method with the appropriate uri', function() {
       return webhooks.getBatchStatus('test')
+        .then(function() {
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks/test/batch-status');
         });

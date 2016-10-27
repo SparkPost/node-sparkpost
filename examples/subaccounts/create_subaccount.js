@@ -3,20 +3,32 @@
 var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key)
-  , options = {
-    name: 'Test Subaccount'
-    , keyLabel: 'Test Subaccount key'
-    , keyGrants: [
-      'smtp/inject'
-      , 'transmissions/modify'
+  , subaccount = {
+    name: 'Test Subaccount',
+    key_label: 'Test Subaccount key',
+    key_grants: [
+      'smtp/inject',
+      'transmissions/modify'
     ]
   };
 
-client.subaccounts.create(options, function(err, data) {
+client.subaccounts.create(subaccount)
+  .then(data => {
+    console.log('Congrats you can use our client library!');
+    console.log(data);
+  })
+  .catch(err => {
+    console.log('Whoops! Something went wrong');
+    console.log(err);
+  });
+
+// Using a callback
+client.subaccounts.create(subaccount, function(err, data) {
   if (err) {
+    console.log('Whoops! Something went wrong');
     console.log(err);
   } else {
-    console.log(data);
     console.log('Congrats you can use our client library!');
+    console.log(data);
   }
 });
