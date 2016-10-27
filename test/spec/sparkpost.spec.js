@@ -106,16 +106,15 @@ describe('SparkPost Library', function() {
     });
 
     it('should return an error when the request fails', function(done) {
-      // simulate a timeout
+      // simulate a bad multipart to make request error
       nock('https://api.sparkpost.com')
         .get('/api/v1/get/test/fail')
-        .delayConnection(500)
         .reply(200);
 
       var options = {
         method: 'GET'
         , uri: 'get/test/fail'
-        , timeout: 100
+        , multipart: [ {} ]
       };
 
       client.request(options, function(err, data) {
