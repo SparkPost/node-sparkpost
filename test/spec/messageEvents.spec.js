@@ -1,24 +1,28 @@
+'use strict';
+
 var chai = require('chai')
   , expect = chai.expect
   , sinon = require('sinon')
-  , sinonChai = require('sinon-chai')
   , Promise = require('../../lib/Promise');
 
-chai.use(sinonChai);
+require('sinon-as-promised');
+
+chai.use(require('sinon-chai'));
+chai.use(require('chai-as-promised'));
 
 describe('Message Events Library', function() {
-  var client;
+  let client, messageEvents;
 
   beforeEach(function() {
     client = {
-      get: sinon.stub().returns(Promise.resolve({}))
+      get: sinon.stub().resolves({})
     };
 
     messageEvents = require('../../lib/messageEvents')(client);
   });
 
   describe('search Method', function() {
-    it('should call client get method with the appropriate parameters', function(done) {
+    it('should call client get method with the appropriate parameters', function() {
       var options = {
         bounce_classes: '10,50',
         campaign_ids: 'test_campaign',
@@ -35,15 +39,17 @@ describe('Message Events Library', function() {
         to: '2016-11-14T16:15',
         transmission_ids: '65832150921904138'
       };
-      messageEvents.search(options, function(err, data) {
-        Object.keys(options).forEach(function(key) {
-          expect(client.get.firstCall.args[0].qs).to.have.property(key).and.equal(options[key]);
+      messageEvents.search(options)
+        .then(function() {
+          let tests = [];
+          Object.keys(options).forEach(function(key) {
+            tests.push(expect(client.get.firstCall.args[0].qs).to.have.property(key).and.equal(options[key]));
+          });
+          return Promise.all(tests);
         });
-        done();
-      });
     });
 
-    it('should accept arrays as parameters where appropriate', function(done) {
+    it('should accept arrays as parameters where appropriate', function() {
       var arroptions = {
         bounce_classes: [10,50],
         campaign_ids: ['campaign1', 'campaignTwo'],
@@ -57,16 +63,18 @@ describe('Message Events Library', function() {
         per_page: 5,
         timezone: 'America/New_York'
       };
-      messageEvents.search(arroptions, function(err, data) {
-        Object.keys(arroptions).forEach(function(key) {
-          var opt = arroptions[key]
-            , firstCallQS = client.get.firstCall.args[0].qs;
-          if (Array.isArray(opt)) {
-            expect(firstCallQS).to.have.property(key).and.equal(opt.toString());
-          }
+      messageEvents.search(arroptions)
+        .then(function() {
+          let tests = [];
+          Object.keys(arroptions).forEach(function(key) {
+            var opt = arroptions[key]
+              , firstCallQS = client.get.firstCall.args[0].qs;
+            if (Array.isArray(opt)) {
+              tests.push(expect(firstCallQS).to.have.property(key).and.equal(opt.toString()));
+            }
+          });
+          return Promise.all(tests);
         });
-        done();
-      });
     });
   });
 });
