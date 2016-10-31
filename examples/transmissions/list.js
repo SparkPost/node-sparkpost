@@ -4,7 +4,8 @@ var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key);
 
-client.transmissions.all()
+// Promise
+client.transmissions.list()
   .then(data => {
     console.log(data);
     console.log('Congrats you can use our client library!');
@@ -13,8 +14,8 @@ client.transmissions.all()
     console.log(err);
   });
 
-// Using a callback
-client.transmissions.all(function(err, data) {
+// Callback
+client.transmissions.list(function(err, data) {
   if (err) {
     console.log(err);
   } else {

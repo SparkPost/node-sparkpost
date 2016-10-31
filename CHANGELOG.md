@@ -42,7 +42,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [1.2.0] - 2016-03-14
 - [#109](https://github.com/SparkPost/node-sparkpost/pull/109) README updates (@aydrian)
 - [#108](https://github.com/SparkPost/node-sparkpost/pull/108) removes from and subject from transmission stored template send example (@colestrode)
-- [#106](https://github.com/SparkPost/node-sparkpost/pull/106) correcting send_transmission_all_fields.js example (@lfreneda)
+- [#106](https://github.com/SparkPost/node-sparkpost/pull/106) correcting send_all_fields.js example (@lfreneda)
 - [#104](https://github.com/SparkPost/node-sparkpost/pull/104) Added a mocha test task to the default grunt task (@ewandennis)
 - [#101](https://github.com/SparkPost/node-sparkpost/pull/101) Added gzipped response support (@ewandennis)
 - [#100](https://github.com/SparkPost/node-sparkpost/pull/100) Added message events wrapper (@ewandennis)

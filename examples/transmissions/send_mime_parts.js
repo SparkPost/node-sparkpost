@@ -3,18 +3,22 @@
 var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key)
-  , tranmission = {
-    recipients: {
-      list_id: 'example-list'
-    },
+  , transmission = {
+    recipients: [{ address: { email: 'john.doe@example.com' } }],
     content: {
       from: 'From Envelope <from@example.com>',
-      subject: 'Example Email for Stored List and Template',
-      template_id: 'my-template'
+      subject: 'Example Email for MIME Parts',
+      html: '<html><body><p>Hello World!</p></body></html>',
+      text: 'Hello World!'
+    },
+    options: {
+      open_tracking: true,
+      click_tracking: true
     }
   };
 
-client.transmissions.send(tranmission)
+// Promise
+client.transmissions.send(transmission)
   .then(data => {
     console.log('Congrats you can use our client library!');
     console.log(data);
@@ -24,8 +28,8 @@ client.transmissions.send(tranmission)
     console.log(err);
   });
 
-// Using a callback
-client.transmissions.send(tranmission, function(err, data) {
+// Callback
+client.transmissions.send(transmission, function(err, data) {
   if (err) {
     console.log('Whoops! Something went wrong');
     console.log(err);

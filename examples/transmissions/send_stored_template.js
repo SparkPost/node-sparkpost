@@ -8,11 +8,14 @@ var key = 'YOURAPIKEY'
     content: {
       template_id: 'ricks-template'
     },
-    'num_rcpt_errors': 3,
     recipients: [{ address: { email: 'rick.sanchez@rickandmorty100years.com', name: 'Rick Sanchez' } }]
+  }
+  , options = {
+    num_rcpt_errors: 3
   };
 
-client.transmissions.send(transmission)
+// Promise
+client.transmissions.send(transmission, options)
   .then(data => {
     console.log('What up my glib globs! SparkPost!');
     console.log(data);
@@ -22,8 +25,8 @@ client.transmissions.send(transmission)
     console.log(err);
   });
 
-// Using a callback
-client.transmissions.send(transmission, function(err, data) {
+// Callback
+client.transmissions.send(transmission, options, function(err, data) {
   if (err) {
     console.log('Whoops! Something went wrong');
     console.log(err);

@@ -35,6 +35,7 @@ var key = 'YOURAPIKEY'
     }
   };
 
+// Promise
 client.transmissions.send(transmission)
   .then(data => {
     console.log(data);
@@ -45,7 +46,7 @@ client.transmissions.send(transmission)
     console.log(err);
   });
 
-// Using a callback
+// Callback
 client.transmissions.send(transmission, function(err, data) {
   if (err) {
     console.log('Whoops! Something went wrong');
