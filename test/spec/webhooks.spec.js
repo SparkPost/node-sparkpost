@@ -24,9 +24,9 @@ describe('Webhooks Library', function() {
     webhooks = require('../../lib/webhooks')(client);
   });
 
-  describe('all Method', function() {
+  describe('list Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return webhooks.all()
+      return webhooks.list()
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks');
         });
@@ -37,36 +37,31 @@ describe('Webhooks Library', function() {
         timezone: 'America/New_York'
       };
 
-      return webhooks.all(options)
+      return webhooks.list(options)
         .then(function() {
           expect(client.get.firstCall.args[0].qs).to.deep.equal({timezone: 'America/New_York'});
         });
     });
   });
 
-  describe('describe Method', function() {
+  describe('get Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      var options = {
-        id: 'test'
-      };
-
-      return webhooks.describe(options)
+      return webhooks.get('test')
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks/test');
         });
     });
 
     it('should throw an error if id is missing', function() {
-      return expect(webhooks.describe()).to.be.rejectedWith('id is required');
+      return expect(webhooks.get()).to.be.rejectedWith('id is required');
     });
 
     it('should allow timezone to be set in options', function() {
       var options = {
-        id: 'test',
         timezone: 'America/New_York'
       };
 
-      return webhooks.describe(options)
+      return webhooks.get('test', options)
         .then(function() {
           expect(client.get.firstCall.args[0].qs).to.deep.equal({timezone: 'America/New_York'});
         });
@@ -96,25 +91,24 @@ describe('Webhooks Library', function() {
   describe('update Method', function() {
     it('should call client put method with the appropriate uri', function() {
       var webhook = {
-        id: 'test',
         name: 'Renamed webhook',
         events: ['rejection', 'delay'],
         auth_type: 'none'
       };
 
-      return webhooks.update(webhook)
+      return webhooks.update('test', webhook)
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('webhooks/test');
-          expect(client.put.firstCall.args[0].json).to.deep.equal(_.omit(webhook, 'id'));
+          expect(client.put.firstCall.args[0].json).to.deep.equal(webhook);
         });
     });
 
-    it('should throw an error if webhook is missing', function() {
-      return expect(webhooks.update()).to.be.rejectedWith('webhook object is required');
+    it('should throw an error if id is missing', function() {
+      return expect(webhooks.update()).to.be.rejectedWith('id is required');
     });
 
-    it('should throw an error if webhook.id is missing', function() {
-      return expect(webhooks.update({})).to.be.rejectedWith('webhook.id is required');
+    it('should throw an error if webhook is missing', function() {
+      return expect(webhooks.update('test')).to.be.rejectedWith('webhook object is required');
     });
   });
 
@@ -132,17 +126,17 @@ describe('Webhooks Library', function() {
   });
 
   describe('validate Method', function() {
-    it('should call client post method with the appropriate uri', function() {
+    it('should call client post method with the appropriate uri and payload', function() {
       var options = {
-        id: 'test',
         message: {
           msys: {}
         }
       };
 
-      return webhooks.validate(options)
+      return webhooks.validate('test', options)
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('webhooks/test/validate');
+          expect(client.post.firstCall.args[0].json).to.deep.equal(options);
         });
     });
 
@@ -151,21 +145,13 @@ describe('Webhooks Library', function() {
     });
 
     it('should throw an error if message is missing', function() {
-      var options = {
-        id: 'test'
-      };
-
-      return expect(webhooks.validate(options)).to.be.rejectedWith('message is required');
+      return expect(webhooks.validate('test')).to.be.rejectedWith('message is required');
     });
   });
 
   describe('getBatchStatus Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      var options = {
-        id: 'test'
-      };
-
-      return webhooks.getBatchStatus(options)
+      return webhooks.getBatchStatus('test')
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks/test/batch-status');
         });
@@ -177,11 +163,10 @@ describe('Webhooks Library', function() {
 
     it('should allow limit to be set in options', function() {
       var options = {
-        id: 'test',
         limit: 1000
       };
 
-      return webhooks.getBatchStatus(options)
+      return webhooks.getBatchStatus('test', options)
         .then(function() {
           expect(client.get.firstCall.args[0].qs).to.deep.equal({limit: 1000});
         });
