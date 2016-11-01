@@ -4,6 +4,8 @@ var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key);
 
+// Returns 1000 events for the last hour
+
 // Promise
 client.messageEvents.search({})
   .then((err, data) => {

@@ -39,13 +39,11 @@ describe('Message Events Library', function() {
         to: '2016-11-14T16:15',
         transmission_ids: '65832150921904138'
       };
-      messageEvents.search(options)
+      return messageEvents.search(options)
         .then(function() {
-          let tests = [];
           Object.keys(options).forEach(function(key) {
-            tests.push(expect(client.get.firstCall.args[0].qs).to.have.property(key).and.equal(options[key]));
+            expect(client.get.firstCall.args[0].qs).to.have.property(key).and.equal(options[key]);
           });
-          return Promise.all(tests);
         });
     });
 
@@ -63,17 +61,15 @@ describe('Message Events Library', function() {
         per_page: 5,
         timezone: 'America/New_York'
       };
-      messageEvents.search(arroptions)
+      return messageEvents.search(arroptions)
         .then(function() {
-          let tests = [];
           Object.keys(arroptions).forEach(function(key) {
             var opt = arroptions[key]
               , firstCallQS = client.get.firstCall.args[0].qs;
             if (Array.isArray(opt)) {
-              tests.push(expect(firstCallQS).to.have.property(key).and.equal(opt.toString()));
+              expect(firstCallQS).to.have.property(key).and.equal(opt.toString());
             }
           });
-          return Promise.all(tests);
         });
     });
   });
