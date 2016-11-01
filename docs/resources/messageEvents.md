@@ -1,28 +1,17 @@
 # Message Events
 
-This library provides easy access to the [Message Events](https://www.sparkpost.com/api#/reference/message-events/) resource.
+This library provides easy access to the [Message Events](https://developers.sparkpost.com/api/message-events) resource.
+
+*Note: All methods return promises and accept an optional last argument callback. [Read about how we handle callbacks and promises](/docs/async.md).*
 
 ## Methods
-* **search(params, callback)**
+* **search([params, callback])**<br />
   Search for message events using the given parameters (NOTE: all params are optional):
-  * `params.bounce_classes` - list of [bounce classes](https://support.sparkpost.com/customer/portal/articles/1929896)
-  * `params.campaign_ids` - campaign IDs
-  * `params.events` - event types
-  * `params.friendly_froms` - 'friendly' from addressess
-  * `params.from` - time lower bound  (see below for date/time format details)
-  * `params.message_ids` - message IDs
-  * `params.page` - results page number
-  * `params.per_page` - number of results per page
-  * `params.reason` - bounce reason with '%' wildcards (see below for example)
-  * `params.recipients` - recipient email addresses
-  * `params.template_ids` - template IDs
-  * `params.timezone` - timezone for `from` and `to` params ([reference](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones))
-  * `params.to` - time upper bound (see below for date/time format details)
-  * `params.transmission_ids` - transmission IDs
+  * `params` - a hash of [Message Events URI Parameters](https://developers.sparkpost.com/api/message-events.html#message-events-message-events-get)
 
 ## Date/Time Parameter Format
 
-The `from` and `to` search parameters accept datestamps of the form:
+The `from` and `to` search parameters accept date stamps of the form:
 
   `YYYY-MM-DDTHH:MM`
 
@@ -32,29 +21,4 @@ Note: timestamps are expressed in the timezone specified by the `timezone` param
 
 ## Examples
 
-This example code retrieves up to 5 'invalid recipient' bounce events from the first 2 days of 2016.
-
-```js
-var SparkPost = require('sparkpost');
-var client = new SparkPost('YOUR_API_KEY');
-var searchParams = {
-  from: '2016-01-01T00:00',
-  to: '2016-01-02T23:59',
-  page: 1,
-  per_page: 5,
-  events: ['bounce', 'out_of_band'],
-  bounce_classes: [10]
-};
-
-client.messageEvents.search(searchParams, function(err, res) {
-  if(err) {
-    console.log(err);
-    return;
-  }
-
-  console.log(data);
-});
-
-```
-
-Check out all the examples provided [here](/examples/messageEvents).
+Visit our examples section to see all of [our message events resource examples](/examples/messageEvents).

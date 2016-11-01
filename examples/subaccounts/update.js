@@ -3,18 +3,13 @@
 var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key)
-  , tranmission = {
-    recipients: {
-      list_id: 'example-list'
-    },
-    content: {
-      from: 'From Envelope <from@example.com>',
-      subject: 'Example Email for Stored List and Template',
-      template_id: 'my-template'
-    }
+  , subaccount = {
+    name: 'Test Subaccount',
+    status: 'suspended'
   };
 
-client.transmissions.send(tranmission)
+// Promise
+client.subaccounts.update('123', subaccount)
   .then(data => {
     console.log('Congrats you can use our client library!');
     console.log(data);
@@ -24,8 +19,8 @@ client.transmissions.send(tranmission)
     console.log(err);
   });
 
-// Using a callback
-client.transmissions.send(tranmission, function(err, data) {
+// Callback
+client.subaccounts.update('123', subaccount, function(err, data) {
   if (err) {
     console.log('Whoops! Something went wrong');
     console.log(err);

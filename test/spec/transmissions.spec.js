@@ -23,14 +23,14 @@ describe('Transmissions Library', function() {
 
   describe('all Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return transmissions.all()
+      return transmissions.list()
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('transmissions');
         });
     });
 
     it('should call client get method with the appropriate uri using callback', function(done) {
-      transmissions.all(function() {
+      transmissions.list(function() {
         expect(client.get.firstCall.args[0].uri).to.equal('transmissions');
         done();
       });
@@ -41,7 +41,7 @@ describe('Transmissions Library', function() {
         campaign_id: 'test-campaign'
       };
 
-      return transmissions.all(options)
+      return transmissions.list(options)
         .then(function() {
           expect(client.get.firstCall.args[0].qs).to.deep.equal({campaign_id: 'test-campaign'});
         });
@@ -52,7 +52,7 @@ describe('Transmissions Library', function() {
         template_id: 'test-template'
       };
 
-      return transmissions.all(options)
+      return transmissions.list(options)
         .then(function() {
           expect(client.get.firstCall.args[0].qs).to.deep.equal({template_id: 'test-template'});
         });
@@ -61,14 +61,14 @@ describe('Transmissions Library', function() {
 
   describe('find Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return transmissions.find('test')
+      return transmissions.get('test')
         .then(function() {
           expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'transmissions/test'});
         });
     });
 
     it('should throw an error if id is missing', function() {
-      return expect(transmissions.find()).to.be.rejectedWith('id is required');
+      return expect(transmissions.get()).to.be.rejectedWith('id is required');
     });
   });
 
@@ -85,20 +85,32 @@ describe('Transmissions Library', function() {
         });
     });
 
-    it('should throw an error if options object is missing', function() {
+    it('should throw an error if transmission object is missing', function() {
       return expect(transmissions.send(function() {})).to.be.rejectedWith('transmission object is required');
     });
 
     it('should allow num_rcpt_errors to be set in options', function() {
-      var options = {
-        campaign_id: 'test-campaign',
-        num_rcpt_errors: 3
-      };
+      var transmission = {
+          campaign_id: 'test-campaign'
+        }
+        , options = {
+          num_rcpt_errors: 3
+        };
 
-      return transmissions.send(options)
+      return transmissions.send(transmission, options)
         .then(function() {
           expect(client.post.firstCall.args[0].qs).to.deep.equal({num_rcpt_errors: 3});
         });
+    });
+
+    it('should not throw an error if optional 2nd argument is a function (callback)', function() {
+      let cb = sinon.stub()
+        , transmission = {
+          campaign_id: 'test-campaign'
+        };
+      return transmissions.send(transmission, cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
     });
 
     it('should leave email_rfc822 content keys intact', function() {

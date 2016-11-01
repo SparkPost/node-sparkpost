@@ -2,26 +2,23 @@
 
 var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
-  , client = new SparkPost(key)
-  , transmission = {
-    recipients: [{address: {email: 'john.doe@example.com'}}],
-    content: {
-      email_rfc822: 'Content-Type: text/plain\nFrom: From Envelope <from@example.com>\nSubject: Example Email\n\nHello World'
-    }
-  };
+  , client = new SparkPost(key);
 
-client.transmissions.send(transmission)
+// Returns 1000 events for the last hour
+
+// Promise
+client.messageEvents.search({})
   .then(data => {
     console.log('Congrats you can use our client library!');
-    onsole.log(data);
+    console.log(data);
   })
   .catch(err => {
     console.log('Whoops! Something went wrong');
     console.log(err);
   });
 
-// Using a callback
-client.transmissions.send(transmission, function(err, data) {
+// Callback
+client.messageEvents.search({}, function(err, data) {
   if (err) {
     console.log('Whoops! Something went wrong');
     console.log(err);

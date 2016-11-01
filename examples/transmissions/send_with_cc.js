@@ -3,7 +3,7 @@
 var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key)
-  , tranmission = {
+  , transmission = {
     recipients: [
       {
         address: {
@@ -39,7 +39,8 @@ var key = 'YOURAPIKEY'
     }
   };
 
-client.transmissions.send(tranmission)
+// Promise
+client.transmissions.send(transmission)
   .then(data => {
     console.log('Congrats! You sent an email with cc using SparkPost!');
     console.log(data);
@@ -49,8 +50,8 @@ client.transmissions.send(tranmission)
     console.log(err);
   });
 
-// Using a callback
-client.transmissions.send(tranmission, function(err, data) {
+// Callback
+client.transmissions.send(transmission, function(err, data) {
   if (err) {
     console.log('Whoops! Something went wrong');
     console.log(err);

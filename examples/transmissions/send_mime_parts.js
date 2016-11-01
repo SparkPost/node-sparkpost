@@ -3,16 +3,22 @@
 var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key)
-  , subaccount = {
-    name: 'Test Subaccount',
-    key_label: 'Test Subaccount key',
-    key_grants: [
-      'smtp/inject',
-      'transmissions/modify'
-    ]
+  , transmission = {
+    recipients: [{ address: { email: 'john.doe@example.com' } }],
+    content: {
+      from: 'From Envelope <from@example.com>',
+      subject: 'Example Email for MIME Parts',
+      html: '<html><body><p>Hello World!</p></body></html>',
+      text: 'Hello World!'
+    },
+    options: {
+      open_tracking: true,
+      click_tracking: true
+    }
   };
 
-client.subaccounts.create(subaccount)
+// Promise
+client.transmissions.send(transmission)
   .then(data => {
     console.log('Congrats you can use our client library!');
     console.log(data);
@@ -22,8 +28,8 @@ client.subaccounts.create(subaccount)
     console.log(err);
   });
 
-// Using a callback
-client.subaccounts.create(subaccount, function(err, data) {
+// Callback
+client.transmissions.send(transmission, function(err, data) {
   if (err) {
     console.log('Whoops! Something went wrong');
     console.log(err);
