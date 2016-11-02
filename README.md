@@ -21,6 +21,8 @@ Before using this library, you must have:
 npm install sparkpost
 ```
 
+*Note: Node.js versions 0.10 and 0.12 are no longer supported. For versions < 4, please continue using [sparkpost v1.3.8](https://github.com/SparkPost/node-sparkpost/tree/1.3.8)* 
+
 ## Initialization
 **new SparkPost(apiKey[, options])** - Initialization
 
@@ -58,8 +60,6 @@ npm install sparkpost
 * **get | post | put | delete(options[, callback])**
     * `options` - see request options
     * Request method will be overwritten and set to the same value as the name of these methods.
-
-*callback is optional because all methods return a Promise.
 
 ## Creating a SparkPost Client
 
