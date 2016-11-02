@@ -1,12 +1,13 @@
+'use strict';
+
 var chai = require('chai')
   , expect = chai.expect
   , sinon = require('sinon')
-  , sinonChai = require('sinon-chai')
   , zlib = require('zlib')
   , nock = require('nock')
   , SparkPost = require('../../lib/sparkpost');
 
-chai.use(sinonChai);
+chai.use(require('sinon-chai'));
 
 describe('SparkPost Library', function() {
 
@@ -63,6 +64,21 @@ describe('SparkPost Library', function() {
     client = new SparkPost(options);
 
     expect(client.origin).to.equal('https://dev.sparkpost.com');
+  });
+
+  it('should allow debug to be set in options', function() {
+    const key = '12345678901234567890';
+    let options = {}
+      , client;
+
+    // testing default initialization
+    client = new SparkPost(key, options);
+    expect(client.debug).to.equal(false);
+
+    // testing setting flag
+    options.debug = true;
+    client = new SparkPost(key, options);
+    expect(client.debug).to.equal(true);
   });
 
   describe('request method', function() {

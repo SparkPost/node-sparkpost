@@ -40,20 +40,22 @@ npm install sparkpost
     * Required: no
     * Type: `Object`
     * set headers that apply to all requests
+* `options.debug`
+    * Required: no
+    * Type: `Boolean`
+    * Default: `false`
+    * appends full response from request client as `debug` when `true` for debugging purposes
 
 ## Methods
-* **request(options[, callback]) &rarr; `{Promise}`**
+
+*Note: All methods return promises and accept an optional last argument callback. [Read about how we handle callbacks and promises](/docs/async.md).*
+
+* **request(options[, callback])**
     * `options` - [see request modules options](https://github.com/mikeal/request#requestoptions-callback)
     * `options.uri` - can either be a full url or a path that is appended to `options.origin` used at initialization ([url.resolve](http://nodejs.org/api/url.html#url_url_resolve_from_to))
     * `options.debug` - setting to `true` includes full response from request client for debugging purposes
-    * `callback` - executed after task is completed if provided*
-      * standard `callback(err, data)`
-      * `err` - any error that occurred
-      * `data` - results from API call
-      * `data.debug` - full response from request client when `options.debug` is `true`
-* **get | post | put | delete(options[, callback]) &rarr; `{Promise}`**
+* **get | post | put | delete(options[, callback])**
     * `options` - see request options
-    * `callback` - see request options
     * Request method will be overwritten and set to the same value as the name of these methods.
 
 *callback is optional because all methods return a Promise.
