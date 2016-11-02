@@ -11,9 +11,7 @@ let client = new SparkPost(key);
 
 client.templates.get(id)
   .then((data) => {
-    // this is either:
-    // a) the `results` key of the API response body, or
-    // b) the full API response body
+    // this the full API response body
   })
   .catch((err) => {
     // handle the sad error
@@ -33,8 +31,6 @@ client.templates.get(id, (err, data) => {
     return;
   }
 
-  // this is either:
-  // a) the `results` key of the API response body, or
-  // b) the full API response body
+  // this is the full API response body
 });
 ```
