@@ -44,7 +44,8 @@ npm install sparkpost
     * Required: no
     * Type: `Boolean`
     * Default: `false`
-    * appends full response from request client as `debug` when `true` for debugging purposes
+    * appends full response from request client as `debug` when `true` for debugging purposes<br/>
+    *Note: This will expose your api key to the client-side. Do not use in production.*
 
 ## Methods
 
