@@ -1,65 +1,57 @@
 # Webhooks
 
-This library provides easy access to the [Webhooks](https://www.sparkpost.com/api#/reference/webhooks/) Resource.
+This library provides easy access to the [Webhooks](https://developers.sparkpost.com/api/webhooks) Resource.
+
+*Note: All methods return promises and accept an optional last argument callback. [Read about how we handle callbacks and promises](/docs/async.md).*
 
 ## Methods
-* **all(options, callback)**
-  List currently extant webhooks.
-  * `options.timezone` - `String` Standard timezone identification Default: `UTC`
-  * `callback` - executed after task is completed. **required**
-    * standard `callback(err, data)`
-    * `err` - any error that occurred
-    * `data` - full response from request client
-* **describe(options, callback)**
-  Retrieve details about a specified webhook by its id
-  * `options.id` - the id of the webhook you want to describe **required**
-  * `options.timezone` - `String` Standard timezone identification Default: `UTC`
-  * `callback` - see all function
-* **create(webhook, callback)**
-  Create a new webhook
-  * `webhook` - a webhook object **required**
-  * `callback` - see all function
-* **update(webhook, callback)**
-  Update an existing webhook
-  * `webhook` - a webhook object **required**
-  * `callback` - see all function
-* **delete(id, callback)**
-  Delete an existing webhook
-  * `id` - the id of the webhook you want to delete **required**
-  * `callback` - see all function
-* **validate(options, callback)**
-  Sends an example message event batch from the Webhook API to the target URL
-  * `options.id` - the id of the webhook you want to validate **required**
-  * `options.message` - sample object to send to the target URL **required**
-  * `callback` - see all function
-* **getBatchStatus(options, callback)**
-  Sends an example message event batch from the Webhook API to the target URL
-  * `options.id` - the id of the webhook you want to get status on **required**
-  * `options.limit` - `number` maximum number of results to return Default: `1000`
-  * `callback` - see all function
-* **getDocumentation(callback)**
-  Lists descriptions of the events, event types, and event fields that could be included in a Webhooks post to your target URL.
-  * `callback` - see all function
-* **getSamples(options, callback)**
-  List an example of the event data that will be posted by a Webhook for the specified events.
-  * `options.events` - `String` event types for which to get a sample payload Defaults to all event types
-  * `callback` - see all function
+* **list([options])**<br />
+  Lists all webhooks.
+  * `options.timezone` - the timezone to use for the `last_successful` and `last_failure` properties | Default: `UTC`
 
-## Examples
+* **get(id[, options])**<br />
+  Get a single webhook by ID.
+  * `id` - the id of the webhook to get **required**
+  * `options.timezone` - the timezone to use for the `last_successful` and `last_failure` properties | Default: `UTC`
 
-```js
-var SparkPost = require('sparkpost');
-var client = new SparkPost('YOUR_API_KEY');
+* **create(webhook)**<br />
+  Create a new webhook.
+  * `webhook` - a hash of [webhook attributes](https://developers.sparkpost.com/api/webhooks#header-webhooks-object-properties) **required**
 
-client.webhooks.all(function(err, data) {
-  if(err) {
+client.webhooks.all()
+  .then(data => {
+    console.log('Congrats you can use our client library!');
+    console.log(data);
+  })
+  .catch(err => {
+    console.log('Whoops! Something went wrong');
     console.log(err);
-    return;
-  }
+  });
 
-  console.log(data.body);
-});
+* **update(id, webhook)**<br />
+  Update an existing webhook.
+  * `id` - the id of the webhook to update **required**
+  * `webhook` - a hash of [webhook attributes](https://developers.sparkpost.com/api/webhooks#header-webhooks-object-properties) **required**
+* **delete(id)**<br />
+  Delete an existing webhook.
+  * `id` - the id of the webhook to delete **required**
 
-```
+* **validate(id, options)**<br />
+  Sends an example message event batch from the Webhook API to the target URL.
+  * `id` - the id of the webhook to validate **required**
+  * `options.message` - the message (payload) to send to the webhook consumer **required**
 
-Check out all the examples provided [here](/examples/webhooks).
+* **getBatchStatus(id[, options])**<br />
+  Gets recent status information about a webhook.
+  * `id` - the id of the webhook **required**
+  * `options.limit` - maximum number of results to return | Default: `1000`
+
+* **getDocumentation()**<br />
+  Lists descriptions of the events, event types, and event fields that could be included in a webhooks post to your target URL.
+
+* **getSamples(options)**<br />
+  Lists examples of the event data that will be posted to a webhook consumer.
+  * `options.events` - [event types](https://support.sparkpost.com/customer/portal/articles/1976204) for which to get a sample payload | Default: all event types returned
+
+
+Visit our examples section to see all of [our webhooks resource examples](/examples/webhooks).

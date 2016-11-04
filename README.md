@@ -1,6 +1,6 @@
 <a href="https://www.sparkpost.com"><img src="https://www.sparkpost.com/sites/default/files/attachments/SparkPost_Logo_2-Color_Gray-Orange_RGB.svg" width="200px"/></a>
 
-[Sign up](https://app.sparkpost.com/sign-up?src=Dev-Website&sfdcid=70160000000pqBb) for a SparkPost account and visit our [Developer Hub](https://developers.sparkpost.com) for even more content.
+[Sign up][sparkpost sign up] for a SparkPost account and visit our [Developer Hub](https://developers.sparkpost.com) for even more content.
 
 # Node.js Client Library
 
@@ -12,7 +12,7 @@ The official Node.js binding for your favorite [SparkPost APIs](https://develope
 
 Before using this library, you must have:
 
-* A shiny new SparkPost Account, [sign up for a new account](https://app.sparkpost.com/#/sign-up) or [login to SparkPost](https://app.sparkpost.com/)
+* A shiny new SparkPost Account, [sign up for a new account][sparkpost sign up] or [login to SparkPost](https://app.sparkpost.com/)
 * A valid SparkPost API Key. Check out our [Support Center](https://support.sparkpost.com/) for information on how to [create API keys](https://support.sparkpost.com/customer/portal/articles/1933377-create-api-keys)
 
 ## Installation
@@ -21,8 +21,10 @@ Before using this library, you must have:
 npm install sparkpost
 ```
 
+*Note: Node.js versions 0.10 and 0.12 are no longer supported. For versions < 4, please continue using [sparkpost v1.3.8](https://github.com/SparkPost/node-sparkpost/tree/1.3.8)* 
+
 ## Initialization
-**new SparkPost(apiKey, options)** - Initialization
+**new SparkPost(apiKey[, options])** - Initialization
 
 * `apiKey`
     * Required: yes (unless key is stored in `SPARKPOST_API_KEY` environment variable)
@@ -40,19 +42,23 @@ npm install sparkpost
     * Required: no
     * Type: `Object`
     * set headers that apply to all requests
+* `options.debug`
+    * Required: no
+    * Type: `Boolean`
+    * Default: `false`
+    * appends full response from request client as `debug` when `true` for debugging purposes<br/>
+    *Note: This will expose your api key to the client-side. Do not use in production.*
 
 ## Methods
-* **request(options, callback)**
+
+*Note: All methods return promises and accept an optional last argument callback. [Read about how we handle callbacks and promises](/docs/async.md).*
+
+* **request(options[, callback])**
     * `options` - [see request modules options](https://github.com/mikeal/request#requestoptions-callback)
     * `options.uri` - can either be a full url or a path that is appended to `options.origin` used at initialization ([url.resolve](http://nodejs.org/api/url.html#url_url_resolve_from_to))
-    * `callback` - executed after task is completed. **required**
-      * standard `callback(err, data)`
-      * `err` - any error that occurred
-      * `data.res` - full response from request client
-      * `data.body` - payload from response
-* **get | post | put | delete(options, callback)**
+    * `options.debug` - setting to `true` includes full response from request client for debugging purposes
+* **get | post | put | delete(options[, callback])**
     * `options` - see request options
-    * `callback` - see request options
     * Request method will be overwritten and set to the same value as the name of these methods.
 
 ## Creating a SparkPost Client
@@ -91,25 +97,27 @@ var options = {
   uri: 'metrics/domains'
 };
 
-client.get(options, function(err, data) {
-  if(err) {
+client.get(options)
+  .then(data => {
+    console.log(data);
+  })
+  .catch(err => {
     console.log(err);
-    return;
-  }
-
-  console.log(data.body);
-});
+  });
 ```
 
 ## Send An Email "Hello World" Example
-Below is an example of how to send a simple email. Sending an email is known as a *transmission*. By using the send method on the transmissions service that's available from the SparkPost object you instatiate you can pass in a *transmissionBody* object with all the information relevant to the email being sent. The send method also takes a callback method that will let you know if the email was sent successful and if not information about the error that ocurred.
+Below is an example of how to send a simple email. Sending an email is known as a *transmission*. By using the send 
+method on the transmissions service that's available from the SparkPost object you instantiate, you can pass in an 
+object with all the [transmission attributes](https://developers.sparkpost.com/api/transmissions#header-transmission-attributes) 
+relevant to the email being sent. The send method will return a promise that will let you know if the email was sent 
+successful and if not information about the error that occurred. If a callback is passed, it will be executed.
 
 ```javascript
 var SparkPost = require('sparkpost');
-var sp = new SparkPost('<YOUR API KEY>');
+var client = new SparkPost('<YOUR API KEY>');
 
-sp.transmissions.send({
-  transmissionBody: {
+client.transmissions.send({
     content: {
       from: 'testing@sparkpostbox.com',
       subject: 'Hello, World!',
@@ -118,15 +126,15 @@ sp.transmissions.send({
     recipients: [
       {address: '<YOUR EMAIL ADDRESS>'}
     ]
-  }
-}, function(err, res) {
-  if (err) {
+  })
+  .then(data => {
+    console.log('Woohoo! You just sent your first mailing!');
+    console.log(data);
+  })
+  .catch(err => {
     console.log('Whoops! Something went wrong');
     console.log(err);
-  } else {
-    console.log('Woohoo! You just sent your first mailing!');
-  }
-});
+  });
 ```
 
 ## SparkPost API Resources Supported in Node Client Library
@@ -147,20 +155,20 @@ Click on the desired API to see usage and more information
 ## Development
 
 ### Setup
-We use [Grunt](http://gruntjs.com/) for our task runner, so you will also have to install Grunt globally `npm install -g grunt-cli`
-
 Run `npm install` inside the repository to install all the dev dependencies.
 
 ### Testing
-Once all the dependencies are installed, you can execute the unit tests using `grunt test`
+Once all the dependencies are installed, you can execute the unit tests using `npm test`
 
 ### Contributing
-[Guidelines for adding issues](docs/ADDING_ISSUES.markdown)
+[Guidelines for adding issues](docs/ADDING_ISSUES.md)
 
-[Our coding standards](docs/CODE_STYLE_GUIDE.markdown)
+[Our coding standards](docs/CODE_STYLE_GUIDE.md)
 
 [Submitting pull requests](CONTRIBUTING.md)
 
 ### ChangeLog
 
 [See ChangeLog here](CHANGELOG.md)
+
+[sparkpost sign up]: https://app.sparkpost.com/sign-up?src=Dev-Website&sfdcid=701600000011daf

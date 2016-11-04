@@ -1,105 +1,74 @@
+'use strict';
+
 var chai = require('chai')
   , expect = chai.expect
-  , sinon = require('sinon')
-  , sinonChai = require('sinon-chai');
+  , sinon = require('sinon');
 
-chai.use(sinonChai);
+require('sinon-as-promised');
+
+chai.use(require('sinon-chai'));
+chai.use(require('chai-as-promised'));
 
 describe('Inbound Domains Library', function() {
-  var client, inboundDomains;
+  let client, inboundDomains;
 
   beforeEach(function() {
     client = {
-      get: sinon.stub().yields(),
-      post: sinon.stub().yields(),
-      delete: sinon.stub().yields()
-
+      get: sinon.stub().resolves({}),
+      post: sinon.stub().resolves({}),
+      delete: sinon.stub().resolves({})
     };
 
     inboundDomains = require('../../lib/inboundDomains')(client);
   });
 
-  describe('all Method', function() {
-    it('should call client get method with the appropriate uri', function(done) {
-      inboundDomains.all(function() {
-        expect(client.get.firstCall.args[0]).to.deep.equal({uri:'inbound-domains'});
-        done();
-      });
+  describe('list Method', function() {
+    it('should call client get method with the appropriate uri', function() {
+      return inboundDomains.list()
+        .then(function() {
+          expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'inbound-domains'});
+        });
     });
   });
 
-  describe('find Method', function() {
-    it('should call client get method with the appropriate uri', function(done) {
-      inboundDomains.find('test', function() {
-        expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'inbound-domains/test'});
-        done();
-      });
+  describe('get Method', function() {
+    it('should call client get method with the appropriate uri', function() {
+      return inboundDomains.get('test')
+        .then(function() {
+          expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'inbound-domains/test'});
+        });
     });
 
-    it('should throw an error if domain is null', function(done) {
-      inboundDomains.find(null, function(err) {
-        expect(err.message).to.equal('domain is required');
-        expect(client.get).not.to.have.been.called;
-        done();
-      });
-    });
-
-    it('should throw an error if domain is missing', function(done) {
-      inboundDomains.find(function(err) {
-        expect(err.message).to.equal('domain is required');
-        expect(client.get).not.to.have.been.called;
-        done();
-      });
+    it('should throw an error if domain is missing', function() {
+      return expect(inboundDomains.get()).to.be.rejectedWith('domain is required');
     });
   });
 
   describe('create Method', function() {
-    it('should call client post method with the appropriate uri', function(done) {
-      inboundDomains.create("test", function(err, data) {
-        expect(client.post.firstCall.args[0].uri).to.equal('inbound-domains');
-        done();
-      });
+    it('should call client post method with the appropriate uri and payload', function() {
+      let createOpts = {domain: 'test'};
+      return inboundDomains.create(createOpts)
+        .then(function() {
+          expect(client.post.firstCall.args[0].uri).to.equal('inbound-domains');
+          expect(client.post.firstCall.args[0].json).to.deep.equal(createOpts);
+        });
     });
 
-    it('should throw an error if domain is null', function(done) {
-      inboundDomains.create(null, function(err) {
-        expect(err.message).to.equal('domain is required');
-        expect(client.post).not.to.have.been.called;
-        done();
-      });
-    });
-
-    it('should throw an error if domain is missing', function(done) {
-      inboundDomains.create(function(err) {
-        expect(err.message).to.equal('domain is required');
-        expect(client.post).not.to.have.been.called;
-        done();
-      });
+    it('should throw an error if domain is missing', function() {
+      return expect(inboundDomains.create()).to.be.rejectedWith('create options are required');
     });
   });
 
   describe('delete Method', function() {
-    it('should call client delete method with the appropriate uri', function(done) {
-      inboundDomains.delete('test', function(err, data) {
-        expect(client.delete.firstCall.args[0].uri).to.equal('inbound-domains/test');
-        done();
-      });
+    it('should call client delete method with the appropriate uri', function() {
+      return inboundDomains.delete('test')
+        .then(function () {
+          expect(client.delete.firstCall.args[0].uri).to.equal('inbound-domains/test');
+        });
     });
 
-    it('should throw an error if domain is null', function(done) {
-      inboundDomains.delete(null, function(err) {
-        expect(err.message).to.equal('domain is required');
-        expect(client.delete).not.to.have.been.called;
-        done();
-      });
-    });
-
-    it('should throw an error if domain is missing', function(done) {
-      inboundDomains.delete(function(err) {
-        expect(err.message).to.equal('domain is required');
-        expect(client.delete).not.to.have.been.called;
-        done();
-      });
+    it('should throw an error if domain is missing', function() {
+      return expect(inboundDomains.delete()).to.be.rejectedWith('domain is required');
     });
   });
 });

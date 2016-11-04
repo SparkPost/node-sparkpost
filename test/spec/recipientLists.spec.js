@@ -1,174 +1,189 @@
-var chai = require('chai')
-  , expect = chai.expect
-  , sinon = require('sinon')
-  , sinonChai = require('sinon-chai');
+'use strict';
 
-chai.use(sinonChai);
+var _ = require('lodash')
+  , chai = require('chai')
+  , expect = chai.expect
+  , sinon = require('sinon');
+
+require('sinon-as-promised');
+
+chai.use(require('sinon-chai'));
+chai.use(require('chai-as-promised'));
 
 describe('Recipient Lists Library', function() {
   var client, recipientLists;
 
   beforeEach(function() {
     client = {
-      get: sinon.stub().yields(),
-      post: sinon.stub().yields(),
-      put: sinon.stub().yields(),
-      'delete': sinon.stub().yields()
+      get: sinon.stub().resolves({}),
+      post: sinon.stub().resolves({}),
+      put: sinon.stub().resolves({}),
+      delete: sinon.stub().resolves({})
     };
 
     recipientLists = require('../../lib/recipientLists')(client);
   });
 
-  describe('all Method', function() {
-    it('should call client get method with the appropriate uri', function(done) {
-      recipientLists.all(function(err, data) {
-        expect(client.get.firstCall.args[0].uri).to.equal('recipient-lists');
-        done();
-      });
+  describe('list', function() {
+
+    it('should call client get method with the appropriate uri', function() {
+      return recipientLists.list()
+        .then(function() {
+          expect(client.get.firstCall.args[0].uri).to.equal('recipient-lists');
+        });
     });
+
   });
 
-  describe('find Method', function() {
-    it('should call client get method with the appropriate uri', function(done) {
-      var options = {
-        id: 'test'
-      };
-      recipientLists.find(options, function(err, data) {
-        expect(client.get.firstCall.args[0].uri).to.equal('recipient-lists/test');
-        done();
+  describe('get', function() {
+
+    it('should call client get method with the appropriate uri', function() {
+      return recipientLists.get('test-id')
+        .then(function() {
+          expect(client.get.firstCall.args[0].uri).to.equal('recipient-lists/test-id');
+        });
+    });
+
+    it('should throw an error if id is missing', function() {
+      return expect(recipientLists.get()).to.be.rejectedWith('id is required');
+    });
+
+    it('should not throw an error if optional 2nd argument is a function (callback)', function() {
+      let cb = sinon.stub();
+      return recipientLists.get('test-id', cb).then(() => {
+        expect(cb.callCount).to.equal(1);
       });
     });
 
-    it('should throw an error if id is missing', function(done) {
-      recipientLists.find(null, function(err) {
-        expect(err.message).to.equal('id is required');
-        expect(client.get).not.to.have.been.called;
-        done();
-      });
-    });
-
-    it('should allow show_recipients to be set in options', function(done) {
+    it('should allow show_recipients to be set in options', function() {
       var options = {
-        id: 'test',
         show_recipients: true
       };
 
-      recipientLists.find(options, function(err, data) {
-        expect(client.get.firstCall.args[0].qs).to.deep.equal({show_recipients: true});
-        done();
-      });
+      return recipientLists.get('test-id', options)
+        .then(function() {
+          expect(client.get.firstCall.args[0].qs).to.deep.equal({show_recipients: true});
+        });
     });
+
   });
 
-  describe('create Method', function() {
-    var test_list = [
-      {
-        address: {
-          email: 'test@test.com',
-          name: 'test'
-        }
-      }
-    ];
+  describe('create', function() {
 
-    it('should call client post method with the appropriate uri', function(done) {
-      var options = {
-        recipients: test_list
+    it('should call client post method with the appropriate uri and payload', function() {
+      let testList = {
+        id: 'test_list',
+        recipients: [
+          {
+            address: {
+              email: 'test@test.com',
+              name: 'test'
+            }
+          }
+        ]
       };
 
-      recipientLists.create(options, function(err, data) {
-        expect(client.post.firstCall.args[0].uri).to.equal('recipient-lists');
-        done();
-      });
+      return recipientLists.create(testList)
+        .then(function() {
+          expect(client.post.firstCall.args[0].uri).to.equal('recipient-lists');
+          expect(client.post.firstCall.args[0].json).to.deep.equal(testList);
+        });
     });
 
-    it('should throw an error if id is missing', function(done) {
-      recipientLists.create(null, function(err) {
-        expect(err.message).to.equal('recipients list is required');
-        expect(client.post).not.to.have.been.called;
-        done();
-      });
+    it('should throw an error if no recipients are provided', function() {
+      return Promise.all([
+        expect(recipientLists.create(), 'no recipient list hash at all').to.be.rejectedWith('recipient list is required'),
+        expect(recipientLists.create({}), 'no recipients key').to.be.rejectedWith('recipient list is required'),
+        expect(recipientLists.create(function() {}), 'recipient list is actually a callback').to.be.rejectedWith('recipient list is required')
+      ]);
     });
 
-    it('should allow num_rcpt_errors to be set in options', function(done) {
-      var options = {
-        recipients: test_list,
+    it('should allow num_rcpt_errors to be set in options', function() {
+      var testList = {
+        id: 'test_list',
+        recipients: [
+          {
+            address: {
+              email: 'test@test.com',
+              name: 'test'
+            }
+          }
+        ],
         num_rcpt_errors: 3
       };
 
-      recipientLists.create(options, function(err, data) {
-        expect(client.post.firstCall.args[0].qs).to.deep.equal({num_rcpt_errors: 3});
-        done();
-      });
+      return recipientLists.create(testList)
+        .then(function() {
+          expect(client.post.firstCall.args[0].qs).to.deep.equal({num_rcpt_errors: 3});
+        });
     });
+
   });
 
-  describe('update Method', function() {
-    var test_list = [
-      {
-        address: {
-          email: 'test@test.com',
-          name: 'test'
-        }
-      }
-    ];
+  describe('update', function() {
 
-    it('should call client put method with the appropriate uri', function(done) {
-      var options = {
-        id: 'test_list',
-        recipients: test_list
+    it('should call client put method with the appropriate uri and payload', function() {
+      const testList = {
+        recipients: [
+          {
+            address: {
+              email: 'test@test.com',
+              name: 'test'
+            }
+          }
+        ]
       };
+      const testId = 'test-id';
 
-      recipientLists.update(options, function(err, data) {
-        expect(client.put.firstCall.args[0].uri).to.equal('recipient-lists/' + options.id);
-        done();
-      });
+      return recipientLists.update(testId, testList)
+        .then(function() {
+          expect(client.put.firstCall.args[0].uri).to.equal('recipient-lists/' + testId);
+          expect(client.put.firstCall.args[0].json).to.deep.equal(testList);
+        });
     });
 
-    it('should throw an error if id is missing', function(done) {
-      recipientLists.update(null, function(err) {
-        expect(err.message).to.equal('recipients list id is required');
-        expect(client.put).not.to.have.been.called;
-        done();
-      });
+    it('should throw an error if recipient list is missing', function() {
+      return expect(recipientLists.update('test-id')).to.be.rejectedWith('recipient list is required');
     });
 
-    it('should allow num_rcpt_errors to be set in options', function(done) {
-      var options = {
-        id: 'test_list',
-        recipients: test_list,
+    it('should throw an error if id is missing', function() {
+      return expect(recipientLists.update()).to.be.rejectedWith('recipient list id is required');
+    });
+
+    it('should allow num_rcpt_errors to be set in options', function() {
+      var testList = {
+        recipients: [
+          {
+            address: {
+              email: 'test@test.com',
+              name: 'test'
+            }
+          }
+        ],
         num_rcpt_errors: 3
       };
 
-      recipientLists.update(options, function(err, data) {
-        expect(client.put.firstCall.args[0].qs).to.deep.equal({num_rcpt_errors: 3});
-        done();
-      });
+      return recipientLists.update('test-id', testList)
+        .then(function() {
+          expect(client.put.firstCall.args[0].qs).to.deep.equal({num_rcpt_errors: 3});
+        });
     });
 
   });
 
-  describe('delete Method', function() {
-    it('should call client delete method with the appropriate uri', function(done) {
-      recipientLists.delete('test', function(err, data) {
-        expect(client['delete'].firstCall.args[0].uri).to.equal('recipient-lists/test');
-        done();
-      });
+  describe('delete', function() {
+
+    it('should call client delete method with the appropriate uri', function() {
+      return recipientLists.delete('test')
+        .then(function() {
+          expect(client.delete.firstCall.args[0].uri).to.equal('recipient-lists/test');
+        });
     });
 
-    it('should throw an error if id is null', function(done) {
-      recipientLists['delete'](null, function(err) {
-        expect(err.message).to.equal('id is required');
-        expect(client['delete']).not.to.have.been.called;
-        done();
-      });
+    it('should throw an error if id is missing', function() {
+      return expect(recipientLists.delete()).to.be.rejectedWith('id is required');
     });
 
-    it('should throw an error if id is missing', function(done) {
-      recipientLists['delete'](function(err) {
-        expect(err.message).to.equal('id is required');
-        expect(client['delete']).not.to.have.been.called;
-        done();
-      });
-    });
   });
+
 });

@@ -1,55 +1,26 @@
 # Relay Webhooks
 
-This library provides easy access to the [Relay Webhooks](https://www.sparkpost.com/api#/reference/relay-webhooks/) Resource.
+This library provides easy access to the [Relay Webhooks](https://developers.sparkpost.com/api/relay-webhooks) Resource.
+
+*Note: All methods return promises and accept an optional last argument callback. [Read about how we handle callbacks and promises](/docs/async.md).*
 
 ## Methods
-* **all(options, callback)**
+* **list()**<br />
   List all relay webhooks.
-  * `callback` - executed after task is completed. **required**
-    * standard `callback(err, data)`
-    * `err` - any error that occurred
-    * `data` - full response from request client
-* **find(webhookId, callback)**
-  Retrieve details about a specified relay webhook by its id
-  * `webhookId` - the id of the relay webhook you want to look up **required**
-  * `callback` - see all function
-* **create(options, callback)**
+* **get(id)**<br />
+  Get details about a specified relay webhook by its id
+  * `id` - the id of the relay webhook you want to look up **required**
+* **create(webhook)**<br />
   Create a new relay webhook
-  * `options.target` - url of the target to which to POST relay batches **required**
-  * `options.domain` - inbound domain associated with this webhook **required**
-  * `options.name` - user-friendly name
-  * `options.authToken` - authentication token to present in the X-MessageSystems-Webhook-Token header of POST requests to target
-  * `options.protocol` - inbound messaging protocol associated with this webhook
-  * `callback` - see all function
-* **update(options, callback)**
+  * `webhook` - an object of [relay webhook attributes](https://developers.sparkpost.com/api/relay-webhooks#header-relay-webhooks-object-properties) **required**
+* **update(id, webhook)**<br />
   Update an existing relay webhook
-  * `options.webhookId` - the id of the relay webhook you want to update **required**
-  * `options.target` - url of the target to which to POST relay batches
-  * `options.domain` - inbound domain associated with this webhook
-  * `options.name` - user-friendly name
-  * `options.authToken` - authentication token to present in the X-MessageSystems-Webhook-Token header of POST requests to target
-  * `options.protocol` - inbound messaging protocol associated with this webhook
-  * `callback` - see all function
-* **delete(webhookId, callback)**
+  * `id` - the id of the relay webhook you want to update **required**
+  * `webhook` - an object of [relay webhook attributes](https://developers.sparkpost.com/api/relay-webhooks#header-relay-webhooks-object-properties) **required**
+* **delete(id)**<br />
   Delete an existing relay webhook
-  * `webhookId` - the id of the webhook you want to delete **required**
-  * `callback` - see all function
+  * `id` - the id of the relay webhook you want to delete **required**
 
 ## Examples
 
-```js
-var SparkPost = require('sparkpost');
-var client = new SparkPost('YOUR_API_KEY');
-
-client.relayWebhooks.all(function(err, data) {
-  if(err) {
-    console.log(err);
-    return;
-  }
-
-  console.log(data.body);
-});
-
-```
-
-Check out all the examples provided [here](/examples/relayWebhooks).
+Visit our examples section to see all of [our relay webhook resource examples](/examples/relayWebhooks).

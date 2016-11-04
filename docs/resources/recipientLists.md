@@ -1,50 +1,31 @@
 # Recipient Lists
 
-This library provides easy access to the [Recipient Lists](https://www.sparkpost.com/api#/reference/recipient-lists/) Resource.
+This library provides easy access to the [Recipient Lists](https://developers.sparkpost.com/api/recipient-lists) Resource.
+
+*Note: All methods return promises and accept an optional last argument callback. [Read about how we handle callbacks and promises](/docs/async.md).*
 
 ## Methods
-* **all(callback)**
+* **list()**<br />
   List a summary of all recipient lists.
-  * `callback` - executed after task is completed. **required**
-    * standard `callback(err, data)`
-    * `err` - any error that occurred
-    * `data` - full response from request client
-* **find(options, callback)**
+
+* **get(id[, options])**<br />
   Retrieve details about a specified recipient list by its id
-  * `options.id` - the id of the recipient list you want to look up **required**
-  * `options.show_recipients` - specifies whether to retrieve the recipients Default: `false`
-  * `callback` - see all function
-* **create(options, callback)**
+  * `options.show_recipients` - specifies whether to retrieve the recipients | Default: `false`
+
+* **create(recipientList)**<br />
   Create a new recipient list
-  * `options.recipients` - an array of recipients to add to the list **required**
-  * `options.num_rcpt_errors` - limit the number of recipient errors returned
-  * `callback` - see all function
-* **update(options, callback)**
+  * `recipientList` - an object of [recipient list](https://developers.sparkpost.com/api/recipient-lists#header-recipient-list-attributes) **required**
+  * `recipientList.num_rcpt_errors` - limit the number of recipient errors returned | Default: all errors returned
+
+* **update(id, recipientList)**<br />
   Update an existing recipient list
-  * `options.id` - the id of the recipient list you want to update **required**
-  * `options.recipients` - an array of recipients to add to the list **required**
-  * `options.num_rcpt_errors` - limit the number of recipient errors returned
-  * `callback` - see all function
-* **delete(id, callback)**
+  * `recipientList` - an object of [recipient list](https://developers.sparkpost.com/api/recipient-lists#header-recipient-list-attributes) **required**
+  * `recipientList.num_rcpt_errors` - limit the number of recipient errors returned | Default: all errors returned
+
+* **delete(id)**<br />
   Delete an existing recipient list
   * `id` - the id of the recipient list you want to delete **required**
-  * `callback` - see all function
 
 ## Examples
 
-```js
-var SparkPost = require('sparkpost');
-var client = new SparkPost('YOUR_API_KEY');
-
-client.recipientLists.all(function(err, data) {
-  if(err) {
-    console.log(err);
-    return;
-  }
-
-  console.log(data.body);
-});
-
-```
-
-Check out all the examples provided [here](/examples/recipientLists).
+Visit our examples section to see all of [our recipient list resource examples](/examples/recipientLists).

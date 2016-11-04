@@ -7,11 +7,24 @@ var key = 'YOURAPIKEY'
     events: 'bounce'
   };
 
-client.webhooks.getSamples(options, function(err, res) {
+// Promise
+client.webhooks.getSamples(options)
+  .then(data => {
+    console.log('Congrats you can use our client library!');
+    console.log(data);
+  })
+  .catch(err => {
+    console.log('Whoops! Something went wrong');
+    console.log(err);
+  });
+
+// Callback
+client.webhooks.getSamples(options, function(err, data) {
   if (err) {
+    console.log('Whoops! Something went wrong');
     console.log(err);
   } else {
-    console.log(res.body);
-    console.log('Congrats you can use our SDK!');
+    console.log('Congrats you can use our client library!');
+    console.log(data);
   }
 });
