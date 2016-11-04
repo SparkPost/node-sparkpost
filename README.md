@@ -1,6 +1,6 @@
 <a href="https://www.sparkpost.com"><img src="https://www.sparkpost.com/sites/default/files/attachments/SparkPost_Logo_2-Color_Gray-Orange_RGB.svg" width="200px"/></a>
 
-[Sign up](https://app.sparkpost.com/sign-up?src=Dev-Website&sfdcid=70160000000pqBb) for a SparkPost account and visit our [Developer Hub](https://developers.sparkpost.com) for even more content.
+[Sign up][sparkpost sign up] for a SparkPost account and visit our [Developer Hub](https://developers.sparkpost.com) for even more content.
 
 # Node.js Client Library
 
@@ -12,7 +12,7 @@ The official Node.js binding for your favorite [SparkPost APIs](https://develope
 
 Before using this library, you must have:
 
-* A shiny new SparkPost Account, [sign up for a new account](https://app.sparkpost.com/#/sign-up) or [login to SparkPost](https://app.sparkpost.com/)
+* A shiny new SparkPost Account, [sign up for a new account][sparkpost sign up] or [login to SparkPost](https://app.sparkpost.com/)
 * A valid SparkPost API Key. Check out our [Support Center](https://support.sparkpost.com/) for information on how to [create API keys](https://support.sparkpost.com/customer/portal/articles/1933377-create-api-keys)
 
 ## Installation
@@ -170,3 +170,5 @@ Once all the dependencies are installed, you can execute the unit tests using `n
 ### ChangeLog
 
 [See ChangeLog here](CHANGELOG.md)
+
+[sparkpost sign up]: https://app.sparkpost.com/sign-up?src=Dev-Website&sfdcid=701600000011daf

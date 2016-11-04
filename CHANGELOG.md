@@ -4,6 +4,31 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
+## [2.0.0] - 2016-11-04 - *breaking*
+- [#188](https://github.com/SparkPost/node-sparkpost/pull/188) Added setting debug in initialization (@aydrian)
+- [#186](https://github.com/SparkPost/node-sparkpost/pull/186) Return full body for sparkpost requests (@aydrian)
+- [#184](https://github.com/SparkPost/node-sparkpost/pull/184) Standardized action verbs on remaining libraries (@aydrian)
+- [#183](https://github.com/SparkPost/node-sparkpost/pull/183) Standardized action verbs for Webhooks (@aydrian)
+- [#181](https://github.com/SparkPost/node-sparkpost/pull/181) Removed toApiFormat (@aydrian)
+- [#177](https://github.com/SparkPost/node-sparkpost/pull/177) Refactored inbound domains library (@aydrian)
+- [#173](https://github.com/SparkPost/node-sparkpost/pull/173) Updated tests and examples for transmissions (@aydrian)
+- [#172](https://github.com/SparkPost/node-sparkpost/pull/172) Refactored subaccounts library (@aydrian)
+- [#171](https://github.com/SparkPost/node-sparkpost/pull/171) Refactored relay webhooks library (@aydrian)
+- [#170](https://github.com/SparkPost/node-sparkpost/pull/170) Refactored webhooks library (@aydrian)
+- [#169](https://github.com/SparkPost/node-sparkpost/pull/169) Refactored templates library (@aydrian)
+- [#168](https://github.com/SparkPost/node-sparkpost/pull/168) Refactored suppression list library (@aydrian)
+- [#167](https://github.com/SparkPost/node-sparkpost/pull/167) Refactored sending domains library (@aydrian)
+- [#166](https://github.com/SparkPost/node-sparkpost/pull/166) Refactored recipient lists library (@aydrian)
+- [#163](https://github.com/SparkPost/node-sparkpost/pull/163) Set options.json=true for GET requests (@aydrian)
+- [#162](https://github.com/SparkPost/node-sparkpost/pull/162) Removed SendGrid Compatibility (@aydrian)
+- [#160](https://github.com/SparkPost/node-sparkpost/pull/160) Switch to using npm scripts instead of grunt (@aydrian)
+- [#159](https://github.com/SparkPost/node-sparkpost/pull/159) Switched JSHint for ESLint with SparkPost config (@aydrian)
+- [#158](https://github.com/SparkPost/node-sparkpost/pull/158) Refactored transmissions library (@aydrian)
+- [#157](https://github.com/SparkPost/node-sparkpost/pull/157) Removed support for nodejs versions .10 & .12 (@aydrian)
+- [#154](https://github.com/SparkPost/node-sparkpost/pull/154) Implement promise support (@aydrian)
+- [#123](https://github.com/SparkPost/node-sparkpost/pull/123) Added json flag to base request and tests to check for JSON response (@aydrian)
+- [#112](https://github.com/SparkPost/node-sparkpost/pull/112) Returns body.results or body as a response. Added debug support. (@aydrian)
+
 ## [1.3.8] - 2016-08-26
 - [#165](https://github.com/SparkPost/node-sparkpost/pull/165) Updated webhook update method to not send id in request (@aydrian)
 
@@ -110,7 +135,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## 0.1.0 - 2014-11-10
 - First Release!
 
-[unreleased]: https://github.com/sparkpost/node-sparkpost/compare/1.3.8...HEAD
+[unreleased]: https://github.com/sparkpost/node-sparkpost/compare/2.0.0...HEAD
+[2.0.0]: https://github.com/sparkpost/node-sparkpost/compare/1.3.8...2.0.0
 [1.3.8]: https://github.com/sparkpost/node-sparkpost/compare/1.3.7...1.3.8
 [1.3.7]: https://github.com/sparkpost/node-sparkpost/compare/1.3.6...1.3.7
 [1.3.6]: https://github.com/sparkpost/node-sparkpost/compare/1.3.5...1.3.6
