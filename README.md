@@ -38,6 +38,10 @@ npm install sparkpost
     * Required: no
     * Type: `String`
     * Default: `v1`
+* `options.stackIdentity`
+    * Required: no
+    * Type: `String`
+    * An optional identifier to include in the User-Agent header. e.g. `product/1.0.0`
 * `options.headers`
     * Required: no
     * Type: `Object`
