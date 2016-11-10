@@ -5,9 +5,11 @@ var chai = require('chai')
   , sinon = require('sinon')
   , zlib = require('zlib')
   , nock = require('nock')
-  , SparkPost = require('../../lib/sparkpost');
+  , SparkPost = require('../../lib/sparkpost')
+  , libVersion = require('../../package.json').version;
 
 chai.use(require('sinon-chai'));
+
 
 describe('SparkPost Library', function() {
 
@@ -79,6 +81,48 @@ describe('SparkPost Library', function() {
     options.debug = true;
     client = new SparkPost(key, options);
     expect(client.debug).to.equal(true);
+  });
+
+  function checkUserAgent(clientOptions, checkFn, done) {
+    let req = {
+        method: 'GET'
+        , uri: 'get/test'
+        , json: true
+        , debug: true
+    }
+    , client;
+
+    nock('https://api.sparkpost.com')
+      .get('/api/v1/get/test')
+      .reply(200, function() {
+        expect(this.req.headers).to.have.property('user-agent');
+        checkFn(this.req.headers['user-agent']);
+        return { ok: true };
+      });
+
+    client = new SparkPost('123456789', clientOptions);
+    client.request(req, done);
+  }
+
+  it('should allow users to self identify in user-agent', function(done) {
+    let options = {
+      stackIdentity: 'phantasmatron/1.1.3.8'
+    }
+    checkUserAgent(options, function(userAgent) {
+      expect(userAgent).to.include(options.stackIdentity);
+    }, done);
+  });
+
+  it('should include lib version in user-agent', function(done) {
+    checkUserAgent({}, function(userAgent) {
+      expect(userAgent).to.include('node-sparkpost/' + libVersion);
+    }, done);
+  });
+
+  it('should include Node.JS version in user-agent', function(done) {
+    checkUserAgent({}, function(userAgent) {
+      expect(userAgent).to.include('node.js/' + process.version);
+    }, done);
   });
 
   describe('request method', function() {
