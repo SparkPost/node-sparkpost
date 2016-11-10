@@ -4,6 +4,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
+## [2.0.1] - 2016-11-10
+### Added
+- Node.js version is now tracked using the User-Agent header by @ewandennis.
+- An optional "stack identifier" that can be set during [initialization](README.md#initialization) so we can track libraries that use node-sparkpost via the User-Agent header by @ewandennis.
+
 ## [2.0.0] - 2016-11-04 - *breaking*
 - [#188](https://github.com/SparkPost/node-sparkpost/pull/188) Added setting debug in initialization (@aydrian)
 - [#186](https://github.com/SparkPost/node-sparkpost/pull/186) Return full body for sparkpost requests (@aydrian)
@@ -135,8 +140,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## 0.1.0 - 2014-11-10
 - First Release!
 
-[unreleased]: https://github.com/sparkpost/node-sparkpost/compare/2.0.0...HEAD
-[2.0.0]: https://github.com/sparkpost/node-sparkpost/compare/1.3.8...2.0.0
+[unreleased]: https://github.com/sparkpost/node-sparkpost/compare/v2.0.1...HEAD
+[2.0.1]: https://github.com/sparkpost/node-sparkpost/compare/v2.0.0...v2.0.1
+[2.0.0]: https://github.com/sparkpost/node-sparkpost/compare/1.3.8...v2.0.0
 [1.3.8]: https://github.com/sparkpost/node-sparkpost/compare/1.3.7...1.3.8
 [1.3.7]: https://github.com/sparkpost/node-sparkpost/compare/1.3.6...1.3.7
 [1.3.6]: https://github.com/sparkpost/node-sparkpost/compare/1.3.5...1.3.6
