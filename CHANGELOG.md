@@ -10,29 +10,26 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - An optional "stack identifier" that can be set during [initialization](README.md#initialization) so we can track libraries that use node-sparkpost via the User-Agent header by @ewandennis.
 
 ## [2.0.0] - 2016-11-04 - *breaking*
-- [#188](https://github.com/SparkPost/node-sparkpost/pull/188) Added setting debug in initialization (@aydrian)
-- [#186](https://github.com/SparkPost/node-sparkpost/pull/186) Return full body for sparkpost requests (@aydrian)
-- [#184](https://github.com/SparkPost/node-sparkpost/pull/184) Standardized action verbs on remaining libraries (@aydrian)
-- [#183](https://github.com/SparkPost/node-sparkpost/pull/183) Standardized action verbs for Webhooks (@aydrian)
-- [#181](https://github.com/SparkPost/node-sparkpost/pull/181) Removed toApiFormat (@aydrian)
-- [#177](https://github.com/SparkPost/node-sparkpost/pull/177) Refactored inbound domains library (@aydrian)
-- [#173](https://github.com/SparkPost/node-sparkpost/pull/173) Updated tests and examples for transmissions (@aydrian)
-- [#172](https://github.com/SparkPost/node-sparkpost/pull/172) Refactored subaccounts library (@aydrian)
-- [#171](https://github.com/SparkPost/node-sparkpost/pull/171) Refactored relay webhooks library (@aydrian)
-- [#170](https://github.com/SparkPost/node-sparkpost/pull/170) Refactored webhooks library (@aydrian)
-- [#169](https://github.com/SparkPost/node-sparkpost/pull/169) Refactored templates library (@aydrian)
-- [#168](https://github.com/SparkPost/node-sparkpost/pull/168) Refactored suppression list library (@aydrian)
-- [#167](https://github.com/SparkPost/node-sparkpost/pull/167) Refactored sending domains library (@aydrian)
-- [#166](https://github.com/SparkPost/node-sparkpost/pull/166) Refactored recipient lists library (@aydrian)
-- [#163](https://github.com/SparkPost/node-sparkpost/pull/163) Set options.json=true for GET requests (@aydrian)
-- [#162](https://github.com/SparkPost/node-sparkpost/pull/162) Removed SendGrid Compatibility (@aydrian)
-- [#160](https://github.com/SparkPost/node-sparkpost/pull/160) Switch to using npm scripts instead of grunt (@aydrian)
-- [#159](https://github.com/SparkPost/node-sparkpost/pull/159) Switched JSHint for ESLint with SparkPost config (@aydrian)
-- [#158](https://github.com/SparkPost/node-sparkpost/pull/158) Refactored transmissions library (@aydrian)
-- [#157](https://github.com/SparkPost/node-sparkpost/pull/157) Removed support for nodejs versions .10 & .12 (@aydrian)
-- [#154](https://github.com/SparkPost/node-sparkpost/pull/154) Implement promise support (@aydrian)
-- [#123](https://github.com/SparkPost/node-sparkpost/pull/123) Added json flag to base request and tests to check for JSON response (@aydrian)
-- [#112](https://github.com/SparkPost/node-sparkpost/pull/112) Returns body.results or body as a response. Added debug support. (@aydrian)
+With this major release, we streamlined and simplified the library making it more of a thin wrapper, adding sugar methods when needed. Parameters are no longer abstracted and are passed directly to the API as laid out in the [official documentation](https://developers.sparkpost.com/api/). Please see the updated [resource docs](/docs/resources) and [examples](/examples). The high level changes have been listed below.
+
+### Added
+- Support for Promises and Callbacks. See [Async Handling](/docs/async.md).
+- Debug option on initialization attaches debug information on response
+
+### Changed
+- Methods return the response body instead of the full response.
+- Standardized methods on all API wrappers. See Issue [#175](https://github.com/SparkPost/node-sparkpost/issues/175).
+- Transmissions `send` method now takes an object of [transmission attributes](https://developers.sparkpost.com/api/transmissions.html#header-transmission-attributes) as the first parameter. Any other options, such as `num_rcpt_errors` has been moved to a second optional `options` parameter.
+- Removed the `toApiFormat` method, parameters are passed directly to the API as snake_case.
+- Now using ESLint with SparkPost config instead of JSLint
+- Now using NPM scripts instead of grunt
+
+### Fixed
+- Responses for `GET` requests are now properly parsed as JSON by @aydrian. Closes [#111](https://github.com/SparkPost/node-sparkpost/issues/111)
+
+### Removed
+- No longer supporting Node.js versions 0.10 & 0.12. We will be following the [LTS Schedule](https://github.com/nodejs/LTS) going forward.
+- Removed SendGrid Compatibility layer.
 
 ## [1.3.8] - 2016-08-26
 - [#165](https://github.com/SparkPost/node-sparkpost/pull/165) Updated webhook update method to not send id in request (@aydrian)
