@@ -10,20 +10,22 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - An optional "stack identifier" that can be set during [initialization](README.md#initialization) so we can track libraries that use node-sparkpost via the User-Agent header by @ewandennis.
 
 ## [2.0.0] - 2016-11-04 - *breaking*
+With this major release, we streamlined and simplified the library making it more of a thin wrapper, adding sugar methods when needed. Parameters are no longer abstracted and are passed directly to the API as laid out in the [official documentation](https://developers.sparkpost.com/api/). Please see the updated [resource docs](/docs/resources) and [examples](/examples). The high level changes have been listed below.
+
 ### Added
-- Support for Promises and Callbacks
-- Debug option on initialization attached debug information on response
+- Support for Promises and Callbacks. See [Async Handling](/docs/async.md).
+- Debug option on initialization attaches debug information on response
 
 ### Changed
-- Methods return `data` comprised of the response body.
-- Standardized methods on all API wrappers. See Issue #175.
+- Methods return the response body instead of the full response.
+- Standardized methods on all API wrappers. See Issue [#175](https://github.com/SparkPost/node-sparkpost/issues/175).
 - Transmissions `send` method now takes an object of [transmission attributes](https://developers.sparkpost.com/api/transmissions.html#header-transmission-attributes) as the first parameter. Any other options, such as `num_rcpt_errors` has been moved to a second optional `options` parameter.
 - Removed the `toApiFormat` method, parameters are passed directly to the API as snake_case.
 - Now using ESLint with SparkPost config instead of JSLint
 - Now using NPM scripts instead of grunt
 
 ### Fixed
-- Responses for `GET` requests are now properly parsed as JSON by @aydrian. Closes #111
+- Responses for `GET` requests are now properly parsed as JSON by @aydrian. Closes [#111](https://github.com/SparkPost/node-sparkpost/issues/111)
 
 ### Removed
 - No longer supporting Node.js versions 0.10 & 0.12. We will be following the [LTS Schedule](https://github.com/nodejs/LTS) going forward.
