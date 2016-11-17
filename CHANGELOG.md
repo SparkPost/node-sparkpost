@@ -16,14 +16,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - Methods return `data` comprised of the response body.
-- Standardized methods on all API wrappers. See Issue [#175](/SparkPost/node-sparkpost/issues/175).
+- Standardized methods on all API wrappers. See Issue #175.
 - Transmissions `send` method now takes an object of [transmission attributes](https://developers.sparkpost.com/api/transmissions.html#header-transmission-attributes) as the first parameter. Any other options, such as `num_rcpt_errors` has been moved to a second optional `options` parameter.
 - Removed the `toApiFormat` method, parameters are passed directly to the API as snake_case.
 - Now using ESLint with SparkPost config instead of JSLint
 - Now using NPM scripts instead of grunt
 
 ### Fixed
-- Responses for `GET` requests are now properly parsed as JSON by @aydrian. Closes [#111](/SparkPost/node-sparkpost/issues/111)
+- Responses for `GET` requests are now properly parsed as JSON by @aydrian. Closes #111
 
 ### Removed
 - No longer supporting Node.js versions 0.10 & 0.12. We will be following the [LTS Schedule](https://github.com/nodejs/LTS) going forward.
