@@ -15,6 +15,8 @@ This library provides easy access to the [Transmissions](https://developers.spar
 * **send(transmission[, options, callback])**<br />
   Sends a message by creating a new transmission
   * `transmission` - an object of [transmission attributes](https://developers.sparkpost.com/api/transmissions#header-transmission-attributes)
+  * `transmission.cc` - Recipients to receive a carbon copy of the transmission
+  * `transmission.bcc` - Recipients to discreetly receive a carbon copy of the transmission
   * `options.num_rcpt_errors` - maximum number of recipient errors returned
 
 ## Examples
