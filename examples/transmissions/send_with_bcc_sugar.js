@@ -13,36 +13,33 @@ var key = 'YOURAPIKEY'
         substitution_data: {
           recipient_type: 'Original'
         }
-      },
+      }
+    ],
+    bcc: [
       {
         address: {
-          email: 'cc.recipient@example.com',
-          name: 'Carbon Copy Recipient',
-          header_to: '"Original Recipient" <original.recipient@example.com>'
+          email: 'bcc.recipient@example.com',
         },
         substitution_data: {
-          recipient_type: 'CC'
+          recipient_type: 'BCC'
         }
       }
     ],
     content: {
       from: {
-        name: 'Node CC Test',
+        name: 'Node BCC Test',
         email: 'from@example.com'
       },
-      headers: {
-        'CC': '"Carbon Copy Recipient" <cc.recipient@example.com>'
-      },
-      subject: 'Example email using cc',
-      text: 'An example email using cc with SparkPost to the {{recipient_type}} recipient.',
-      html: '<p>An example email using cc with SparkPost to the {{recipient_type}} recipient.</p>'
+      subject: 'Example email using bcc',
+      text: 'An example email using bcc with SparkPost to the {{recipient_type}} recipient.',
+      html: '<p>An example email using bcc with SparkPost to the {{recipient_type}} recipient.</p>'
     }
   };
 
 // Promise
 client.transmissions.send(transmission)
   .then(data => {
-    console.log('Congrats! You sent an email with cc using SparkPost!');
+    console.log('Congrats! You sent an email with bcc using SparkPost!');
     console.log(data);
   })
   .catch(err => {
@@ -56,7 +53,7 @@ client.transmissions.send(transmission, function(err, data) {
     console.log('Whoops! Something went wrong');
     console.log(err);
   } else {
-    console.log('Congrats! You sent an email with cc using SparkPost!');
+    console.log('Congrats! You sent an email with bcc using SparkPost!');
     console.log(data);
   }
 });
