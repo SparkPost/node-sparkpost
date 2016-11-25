@@ -9,6 +9,79 @@ require('sinon-as-promised');
 chai.use(require('sinon-chai'));
 chai.use(require('chai-as-promised'));
 
+var ccTransmission = {
+    recipients: [
+      {
+        address: '"Bob" <recipient1@gmail.com>'
+      },
+      {
+        address: {
+          email: 'recipient2@gmail.com',
+          name: 'Bertha',
+        }
+      },
+      {
+        address: {
+          email: 'recipient3@gmail.com'
+        }
+      },
+      {
+        address: 'recipient4@gmail.com'
+      },
+    ],
+    cc: [
+      {
+        address: '"John" <cc1@gmail.com>'
+      },
+      {
+        address: {
+          email: 'cc2@gmail.com',
+          name: 'Jane',
+        }
+      }
+    ],
+    content: {
+      template_id: 'hello-world'
+    }
+  }
+  , ccExpectedRecipients = [
+      {
+        address: {
+          email: 'recipient1@gmail.com',
+          name: 'Bob',
+        }
+      },
+      {
+        address: {
+          email: 'recipient2@gmail.com',
+          name: 'Bertha',
+        }
+      },
+      {
+        address: {
+          email: 'recipient3@gmail.com',
+        }
+      },
+      {
+        address: {
+          email: 'recipient4@gmail.com',
+        }
+      },
+      {
+        address: {
+          email: 'cc1@gmail.com',
+          header_to: '"Bob" <recipient1@gmail.com>, "Bertha" <recipient2@gmail.com>, recipient3@gmail.com, recipient4@gmail.com'
+        }
+      },
+      {
+        address: {
+          email: 'cc2@gmail.com',
+          header_to: '"Bob" <recipient1@gmail.com>, "Bertha" <recipient2@gmail.com>, recipient3@gmail.com, recipient4@gmail.com'
+        }
+      }
+  ]
+  , expectedCCHeader = '"John" <cc1@gmail.com>, "Jane" <cc2@gmail.com>';
+
 describe('Transmissions Library', function() {
   var client, transmissions;
 
@@ -123,6 +196,98 @@ describe('Transmissions Library', function() {
       return transmissions.send(options)
         .then(function() {
           expect(client.post.firstCall.args[0].json.content).to.have.property('email_rfc822');
+        });
+    });
+
+    it('should allow a list_id and template through', function() {
+      var transmission = {
+        recipients: [
+          {
+            list_id: 'my-list-id'
+          }
+        ],
+        content: {
+          template_id: 'my-template-id'
+        }
+      };
+
+      return transmissions.send(transmission)
+        .then(function() {
+          expect(client.post.firstCall.args[0].json).to.deep.equal(transmission);
+        });
+    });
+
+    it('should throw an error due to an invalid string format', function() {
+      var transmission = {
+        recipients: [
+          {
+            address: '"Bob" Im_missing_a_bracket@gmail.com>'
+          }
+        ]
+      };
+
+      expect(function() {
+        transmissions.send(transmission);
+      }).to.throw(Error);
+    });
+
+    it('should convert cc to the correct recipients and headers', function() {
+      return transmissions.send(ccTransmission)
+        .then(function() {
+          expect(client.post.firstCall.args[0].json.recipients).to.deep.equal(ccExpectedRecipients);
+          expect(client.post.firstCall.args[0].json.content.headers.CC).to.deep.equal(expectedCCHeader);
+        });
+    });
+
+    it('should convert bcc to the correct recipients and headers', function() {
+      var bccTransmission = ccTransmission
+        , bccExpectedRecipients = ccExpectedRecipients;
+      bccTransmission['bcc'] = bccTransmission['cc'];
+      delete bccTransmission['cc'];
+
+      return transmissions.send(bccTransmission)
+        .then(function() {
+          expect(client.post.firstCall.args[0].json.recipients).to.deep.equal(bccExpectedRecipients);
+          expect(client.post.firstCall.args[0].json.content.headers).to.be.undefined;
+        });
+    });
+
+    it('should not modify a transmission using the full cc/bcc syntax', function() {
+      var transmission = {
+        recipients: [
+          {
+            address: {
+              email: 'original.recipient@example.com',
+              name: 'Original Recipient'
+            },
+            substitution_data: {
+              recipient_type: 'Original'
+            }
+          },
+          {
+            address: {
+              email: 'bcc.recipient@example.com',
+              header_to: '"Original Recipient" <original.recipient@example.com>'
+            },
+            substitution_data: {
+              recipient_type: 'BCC'
+            }
+          }
+        ],
+        content: {
+          from: {
+            name: 'Node BCC Test',
+            email: 'from@example.com'
+          },
+          subject: 'Example email using bcc',
+          text: 'An example email using bcc with SparkPost to the {{recipient_type}} recipient.',
+          html: '<p>An example email using bcc with SparkPost to the {{recipient_type}} recipient.</p>'
+        }
+      };
+
+      return transmissions.send(transmission)
+        .then(function() {
+          expect(client.post.firstCall.args[0].json).to.deep.equal(transmission);
         });
     });
   });
