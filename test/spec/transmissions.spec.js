@@ -201,11 +201,9 @@ describe('Transmissions Library', function() {
 
     it('should allow a list_id and template through', function() {
       var transmission = {
-        recipients: [
-          {
-            list_id: 'my-list-id'
-          }
-        ],
+        recipients: {
+          list_id: 'my-list-id'
+        },
         content: {
           template_id: 'my-template-id'
         }
@@ -217,19 +215,6 @@ describe('Transmissions Library', function() {
         });
     });
 
-    it('should throw an error due to an invalid string format', function() {
-      var transmission = {
-        recipients: [
-          {
-            address: '"Bob" Im_missing_a_bracket@gmail.com>'
-          }
-        ]
-      };
-
-      expect(function() {
-        transmissions.send(transmission);
-      }).to.throw(Error);
-    });
 
     it('should convert cc to the correct recipients and headers', function() {
       return transmissions.send(ccTransmission)
