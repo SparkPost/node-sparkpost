@@ -58,6 +58,15 @@ describe('Templates Library', function() {
           expect(client.get.firstCall.args[0].qs).to.deep.equal({draft: true});
         });
     });
+
+    it('should work given just an id and callback', function() {
+      var id = 'test';
+
+      return templates.get(id, function() {
+        expect(client.get.firstCall.args[0].uri).to.contain(id);
+        expect(client.get.firstCall.args[0].qs).to.deep.equal({});
+      });
+    });
   });
 
   describe('create Method', function() {
