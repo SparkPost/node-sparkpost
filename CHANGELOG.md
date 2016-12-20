@@ -4,6 +4,18 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
+## [2.1.0] - 2016-12-20
+### Added
+- You can now add recipients to CC and BCC using sugar methods by @avrahamgoldman. See the updated [transmissions documentation](/docs/resources/transmissions.md) and [CC](/examples/transmissions/send_with_cc_sugar.js)/[BCC](/examples/transmissions/send_with_bcc_sugar.js) examples.
+
+### Changed
+- Updated the following npm packages: coveralls, eslint, eslint-config-sparkpost, mocha, lodash, and request by @aydrian.
+- Resolved new linting issues from eslint-config-sparkpost update by @avrahamgoldman.
+
+### Fixed
+- The options parameter on the `transmissions.send()` method is now optional if you're using a callback function by @avrahamgoldman.
+- The options parameter on the  `templates.get()` method is now optional if you're using a callback function by @avrahamgoldman.
+
 ## [2.0.1] - 2016-11-10
 ### Added
 - Node.js version is now tracked using the User-Agent header by @ewandennis.
@@ -137,7 +149,8 @@ With this major release, we streamlined and simplified the library making it mor
 ## 0.1.0 - 2014-11-10
 - First Release!
 
-[unreleased]: https://github.com/sparkpost/node-sparkpost/compare/v2.0.1...HEAD
+[unreleased]: https://github.com/sparkpost/node-sparkpost/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/sparkpost/node-sparkpost/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/sparkpost/node-sparkpost/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/sparkpost/node-sparkpost/compare/1.3.8...v2.0.0
 [1.3.8]: https://github.com/sparkpost/node-sparkpost/compare/1.3.7...1.3.8
