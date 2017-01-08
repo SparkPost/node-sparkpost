@@ -215,6 +215,31 @@ describe('Transmissions Library', function() {
         });
     });
 
+    it('should ignore empty bcc and cc', function() {
+      var transmission = {
+        recipients: [
+          {
+            address: {
+              name: "Bob",
+              email: "recipient1@gmail.com"
+            }
+          },
+        ],
+        cc: [],
+        bcc: [],
+        content: {
+          template_id: 'my-template-id'
+        }
+      };
+
+      return transmissions.send(transmission)
+        .then(function() {
+          delete transmission.cc;
+          delete transmission.bcc;
+
+          expect(client.post.firstCall.args[0].json).to.deep.equal(transmission);
+        });
+    });
 
     it('should convert cc to the correct recipients and headers', function() {
       return transmissions.send(ccTransmission)
