@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
+### Fixed
+- Empty CC sugar method no longer triggers an API error.
 
 ## [2.1.0] - 2016-12-20
 ### Added
