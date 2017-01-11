@@ -3,8 +3,13 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
+
+## [2.1.1] - 2017-01-11
+### Changed
+- Removed our addition to the native Promise prototype in favor of a bluebird-inspired callback-wrapping function. See Issue [#199](https://github.com/SparkPost/node-sparkpost/issues/199). Thanks @danieljuhl.
+
 ### Fixed
-- Empty CC sugar method no longer triggers an API error.
+- Empty CC sugar method no longer triggers an API error by @avrahamgoldman.
 
 ## [2.1.0] - 2016-12-20
 ### Added
@@ -151,7 +156,8 @@ With this major release, we streamlined and simplified the library making it mor
 ## 0.1.0 - 2014-11-10
 - First Release!
 
-[unreleased]: https://github.com/sparkpost/node-sparkpost/compare/v2.1.0...HEAD
+[unreleased]: https://github.com/sparkpost/node-sparkpost/compare/v2.1.1...HEAD
+[2.1.1]: https://github.com/sparkpost/node-sparkpost/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/sparkpost/node-sparkpost/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/sparkpost/node-sparkpost/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/sparkpost/node-sparkpost/compare/1.3.8...v2.0.0
