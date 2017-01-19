@@ -21,31 +21,27 @@ describe('Subaccounts Library', function() {
       reject: SparkPost.prototype.reject
     };
 
-    callback = sinon.stub();
+    callback = function() {};
 
     subaccounts = require('../../lib/subaccounts')(client);
   });
 
   describe('list Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      client.get.yields();
-
       return subaccounts.list(callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('subaccounts');
-          expect(callback.callCount).to.equal(1);
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
   });
 
   describe('get Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      client.get.yields();
-
       return subaccounts.get('test', callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('subaccounts/test');
-          expect(callback.callCount).to.equal(1);
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -56,8 +52,6 @@ describe('Subaccounts Library', function() {
 
   describe('create Method', function() {
     it('should call client post method with the appropriate uri and payload', function() {
-      client.post.yields();
-
       var subaccount = {
         name: 'test',
         key_label: 'test',
@@ -68,7 +62,7 @@ describe('Subaccounts Library', function() {
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('subaccounts');
           expect(client.post.firstCall.args[0].json).to.deep.equal(subaccount);
-          expect(callback.callCount).to.equal(1);
+          expect(client.post.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -79,8 +73,6 @@ describe('Subaccounts Library', function() {
 
   describe('update Method', function() {
     it('should call client put method with the appropriate uri and payload', function() {
-      client.put.yields();
-
       var subaccount = {
         name: 'Hey Joe! Garage and Parts',
         status: 'suspended',
@@ -91,7 +83,7 @@ describe('Subaccounts Library', function() {
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('subaccounts/test');
           expect(client.put.firstCall.args[0].json).to.deep.equal(subaccount);
-          expect(callback.callCount).to.equal(1);
+          expect(client.put.firstCall.args[1]).to.equal(callback);
         });
     });
 

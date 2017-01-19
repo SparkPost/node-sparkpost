@@ -22,31 +22,27 @@ describe('Suppression List Library', function() {
       reject: SparkPost.prototype.reject
     };
 
-    callback = sinon.stub();
+    callback = function() {};
 
     suppressionList = require('../../lib/suppressionList')(client);
   });
 
   describe('list', function() {
     it('should call client get method with the appropriate uri', function() {
-      client.get.yields();
-
       return suppressionList.list({limit: 5}, callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('suppression-list');
-          expect(callback.callCount).to.equal(1);
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
   });
 
   describe('get', function() {
     it('should call client get method with the appropriate uri', function() {
-      client.get.yields();
-
       return suppressionList.get('test@test.com', callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('suppression-list/test@test.com');
-          expect(callback.callCount).to.equal(1);
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -57,15 +53,13 @@ describe('Suppression List Library', function() {
 
   describe('upsert', function() {
     it('should accept a single list entry', function() {
-      client.put.yields();
-
       var listEntry = { email: 'test@test.com' };
 
       return suppressionList.upsert(listEntry, callback)
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('suppression-list');
           expect(client.put.firstCall.args[0].json.recipients).to.deep.equal([listEntry]);
-          expect(callback.callCount).to.equal(1);
+          expect(client.put.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -89,12 +83,10 @@ describe('Suppression List Library', function() {
 
   describe('delete', function() {
     it('should call client delete method with the appropriate uri', function() {
-      client.delete.yields();
-
       return suppressionList.delete('test@test.com', callback)
         .then(function() {
           expect(client.delete.firstCall.args[0].uri).to.equal('suppression-list/test@test.com');
-          expect(callback.callCount).to.equal(1);
+          expect(client.delete.firstCall.args[1]).to.equal(callback);
         });
     });
 

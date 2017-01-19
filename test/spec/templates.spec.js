@@ -22,32 +22,28 @@ describe('Templates Library', function() {
       reject: SparkPost.prototype.reject
     };
 
-    callback = sinon.stub();
+    callback = function() {};
 
     templates = require('../../lib/templates')(client);
   });
 
   describe('list Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      client.get.yields();
-
       return templates.list(callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('templates');
-          expect(callback.callCount).to.equal(1);
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
   });
 
   describe('get Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      client.get.yields();
-
       var id = 'test';
       return templates.get(id, callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('templates/test');
-          expect(callback.callCount).to.equal(1);
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -71,8 +67,6 @@ describe('Templates Library', function() {
 
   describe('create Method', function() {
     it('should call client post method with the appropriate uri and payload', function() {
-      client.post.yields();
-
       var template = {
         id: 'test'
       };
@@ -81,7 +75,7 @@ describe('Templates Library', function() {
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('templates');
           expect(client.post.firstCall.args[0].json).to.deep.equal(template);
-          expect(callback.callCount).to.equal(1);
+          expect(client.post.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -92,8 +86,6 @@ describe('Templates Library', function() {
 
   describe('update Method', function() {
     it('should call client put method with the appropriate uri and payload', function() {
-      client.put.yields();
-
       var id = 'test'
         , template = {
           name: 'A new name!'
@@ -103,7 +95,7 @@ describe('Templates Library', function() {
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('templates/test');
           expect(client.put.firstCall.args[0].json).to.deep.equal(template);
-          expect(callback.callCount).to.equal(1);
+          expect(client.put.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -147,12 +139,10 @@ describe('Templates Library', function() {
 
   describe('delete Method', function() {
     it('should call client delete method with the appropriate uri', function() {
-      client.delete.yields();
-
       return templates.delete('test', callback)
         .then(function() {
           expect(client.delete.firstCall.args[0].uri).to.equal('templates/test');
-          expect(callback.callCount).to.equal(1);
+          expect(client.delete.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -163,8 +153,6 @@ describe('Templates Library', function() {
 
   describe('preview Method', function() {
     it('should call client post method with the appropriate uri and payload', function() {
-      client.post.yields();
-
       var id = 'test'
         , options = {
           substitution_data: {
@@ -177,7 +165,7 @@ describe('Templates Library', function() {
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('templates/test/preview');
           expect(client.post.firstCall.args[0].json).to.deep.equal(options);
-          expect(callback.callCount).to.equal(1);
+          expect(client.post.firstCall.args[1]).to.equal(callback);
         });
     });
 

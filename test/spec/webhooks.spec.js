@@ -23,19 +23,17 @@ describe('Webhooks Library', function() {
       reject: SparkPost.prototype.reject
     };
 
-    callback = sinon.stub();
+    callback = function() {};
 
     webhooks = require('../../lib/webhooks')(client);
   });
 
   describe('list Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      client.get.yields();
-
       return webhooks.list(callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks');
-          expect(callback.callCount).to.equal(1);
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -53,12 +51,10 @@ describe('Webhooks Library', function() {
 
   describe('get Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      client.get.yields();
-
       return webhooks.get('test', callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks/test');
-          expect(callback.callCount).to.equal(1);
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -80,8 +76,6 @@ describe('Webhooks Library', function() {
 
   describe('create Method', function() {
     it('should call client post method with the appropriate uri and payload', function() {
-      client.post.yields()
-
       var webhook = {
         name: 'Example webhook',
         target: 'http://client.example.com/example-webhook',
@@ -92,7 +86,7 @@ describe('Webhooks Library', function() {
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('webhooks');
           expect(client.post.firstCall.args[0].json).to.deep.equal(webhook);
-          expect(callback.callCount).to.equal(1);
+          expect(client.post.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -103,8 +97,6 @@ describe('Webhooks Library', function() {
 
   describe('update Method', function() {
     it('should call client put method with the appropriate uri', function() {
-      client.put.yields();
-
       var webhook = {
         name: 'Renamed webhook',
         events: ['rejection', 'delay'],
@@ -115,7 +107,7 @@ describe('Webhooks Library', function() {
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('webhooks/test');
           expect(client.put.firstCall.args[0].json).to.deep.equal(webhook);
-          expect(callback.callCount).to.equal(1);
+          expect(client.put.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -130,12 +122,10 @@ describe('Webhooks Library', function() {
 
   describe('delete Method', function() {
     it('should call client delete method with the appropriate uri', function() {
-      client.delete.yields();
-
       return webhooks.delete('test', callback)
         .then(function() {
           expect(client.delete.firstCall.args[0].uri).to.equal('webhooks/test');
-          expect(callback.callCount).to.equal(1);
+          expect(client.delete.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -146,8 +136,6 @@ describe('Webhooks Library', function() {
 
   describe('validate Method', function() {
     it('should call client post method with the appropriate uri and payload', function() {
-      client.post.yields();
-
       var options = {
         message: {
           msys: {}
@@ -158,7 +146,7 @@ describe('Webhooks Library', function() {
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('webhooks/test/validate');
           expect(client.post.firstCall.args[0].json).to.deep.equal(options);
-          expect(callback.callCount).to.equal(1);
+          expect(client.post.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -173,12 +161,10 @@ describe('Webhooks Library', function() {
 
   describe('getBatchStatus Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      client.get.yields();
-
       return webhooks.getBatchStatus('test', callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks/test/batch-status');
-          expect(callback.callCount).to.equal(1);
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -200,24 +186,20 @@ describe('Webhooks Library', function() {
 
   describe('getDocumentation Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      client.get.yields();
-
       return webhooks.getDocumentation(callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks/events/documentation');
-          expect(callback.callCount).to.equal(1);
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
   });
 
   describe('getSamples Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      client.get.yields();
-
       return webhooks.getSamples(callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks/events/samples');
-          expect(callback.callCount).to.equal(1);
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
 

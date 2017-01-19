@@ -92,19 +92,17 @@ describe('Transmissions Library', function() {
       reject: SparkPost.prototype.reject
     };
 
-    callback = sinon.stub();
+    callback = function() {};
 
     transmissions = require('../../lib/transmissions')(client);
   });
 
   describe('list Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      client.get.yields();
-
       return transmissions.list(callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('transmissions');
-          expect(callback.callCount).to.equal(1);
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -133,12 +131,10 @@ describe('Transmissions Library', function() {
 
   describe('find Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      client.get.yields();
-
       return transmissions.get('test', callback)
         .then(function() {
           expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'transmissions/test'});
-          expect(callback.callCount).to.equal(1);
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -149,8 +145,6 @@ describe('Transmissions Library', function() {
 
   describe('send Method', function() {
     it('should call client post method with the appropriate uri and payload', function() {
-      client.post.yields();
-
       var transmission = {
         campaign_id: 'test-campaign'
       };
@@ -159,7 +153,7 @@ describe('Transmissions Library', function() {
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('transmissions');
           expect(client.post.firstCall.args[0].json).to.deep.equal(transmission);
-          expect(callback.callCount).to.equal(1);
+          expect(client.post.firstCall.args[1]).to.equal(callback);
         });
     });
 

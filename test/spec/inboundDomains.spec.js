@@ -21,31 +21,28 @@ describe('Inbound Domains Library', function() {
       reject: SparkPost.prototype.reject
     };
 
-    callback = sinon.stub();
+    callback = function() {};
 
     inboundDomains = require('../../lib/inboundDomains')(client);
   });
 
   describe('list Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      client.get.yields();
 
       return inboundDomains.list(callback)
         .then(function() {
           expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'inbound-domains'});
-          expect(callback.callCount).to.equal(1);
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
   });
 
   describe('get Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      client.get.yields();
-
       return inboundDomains.get('test', callback)
         .then(function() {
           expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'inbound-domains/test'});
-          expect(callback.callCount).to.equal(1);
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -57,14 +54,12 @@ describe('Inbound Domains Library', function() {
 
   describe('create Method', function() {
     it('should call client post method with the appropriate uri and payload', function() {
-      client.post.yields();
-
       let createOpts = {domain: 'test'};
       return inboundDomains.create(createOpts, callback)
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('inbound-domains');
           expect(client.post.firstCall.args[0].json).to.deep.equal(createOpts);
-          expect(callback.callCount).to.equal(1);
+          expect(client.post.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -75,12 +70,10 @@ describe('Inbound Domains Library', function() {
 
   describe('delete Method', function() {
     it('should call client delete method with the appropriate uri', function() {
-      client.delete.yields();
-
       return inboundDomains.delete('test', callback)
         .then(function () {
           expect(client.delete.firstCall.args[0].uri).to.equal('inbound-domains/test');
-          expect(callback.callCount).to.equal(1);
+          expect(client.delete.firstCall.args[1]).to.equal(callback);
         });
     });
 

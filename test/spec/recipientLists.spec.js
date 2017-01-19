@@ -23,7 +23,7 @@ describe('Recipient Lists Library', function() {
       reject: SparkPost.prototype.reject
     };
 
-    callback = sinon.stub();
+    callback = function() {};
 
     recipientLists = require('../../lib/recipientLists')(client);
   });
@@ -31,12 +31,10 @@ describe('Recipient Lists Library', function() {
   describe('list', function() {
 
     it('should call client get method with the appropriate uri', function() {
-      client.get.yields();
-
       return recipientLists.list(callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('recipient-lists');
-          expect(callback.callCount).to.equal(1);
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
   });
@@ -44,12 +42,10 @@ describe('Recipient Lists Library', function() {
   describe('get', function() {
 
     it('should call client get method with the appropriate uri', function() {
-      client.get.yields();
-
       return recipientLists.get('test-id', callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('recipient-lists/test-id');
-          expect(callback.callCount).to.equal(1);
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -58,8 +54,9 @@ describe('Recipient Lists Library', function() {
     });
 
     it('should not throw an error if optional 2nd argument is a function (callback)', function() {
-      client.get.yields();
       let cb = sinon.stub();
+
+      client.get.yields();
 
       return recipientLists.get('test-id', cb).then(() => {
         expect(cb.callCount).to.equal(1);
@@ -82,8 +79,6 @@ describe('Recipient Lists Library', function() {
   describe('create', function() {
 
     it('should call client post method with the appropriate uri and payload', function() {
-      client.post.yields();
-
       let testList = {
         id: 'test_list',
         recipients: [
@@ -100,7 +95,7 @@ describe('Recipient Lists Library', function() {
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('recipient-lists');
           expect(client.post.firstCall.args[0].json).to.deep.equal(testList);
-          expect(callback.callCount).to.equal(1);
+          expect(client.post.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -137,8 +132,6 @@ describe('Recipient Lists Library', function() {
   describe('update', function() {
 
     it('should call client put method with the appropriate uri and payload', function() {
-      client.put.yields();
-
       const testList = {
         recipients: [
           {
@@ -155,7 +148,7 @@ describe('Recipient Lists Library', function() {
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('recipient-lists/' + testId);
           expect(client.put.firstCall.args[0].json).to.deep.equal(testList);
-          expect(callback.callCount).to.equal(1);
+          expect(client.put.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -191,12 +184,10 @@ describe('Recipient Lists Library', function() {
   describe('delete', function() {
 
     it('should call client delete method with the appropriate uri', function() {
-      client.delete.yields();
-
       return recipientLists.delete('test', callback)
         .then(function() {
           expect(client.delete.firstCall.args[0].uri).to.equal('recipient-lists/test');
-          expect(callback.callCount).to.equal(1);
+          expect(client.delete.firstCall.args[1]).to.equal(callback);
         });
     });
 

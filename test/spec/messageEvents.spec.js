@@ -17,15 +17,13 @@ describe('Message Events Library', function() {
       get: sinon.stub().resolves({})
     };
 
-    callback = sinon.stub();
+    callback = function() {};
 
     messageEvents = require('../../lib/messageEvents')(client);
   });
 
   describe('search Method', function() {
     it('should call client get method with the appropriate parameters', function() {
-      client.get.yields();
-
       var options = {
         bounce_classes: '10,50',
         campaign_ids: 'test_campaign',
@@ -47,7 +45,7 @@ describe('Message Events Library', function() {
           Object.keys(options).forEach(function(key) {
             expect(client.get.firstCall.args[0].qs).to.have.property(key).and.equal(options[key]);
           });
-          expect(callback.callCount).to.equal(1);
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
 

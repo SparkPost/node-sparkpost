@@ -22,31 +22,27 @@ describe('Relay Webhooks Library', function() {
       reject: SparkPost.prototype.reject
     };
 
-    callback = sinon.stub();
+    callback = function() {};
 
     relayWebhooks = require('../../lib/relayWebhooks')(client);
   });
 
   describe('list Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      client.get.yields();
-
       return relayWebhooks.list(callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('relay-webhooks');
-          expect(callback.callCount).to.equal(1);
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
   });
 
   describe('get Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      client.get.yields();
-
       return relayWebhooks.get('test', callback)
         .then(function() {
           expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'relay-webhooks/test'});
-          expect(callback.callCount).to.equal(1);
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -57,8 +53,6 @@ describe('Relay Webhooks Library', function() {
 
   describe('create Method', function() {
     it('should call client post method with the appropriate uri and payload', function() {
-      client.post.yields();
-
       let webhook = {
         target: 'test',
         domain: 'inbound.example.com'
@@ -68,7 +62,7 @@ describe('Relay Webhooks Library', function() {
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('relay-webhooks');
           expect(client.post.firstCall.args[0].json).to.deep.equal(webhook);
-          expect(callback.callCount).to.equal(1);
+          expect(client.post.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -79,8 +73,6 @@ describe('Relay Webhooks Library', function() {
 
   describe('update Method', function() {
     it('should call client put method with the appropriate uri and payload', function() {
-      client.put.yields();
-
       let webhook = {
         name: 'New Replies Webhook'
       };
@@ -89,7 +81,7 @@ describe('Relay Webhooks Library', function() {
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('relay-webhooks/test');
           expect(client.put.firstCall.args[0].json).to.deep.equal(webhook);
-          expect(callback.callCount).to.equal(1);
+          expect(client.put.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -104,12 +96,10 @@ describe('Relay Webhooks Library', function() {
 
   describe('delete Method', function() {
     it('should call client delete method with the appropriate uri', function() {
-      client.delete.yields();
-
       return relayWebhooks.delete('test', callback)
         .then(function() {
           expect(client.delete.firstCall.args[0].uri).to.equal('relay-webhooks/test');
-          expect(callback.callCount).to.equal(1);
+          expect(client.delete.firstCall.args[1]).to.equal(callback);
         });
     });
 
