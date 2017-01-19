@@ -50,6 +50,9 @@ describe('Recipient Lists Library', function() {
 
     it('should not throw an error if optional 2nd argument is a function (callback)', function() {
       let cb = sinon.stub();
+
+      client.get.yields();
+
       return recipientLists.get('test-id', cb).then(() => {
         expect(cb.callCount).to.equal(1);
       });

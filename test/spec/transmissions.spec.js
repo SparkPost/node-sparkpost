@@ -103,6 +103,8 @@ describe('Transmissions Library', function() {
     });
 
     it('should call client get method with the appropriate uri using callback', function(done) {
+      client.get.yields();
+
       transmissions.list(function() {
         expect(client.get.firstCall.args[0].uri).to.equal('transmissions');
         done();
@@ -181,6 +183,9 @@ describe('Transmissions Library', function() {
         , transmission = {
           campaign_id: 'test-campaign'
         };
+
+      client.post.yields();
+
       return transmissions.send(transmission, cb).then(function() {
         expect(cb.callCount).to.equal(1);
       });

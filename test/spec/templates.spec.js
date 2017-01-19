@@ -1,5 +1,4 @@
 'use strict';
-
 var _ = require('lodash')
   , chai = require('chai')
   , expect = chai.expect
@@ -115,6 +114,9 @@ describe('Templates Library', function() {
         , template = {
           name: 'A new name!'
         };
+
+      client.put.yields();
+
       return templates.update(id, template, cb).then(function() {
         expect(cb.callCount).to.equal(1);
       });
@@ -172,6 +174,9 @@ describe('Templates Library', function() {
 
     it('should not throw an error if optional 2nd argument is a function (callback)', function() {
       let cb = sinon.stub();
+
+      client.post.yields();
+
       return templates.preview('test', cb).then(function() {
         expect(cb.callCount).to.equal(1);
       });

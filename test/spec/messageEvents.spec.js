@@ -2,8 +2,7 @@
 
 var chai = require('chai')
   , expect = chai.expect
-  , sinon = require('sinon')
-  , Promise = require('../../lib/Promise');
+  , sinon = require('sinon');
 
 require('sinon-as-promised');
 
