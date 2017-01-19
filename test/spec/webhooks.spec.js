@@ -12,7 +12,7 @@ chai.use(require('sinon-chai'));
 chai.use(require('chai-as-promised'));
 
 describe('Webhooks Library', function() {
-  var client, webhooks;
+  var client, webhooks, callback;
 
   beforeEach(function() {
     client = {
@@ -23,14 +23,19 @@ describe('Webhooks Library', function() {
       reject: SparkPost.prototype.reject
     };
 
+    callback = sinon.stub();
+
     webhooks = require('../../lib/webhooks')(client);
   });
 
   describe('list Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return webhooks.list()
+      client.get.yields();
+
+      return webhooks.list(callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks');
+          expect(callback.callCount).to.equal(1);
         });
     });
 
@@ -44,32 +49,17 @@ describe('Webhooks Library', function() {
           expect(client.get.firstCall.args[0].qs).to.deep.equal({timezone: 'America/New_York'});
         });
     });
-
-    it('should call the callback once', function() {
-      client.get.yields();
-      let cb = sinon.stub();
-
-      return webhooks.list(cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
-    });
   });
 
   describe('get Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return webhooks.get('test')
+      client.get.yields();
+
+      return webhooks.get('test', callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks/test');
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.get.yields();
-      let cb = sinon.stub();
-
-      return webhooks.get('test', cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
 
     it('should throw an error if id is missing', function() {
@@ -90,26 +80,20 @@ describe('Webhooks Library', function() {
 
   describe('create Method', function() {
     it('should call client post method with the appropriate uri and payload', function() {
+      client.post.yields()
+
       var webhook = {
         name: 'Example webhook',
         target: 'http://client.example.com/example-webhook',
         events: ['delivery', 'injection', 'open', 'click']
       };
 
-      return webhooks.create(webhook)
+      return webhooks.create(webhook, callback)
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('webhooks');
           expect(client.post.firstCall.args[0].json).to.deep.equal(webhook);
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.post.yields();
-      let cb = sinon.stub();
-
-      return webhooks.create({}, cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
 
     it('should throw an error if webhook is missing', function() {
@@ -119,26 +103,20 @@ describe('Webhooks Library', function() {
 
   describe('update Method', function() {
     it('should call client put method with the appropriate uri', function() {
+      client.put.yields();
+
       var webhook = {
         name: 'Renamed webhook',
         events: ['rejection', 'delay'],
         auth_type: 'none'
       };
 
-      return webhooks.update('test', webhook)
+      return webhooks.update('test', webhook, callback)
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('webhooks/test');
           expect(client.put.firstCall.args[0].json).to.deep.equal(webhook);
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.put.yields();
-      let cb = sinon.stub();
-
-      return webhooks.update('id', {}, cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
 
     it('should throw an error if id is missing', function() {
@@ -152,19 +130,13 @@ describe('Webhooks Library', function() {
 
   describe('delete Method', function() {
     it('should call client delete method with the appropriate uri', function() {
-      return webhooks.delete('test')
+      client.delete.yields();
+
+      return webhooks.delete('test', callback)
         .then(function() {
           expect(client.delete.firstCall.args[0].uri).to.equal('webhooks/test');
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.delete.yields();
-      let cb = sinon.stub();
-
-      return webhooks.delete('id', cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
 
     it('should throw an error if id is missing', function() {
@@ -174,26 +146,20 @@ describe('Webhooks Library', function() {
 
   describe('validate Method', function() {
     it('should call client post method with the appropriate uri and payload', function() {
+      client.post.yields();
+
       var options = {
         message: {
           msys: {}
         }
       };
 
-      return webhooks.validate('test', options)
+      return webhooks.validate('test', options, callback)
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('webhooks/test/validate');
           expect(client.post.firstCall.args[0].json).to.deep.equal(options);
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.post.yields();
-      let cb = sinon.stub();
-
-      return webhooks.validate('id', { message: {} }, cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
 
     it('should throw an error if id is missing', function() {
@@ -207,19 +173,13 @@ describe('Webhooks Library', function() {
 
   describe('getBatchStatus Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return webhooks.getBatchStatus('test')
+      client.get.yields();
+
+      return webhooks.getBatchStatus('test', callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks/test/batch-status');
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.get.yields();
-      let cb = sinon.stub();
-
-      return webhooks.getBatchStatus('test', cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
 
     it('should throw an error if id is missing', function() {
@@ -240,27 +200,24 @@ describe('Webhooks Library', function() {
 
   describe('getDocumentation Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return webhooks.getDocumentation()
+      client.get.yields();
+
+      return webhooks.getDocumentation(callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks/events/documentation');
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-     it('should call the callback once', function() {
-      client.get.yields();
-      let cb = sinon.stub();
-
-      return webhooks.getDocumentation(cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
   });
 
   describe('getSamples Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return webhooks.getSamples()
+      client.get.yields();
+
+      return webhooks.getSamples(callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks/events/samples');
+          expect(callback.callCount).to.equal(1);
         });
     });
 
@@ -273,15 +230,6 @@ describe('Webhooks Library', function() {
         .then(function() {
           expect(client.get.firstCall.args[0].qs).to.deep.equal({events: 'bounces'});
         });
-    });
-
-    it('should call the callback once', function() {
-      client.get.yields();
-      let cb = sinon.stub();
-
-      return webhooks.getSamples(cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
   });
 });

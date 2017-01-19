@@ -11,7 +11,7 @@ chai.use(require('sinon-chai'));
 chai.use(require('chai-as-promised'));
 
 describe('Templates Library', function() {
-  var client, templates;
+  var client, templates, callback;
 
   beforeEach(function() {
     client = {
@@ -22,43 +22,33 @@ describe('Templates Library', function() {
       reject: SparkPost.prototype.reject
     };
 
+    callback = sinon.stub();
+
     templates = require('../../lib/templates')(client);
   });
 
   describe('list Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return templates.list()
+      client.get.yields();
+
+      return templates.list(callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('templates');
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.get.yields();
-      let cb = sinon.stub();
-
-      return templates.list(cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
   });
 
   describe('get Method', function() {
     it('should call client get method with the appropriate uri', function() {
+      client.get.yields();
+
       var id = 'test';
-      return templates.get(id)
+      return templates.get(id, callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('templates/test');
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.get.yields();
-      let cb = sinon.stub();
-
-      return templates.get('test', cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
 
     it('should throw an error if id is missing', function() {
@@ -77,37 +67,22 @@ describe('Templates Library', function() {
           expect(client.get.firstCall.args[0].qs).to.deep.equal({draft: true});
         });
     });
-
-    it('should work given just an id and callback', function() {
-      var id = 'test';
-
-      return templates.get(id, function() {
-        expect(client.get.firstCall.args[0].uri).to.contain(id);
-        expect(client.get.firstCall.args[0].qs).to.deep.equal({});
-      });
-    });
   });
 
   describe('create Method', function() {
     it('should call client post method with the appropriate uri and payload', function() {
+      client.post.yields();
+
       var template = {
         id: 'test'
       };
 
-      return templates.create(template)
+      return templates.create(template, callback)
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('templates');
           expect(client.post.firstCall.args[0].json).to.deep.equal(template);
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.post.yields();
-      let cb = sinon.stub();
-
-      return templates.create({}, cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
 
     it('should throw an error if template object is missing', function() {
@@ -117,25 +92,19 @@ describe('Templates Library', function() {
 
   describe('update Method', function() {
     it('should call client put method with the appropriate uri and payload', function() {
+      client.put.yields();
+
       var id = 'test'
         , template = {
           name: 'A new name!'
         };
 
-      return templates.update(id, template)
+      return templates.update(id, template, callback)
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('templates/test');
           expect(client.put.firstCall.args[0].json).to.deep.equal(template);
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.put.yields();
-      let cb = sinon.stub();
-
-      return templates.update('id', {}, cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
 
     it('should throw an error if template id is missing', function() {
@@ -178,19 +147,13 @@ describe('Templates Library', function() {
 
   describe('delete Method', function() {
     it('should call client delete method with the appropriate uri', function() {
-      return templates.delete('test')
+      client.delete.yields();
+
+      return templates.delete('test', callback)
         .then(function() {
           expect(client.delete.firstCall.args[0].uri).to.equal('templates/test');
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.delete.yields();
-      let cb = sinon.stub();
-
-      return templates.delete('id', cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
 
     it('should throw an error if id is missing', function() {
@@ -200,6 +163,8 @@ describe('Templates Library', function() {
 
   describe('preview Method', function() {
     it('should call client post method with the appropriate uri and payload', function() {
+      client.post.yields();
+
       var id = 'test'
         , options = {
           substitution_data: {
@@ -208,20 +173,12 @@ describe('Templates Library', function() {
             'member': true
           }
         };
-      return templates.preview(id, options)
+      return templates.preview(id, options, callback)
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('templates/test/preview');
           expect(client.post.firstCall.args[0].json).to.deep.equal(options);
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.post.yields();
-      let cb = sinon.stub();
-
-      return templates.preview('id', {}, cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
 
     it('should throw an error if id is missing', function() {

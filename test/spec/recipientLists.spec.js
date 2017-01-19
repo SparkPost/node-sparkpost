@@ -12,7 +12,7 @@ chai.use(require('sinon-chai'));
 chai.use(require('chai-as-promised'));
 
 describe('Recipient Lists Library', function() {
-  var client, recipientLists;
+  var client, recipientLists, callback;
 
   beforeEach(function() {
     client = {
@@ -23,45 +23,34 @@ describe('Recipient Lists Library', function() {
       reject: SparkPost.prototype.reject
     };
 
+    callback = sinon.stub();
+
     recipientLists = require('../../lib/recipientLists')(client);
   });
 
   describe('list', function() {
 
     it('should call client get method with the appropriate uri', function() {
-      return recipientLists.list()
+      client.get.yields();
+
+      return recipientLists.list(callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('recipient-lists');
+          expect(callback.callCount).to.equal(1);
         });
     });
-
-    it('should call the callback once', function() {
-      client.get.yields();
-      let cb = sinon.stub();
-
-      return recipientLists.list(cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
-    });
-
   });
 
   describe('get', function() {
 
     it('should call client get method with the appropriate uri', function() {
-      return recipientLists.get('test-id')
+      client.get.yields();
+
+      return recipientLists.get('test-id', callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('recipient-lists/test-id');
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.get.yields();
-      let cb = sinon.stub();
-
-      return recipientLists.get('test-id', cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
 
     it('should throw an error if id is missing', function() {
@@ -93,6 +82,8 @@ describe('Recipient Lists Library', function() {
   describe('create', function() {
 
     it('should call client post method with the appropriate uri and payload', function() {
+      client.post.yields();
+
       let testList = {
         id: 'test_list',
         recipients: [
@@ -105,32 +96,12 @@ describe('Recipient Lists Library', function() {
         ]
       };
 
-      return recipientLists.create(testList)
+      return recipientLists.create(testList, callback)
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('recipient-lists');
           expect(client.post.firstCall.args[0].json).to.deep.equal(testList);
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.post.yields();
-      let cb = sinon.stub();
-
-      let testList = {
-        id: 'test_list',
-        recipients: [
-          {
-            address: {
-              email: 'test@test.com',
-              name: 'test'
-            }
-          }
-        ]
-      };
-
-      return recipientLists.create(testList, cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
 
     it('should throw an error if no recipients are provided', function() {
@@ -166,6 +137,8 @@ describe('Recipient Lists Library', function() {
   describe('update', function() {
 
     it('should call client put method with the appropriate uri and payload', function() {
+      client.put.yields();
+
       const testList = {
         recipients: [
           {
@@ -178,31 +151,12 @@ describe('Recipient Lists Library', function() {
       };
       const testId = 'test-id';
 
-      return recipientLists.update(testId, testList)
+      return recipientLists.update(testId, testList, callback)
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('recipient-lists/' + testId);
           expect(client.put.firstCall.args[0].json).to.deep.equal(testList);
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.put.yields();
-      let cb = sinon.stub();
-
-      const testList = {
-        recipients: [
-          {
-            address: {
-              email: 'test@test.com',
-              name: 'test'
-            }
-          }
-        ]
-      };
-
-      return recipientLists.update('test-id', testList, cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
 
     it('should throw an error if recipient list is missing', function() {
@@ -237,21 +191,14 @@ describe('Recipient Lists Library', function() {
   describe('delete', function() {
 
     it('should call client delete method with the appropriate uri', function() {
-      return recipientLists.delete('test')
+      client.delete.yields();
+
+      return recipientLists.delete('test', callback)
         .then(function() {
           expect(client.delete.firstCall.args[0].uri).to.equal('recipient-lists/test');
+          expect(callback.callCount).to.equal(1);
         });
     });
-
-    it('should call the callback once', function() {
-      client.delete.yields();
-      let cb = sinon.stub();
-
-      return recipientLists.delete('test-id', cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
-    });
-
 
     it('should throw an error if id is missing', function() {
       return expect(recipientLists.delete()).to.be.rejectedWith('id is required');

@@ -9,7 +9,6 @@ require('sinon-as-promised');
 
 chai.use(require('sinon-chai'));
 chai.use(require('chai-as-promised'));
-
 var ccTransmission = {
     recipients: [
       {
@@ -84,7 +83,7 @@ var ccTransmission = {
   , expectedCCHeader = '"John" <cc1@gmail.com>, "Jane" <cc2@gmail.com>';
 
 describe('Transmissions Library', function() {
-  var client, transmissions;
+  var client, transmissions, callback;
 
   beforeEach(function() {
     client = {
@@ -93,24 +92,20 @@ describe('Transmissions Library', function() {
       reject: SparkPost.prototype.reject
     };
 
+    callback = sinon.stub();
+
     transmissions = require('../../lib/transmissions')(client);
   });
 
   describe('list Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return transmissions.list()
-        .then(function() {
-          expect(client.get.firstCall.args[0].uri).to.equal('transmissions');
-        });
-    });
-
-    it('should call client get method with the appropriate uri using callback', function(done) {
       client.get.yields();
 
-      transmissions.list(function() {
-        expect(client.get.firstCall.args[0].uri).to.equal('transmissions');
-        done();
-      });
+      return transmissions.list(callback)
+        .then(function() {
+          expect(client.get.firstCall.args[0].uri).to.equal('transmissions');
+          expect(callback.callCount).to.equal(1);
+        });
     });
 
     it('should allow campaign_id to be set in options', function() {
@@ -134,32 +129,17 @@ describe('Transmissions Library', function() {
           expect(client.get.firstCall.args[0].qs).to.deep.equal({template_id: 'test-template'});
         });
     });
-
-    it('should call the callback once', function() {
-      client.get.yields();
-      let cb = sinon.stub();
-
-      return transmissions.list(cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
-    });
   });
 
   describe('find Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return transmissions.get('test')
+      client.get.yields();
+
+      return transmissions.get('test', callback)
         .then(function() {
           expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'transmissions/test'});
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.get.yields();
-      let cb = sinon.stub();
-
-      return transmissions.get('id', cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
 
     it('should throw an error if id is missing', function() {
@@ -169,24 +149,18 @@ describe('Transmissions Library', function() {
 
   describe('send Method', function() {
     it('should call client post method with the appropriate uri and payload', function() {
+      client.post.yields();
+
       var transmission = {
         campaign_id: 'test-campaign'
       };
 
-      return transmissions.send(transmission)
+      return transmissions.send(transmission, callback)
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('transmissions');
           expect(client.post.firstCall.args[0].json).to.deep.equal(transmission);
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.post.yields();
-      let cb = sinon.stub();
-
-      return transmissions.send({}, cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
 
     it('should throw an error if transmission object is missing', function() {

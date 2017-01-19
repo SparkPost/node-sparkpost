@@ -11,7 +11,7 @@ chai.use(require('sinon-chai'));
 chai.use(require('chai-as-promised'));
 
 describe('Inbound Domains Library', function() {
-  let client, inboundDomains;
+  let client, inboundDomains, callback;
 
   beforeEach(function() {
     client = {
@@ -21,45 +21,34 @@ describe('Inbound Domains Library', function() {
       reject: SparkPost.prototype.reject
     };
 
+    callback = sinon.stub();
+
     inboundDomains = require('../../lib/inboundDomains')(client);
   });
 
   describe('list Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return inboundDomains.list()
+      client.get.yields();
+
+      return inboundDomains.list(callback)
         .then(function() {
           expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'inbound-domains'});
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.get.yields();
-      let cb = sinon.stub();
-
-      return inboundDomains.list(cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
-
-
     });
   });
 
   describe('get Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return inboundDomains.get('test')
+      client.get.yields();
+
+      return inboundDomains.get('test', callback)
         .then(function() {
           expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'inbound-domains/test'});
+          expect(callback.callCount).to.equal(1);
         });
     });
 
-    it('should call the callback once', function() {
-      client.get.yields();
-      let cb = sinon.stub();
-
-      return inboundDomains.get('test', cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
-    });
 
     it('should throw an error if domain is missing', function() {
       return expect(inboundDomains.get()).to.be.rejectedWith('domain is required');
@@ -68,22 +57,15 @@ describe('Inbound Domains Library', function() {
 
   describe('create Method', function() {
     it('should call client post method with the appropriate uri and payload', function() {
+      client.post.yields();
+
       let createOpts = {domain: 'test'};
-      return inboundDomains.create(createOpts)
+      return inboundDomains.create(createOpts, callback)
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('inbound-domains');
           expect(client.post.firstCall.args[0].json).to.deep.equal(createOpts);
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      let createOpts = {domain: 'test'};
-      client.post.yields();
-      let cb = sinon.stub();
-
-      return inboundDomains.create(createOpts, cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
 
     it('should throw an error if domain is missing', function() {
@@ -93,19 +75,13 @@ describe('Inbound Domains Library', function() {
 
   describe('delete Method', function() {
     it('should call client delete method with the appropriate uri', function() {
-      return inboundDomains.delete('test')
+      client.delete.yields();
+
+      return inboundDomains.delete('test', callback)
         .then(function () {
           expect(client.delete.firstCall.args[0].uri).to.equal('inbound-domains/test');
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.delete.yields();
-      let cb = sinon.stub();
-
-      return inboundDomains.delete('test', cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
 
     it('should throw an error if domain is missing', function() {

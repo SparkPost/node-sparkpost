@@ -11,7 +11,7 @@ chai.use(require('sinon-chai'));
 chai.use(require('chai-as-promised'));
 
 describe('Subaccounts Library', function() {
-  let client, subaccounts;
+  let client, subaccounts, callback;
 
   beforeEach(function() {
     client = {
@@ -21,42 +21,32 @@ describe('Subaccounts Library', function() {
       reject: SparkPost.prototype.reject
     };
 
+    callback = sinon.stub();
+
     subaccounts = require('../../lib/subaccounts')(client);
   });
 
   describe('list Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return subaccounts.list()
+      client.get.yields();
+
+      return subaccounts.list(callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('subaccounts');
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.get.yields();
-      let cb = sinon.stub();
-
-      return subaccounts.list(cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
   });
 
   describe('get Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return subaccounts.get('test')
+      client.get.yields();
+
+      return subaccounts.get('test', callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('subaccounts/test');
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.get.yields();
-      let cb = sinon.stub();
-
-      return subaccounts.get('test', cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
 
     it('should throw an error if id is missing', function() {
@@ -66,26 +56,20 @@ describe('Subaccounts Library', function() {
 
   describe('create Method', function() {
     it('should call client post method with the appropriate uri and payload', function() {
+      client.post.yields();
+
       var subaccount = {
         name: 'test',
         key_label: 'test',
         key_grants: []
       };
 
-      return subaccounts.create(subaccount)
+      return subaccounts.create(subaccount, callback)
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('subaccounts');
           expect(client.post.firstCall.args[0].json).to.deep.equal(subaccount);
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.post.yields();
-      let cb = sinon.stub();
-
-      return subaccounts.create({}, cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
 
     it('should throw an error if subaccount object is missing', function() {
@@ -95,26 +79,20 @@ describe('Subaccounts Library', function() {
 
   describe('update Method', function() {
     it('should call client put method with the appropriate uri and payload', function() {
+      client.put.yields();
+
       var subaccount = {
         name: 'Hey Joe! Garage and Parts',
         status: 'suspended',
         ip_pool: ''
       };
 
-      return subaccounts.update('test', subaccount)
+      return subaccounts.update('test', subaccount, callback)
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('subaccounts/test');
           expect(client.put.firstCall.args[0].json).to.deep.equal(subaccount);
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.put.yields();
-      let cb = sinon.stub();
-
-      return subaccounts.update('id', {}, cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
 
     it('should throw an error if subaccount id is missing from options', function() {

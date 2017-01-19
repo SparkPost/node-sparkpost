@@ -11,7 +11,7 @@ chai.use(require('sinon-chai'));
 chai.use(require('chai-as-promised'));
 
 describe('Relay Webhooks Library', function() {
-  let client, relayWebhooks;
+  let client, relayWebhooks, callback;
 
   beforeEach(function() {
     client = {
@@ -22,42 +22,32 @@ describe('Relay Webhooks Library', function() {
       reject: SparkPost.prototype.reject
     };
 
+    callback = sinon.stub();
+
     relayWebhooks = require('../../lib/relayWebhooks')(client);
   });
 
   describe('list Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return relayWebhooks.list()
+      client.get.yields();
+
+      return relayWebhooks.list(callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('relay-webhooks');
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.get.yields();
-      let cb = sinon.stub();
-
-      return relayWebhooks.list(cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
   });
 
   describe('get Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return relayWebhooks.get('test')
+      client.get.yields();
+
+      return relayWebhooks.get('test', callback)
         .then(function() {
           expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'relay-webhooks/test'});
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.get.yields();
-      let cb = sinon.stub();
-
-      return relayWebhooks.get('test', cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
 
     it('should throw an error if id is missing', function() {
@@ -67,30 +57,19 @@ describe('Relay Webhooks Library', function() {
 
   describe('create Method', function() {
     it('should call client post method with the appropriate uri and payload', function() {
+      client.post.yields();
+
       let webhook = {
         target: 'test',
         domain: 'inbound.example.com'
       };
 
-      return relayWebhooks.create(webhook)
+      return relayWebhooks.create(webhook, callback)
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('relay-webhooks');
           expect(client.post.firstCall.args[0].json).to.deep.equal(webhook);
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.post.yields();
-      let cb = sinon.stub();
-
-      let webhook = {
-        target: 'test',
-        domain: 'inbound.example.com'
-      };
-
-      return relayWebhooks.create(webhook, cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
 
     it('should throw an error if webhook object is missing', function() {
@@ -100,14 +79,17 @@ describe('Relay Webhooks Library', function() {
 
   describe('update Method', function() {
     it('should call client put method with the appropriate uri and payload', function() {
+      client.put.yields();
+
       let webhook = {
         name: 'New Replies Webhook'
       };
 
-      return relayWebhooks.update('test', webhook)
+      return relayWebhooks.update('test', webhook, callback)
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('relay-webhooks/test');
           expect(client.put.firstCall.args[0].json).to.deep.equal(webhook);
+          expect(callback.callCount).to.equal(1);
         });
     });
 
@@ -122,9 +104,12 @@ describe('Relay Webhooks Library', function() {
 
   describe('delete Method', function() {
     it('should call client delete method with the appropriate uri', function() {
-      return relayWebhooks.delete('test')
+      client.delete.yields();
+
+      return relayWebhooks.delete('test', callback)
         .then(function() {
           expect(client.delete.firstCall.args[0].uri).to.equal('relay-webhooks/test');
+          expect(callback.callCount).to.equal(1);
         });
     });
 

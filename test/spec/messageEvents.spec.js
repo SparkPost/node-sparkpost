@@ -10,18 +10,22 @@ chai.use(require('sinon-chai'));
 chai.use(require('chai-as-promised'));
 
 describe('Message Events Library', function() {
-  let client, messageEvents;
+  let client, messageEvents, callback;
 
   beforeEach(function() {
     client = {
       get: sinon.stub().resolves({})
     };
 
+    callback = sinon.stub();
+
     messageEvents = require('../../lib/messageEvents')(client);
   });
 
   describe('search Method', function() {
     it('should call client get method with the appropriate parameters', function() {
+      client.get.yields();
+
       var options = {
         bounce_classes: '10,50',
         campaign_ids: 'test_campaign',
@@ -38,11 +42,12 @@ describe('Message Events Library', function() {
         to: '2016-11-14T16:15',
         transmission_ids: '65832150921904138'
       };
-      return messageEvents.search(options)
+      return messageEvents.search(options, callback)
         .then(function() {
           Object.keys(options).forEach(function(key) {
             expect(client.get.firstCall.args[0].qs).to.have.property(key).and.equal(options[key]);
           });
+          expect(callback.callCount).to.equal(1);
         });
     });
 
@@ -70,15 +75,6 @@ describe('Message Events Library', function() {
             }
           });
         });
-    });
-
-    it('should call the callback once', function() {
-      client.get.yields();
-      let cb = sinon.stub();
-
-      return messageEvents.search({}, cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
   });
 });

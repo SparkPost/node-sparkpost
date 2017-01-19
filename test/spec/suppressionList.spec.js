@@ -11,7 +11,7 @@ chai.use(require('sinon-chai'));
 chai.use(require('chai-as-promised'));
 
 describe('Suppression List Library', function() {
-  let client, suppressionList;
+  let client, suppressionList, callback;
 
   beforeEach(function() {
     client = {
@@ -22,42 +22,32 @@ describe('Suppression List Library', function() {
       reject: SparkPost.prototype.reject
     };
 
+    callback = sinon.stub();
+
     suppressionList = require('../../lib/suppressionList')(client);
   });
 
   describe('list', function() {
     it('should call client get method with the appropriate uri', function() {
-      return suppressionList.list({limit: 5})
+      client.get.yields();
+
+      return suppressionList.list({limit: 5}, callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('suppression-list');
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.get.yields();
-      let cb = sinon.stub();
-
-      return suppressionList.list({}, cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
   });
 
   describe('get', function() {
     it('should call client get method with the appropriate uri', function() {
-      return suppressionList.get('test@test.com')
+      client.get.yields();
+
+      return suppressionList.get('test@test.com', callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('suppression-list/test@test.com');
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.get.yields();
-      let cb = sinon.stub();
-
-      return suppressionList.get('test@test.com', cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
 
     it('should throw an error if email is missing', function() {
@@ -67,22 +57,16 @@ describe('Suppression List Library', function() {
 
   describe('upsert', function() {
     it('should accept a single list entry', function() {
+      client.put.yields();
+
       var listEntry = { email: 'test@test.com' };
 
-      return suppressionList.upsert(listEntry)
+      return suppressionList.upsert(listEntry, callback)
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('suppression-list');
           expect(client.put.firstCall.args[0].json.recipients).to.deep.equal([listEntry]);
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.put.yields();
-      let cb = sinon.stub();
-
-      return suppressionList.upsert({ email: 'test@test.com' }, cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
 
     it('should accept an array of list entries', function() {
@@ -105,19 +89,13 @@ describe('Suppression List Library', function() {
 
   describe('delete', function() {
     it('should call client delete method with the appropriate uri', function() {
-      return suppressionList.delete('test@test.com')
+      client.delete.yields();
+
+      return suppressionList.delete('test@test.com', callback)
         .then(function() {
           expect(client.delete.firstCall.args[0].uri).to.equal('suppression-list/test@test.com');
+          expect(callback.callCount).to.equal(1);
         });
-    });
-
-    it('should call the callback once', function() {
-      client.delete.yields();
-      let cb = sinon.stub();
-
-      return suppressionList.delete('test@test.com', cb).then(function() {
-        expect(cb.callCount).to.equal(1);
-      });
     });
 
     it('should throw an error if email deleteEntry missing', function() {
