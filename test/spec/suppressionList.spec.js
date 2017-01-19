@@ -32,6 +32,15 @@ describe('Suppression List Library', function() {
           expect(client.get.firstCall.args[0].uri).to.equal('suppression-list');
         });
     });
+
+    it('should call the callback once', function() {
+      client.get.yields();
+      let cb = sinon.stub();
+
+      return suppressionList.list({}, cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
+    });
   });
 
   describe('get', function() {
@@ -40,6 +49,15 @@ describe('Suppression List Library', function() {
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('suppression-list/test@test.com');
         });
+    });
+
+    it('should call the callback once', function() {
+      client.get.yields();
+      let cb = sinon.stub();
+
+      return suppressionList.get('test@test.com', cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
     });
 
     it('should throw an error if email is missing', function() {
@@ -56,6 +74,15 @@ describe('Suppression List Library', function() {
           expect(client.put.firstCall.args[0].uri).to.equal('suppression-list');
           expect(client.put.firstCall.args[0].json.recipients).to.deep.equal([listEntry]);
         });
+    });
+
+    it('should call the callback once', function() {
+      client.put.yields();
+      let cb = sinon.stub();
+
+      return suppressionList.upsert({ email: 'test@test.com' }, cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
     });
 
     it('should accept an array of list entries', function() {
@@ -82,6 +109,15 @@ describe('Suppression List Library', function() {
         .then(function() {
           expect(client.delete.firstCall.args[0].uri).to.equal('suppression-list/test@test.com');
         });
+    });
+
+    it('should call the callback once', function() {
+      client.delete.yields();
+      let cb = sinon.stub();
+
+      return suppressionList.delete('test@test.com', cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
     });
 
     it('should throw an error if email deleteEntry missing', function() {

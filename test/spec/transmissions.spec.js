@@ -96,7 +96,7 @@ describe('Transmissions Library', function() {
     transmissions = require('../../lib/transmissions')(client);
   });
 
-  describe('all Method', function() {
+  describe('list Method', function() {
     it('should call client get method with the appropriate uri', function() {
       return transmissions.list()
         .then(function() {
@@ -134,6 +134,15 @@ describe('Transmissions Library', function() {
           expect(client.get.firstCall.args[0].qs).to.deep.equal({template_id: 'test-template'});
         });
     });
+
+    it('should call the callback once', function() {
+      client.get.yields();
+      let cb = sinon.stub();
+
+      return transmissions.list(cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
+    });
   });
 
   describe('find Method', function() {
@@ -142,6 +151,15 @@ describe('Transmissions Library', function() {
         .then(function() {
           expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'transmissions/test'});
         });
+    });
+
+    it('should call the callback once', function() {
+      client.get.yields();
+      let cb = sinon.stub();
+
+      return transmissions.get('id', cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
     });
 
     it('should throw an error if id is missing', function() {
@@ -160,6 +178,15 @@ describe('Transmissions Library', function() {
           expect(client.post.firstCall.args[0].uri).to.equal('transmissions');
           expect(client.post.firstCall.args[0].json).to.deep.equal(transmission);
         });
+    });
+
+    it('should call the callback once', function() {
+      client.post.yields();
+      let cb = sinon.stub();
+
+      return transmissions.send({}, cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
     });
 
     it('should throw an error if transmission object is missing', function() {

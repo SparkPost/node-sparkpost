@@ -32,6 +32,15 @@ describe('Templates Library', function() {
           expect(client.get.firstCall.args[0].uri).to.equal('templates');
         });
     });
+
+    it('should call the callback once', function() {
+      client.get.yields();
+      let cb = sinon.stub();
+
+      return templates.list(cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
+    });
   });
 
   describe('get Method', function() {
@@ -41,6 +50,15 @@ describe('Templates Library', function() {
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('templates/test');
         });
+    });
+
+    it('should call the callback once', function() {
+      client.get.yields();
+      let cb = sinon.stub();
+
+      return templates.get('test', cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
     });
 
     it('should throw an error if id is missing', function() {
@@ -83,6 +101,15 @@ describe('Templates Library', function() {
         });
     });
 
+    it('should call the callback once', function() {
+      client.post.yields();
+      let cb = sinon.stub();
+
+      return templates.create({}, cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
+    });
+
     it('should throw an error if template object is missing', function() {
       return expect(templates.create()).to.be.rejectedWith('template object is required');
     });
@@ -100,6 +127,15 @@ describe('Templates Library', function() {
           expect(client.put.firstCall.args[0].uri).to.equal('templates/test');
           expect(client.put.firstCall.args[0].json).to.deep.equal(template);
         });
+    });
+
+    it('should call the callback once', function() {
+      client.put.yields();
+      let cb = sinon.stub();
+
+      return templates.update('id', {}, cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
     });
 
     it('should throw an error if template id is missing', function() {
@@ -148,6 +184,15 @@ describe('Templates Library', function() {
         });
     });
 
+    it('should call the callback once', function() {
+      client.delete.yields();
+      let cb = sinon.stub();
+
+      return templates.delete('id', cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
+    });
+
     it('should throw an error if id is missing', function() {
       return expect(templates.delete()).to.be.rejectedWith('template id is required');
     });
@@ -168,6 +213,15 @@ describe('Templates Library', function() {
           expect(client.post.firstCall.args[0].uri).to.equal('templates/test/preview');
           expect(client.post.firstCall.args[0].json).to.deep.equal(options);
         });
+    });
+
+    it('should call the callback once', function() {
+      client.post.yields();
+      let cb = sinon.stub();
+
+      return templates.preview('id', {}, cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
     });
 
     it('should throw an error if id is missing', function() {

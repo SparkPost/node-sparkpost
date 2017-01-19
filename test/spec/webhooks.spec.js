@@ -44,6 +44,15 @@ describe('Webhooks Library', function() {
           expect(client.get.firstCall.args[0].qs).to.deep.equal({timezone: 'America/New_York'});
         });
     });
+
+    it('should call the callback once', function() {
+      client.get.yields();
+      let cb = sinon.stub();
+
+      return webhooks.list(cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
+    });
   });
 
   describe('get Method', function() {
@@ -52,6 +61,15 @@ describe('Webhooks Library', function() {
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks/test');
         });
+    });
+
+    it('should call the callback once', function() {
+      client.get.yields();
+      let cb = sinon.stub();
+
+      return webhooks.get('test', cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
     });
 
     it('should throw an error if id is missing', function() {
@@ -85,6 +103,15 @@ describe('Webhooks Library', function() {
         });
     });
 
+    it('should call the callback once', function() {
+      client.post.yields();
+      let cb = sinon.stub();
+
+      return webhooks.create({}, cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
+    });
+
     it('should throw an error if webhook is missing', function() {
       return expect(webhooks.create()).to.be.rejectedWith('webhook object is required');
     });
@@ -105,6 +132,15 @@ describe('Webhooks Library', function() {
         });
     });
 
+    it('should call the callback once', function() {
+      client.put.yields();
+      let cb = sinon.stub();
+
+      return webhooks.update('id', {}, cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
+    });
+
     it('should throw an error if id is missing', function() {
       return expect(webhooks.update()).to.be.rejectedWith('id is required');
     });
@@ -120,6 +156,15 @@ describe('Webhooks Library', function() {
         .then(function() {
           expect(client.delete.firstCall.args[0].uri).to.equal('webhooks/test');
         });
+    });
+
+    it('should call the callback once', function() {
+      client.delete.yields();
+      let cb = sinon.stub();
+
+      return webhooks.delete('id', cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
     });
 
     it('should throw an error if id is missing', function() {
@@ -142,6 +187,15 @@ describe('Webhooks Library', function() {
         });
     });
 
+    it('should call the callback once', function() {
+      client.post.yields();
+      let cb = sinon.stub();
+
+      return webhooks.validate('id', { message: {} }, cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
+    });
+
     it('should throw an error if id is missing', function() {
       return expect(webhooks.validate()).to.be.rejectedWith('id is required');
     });
@@ -157,6 +211,15 @@ describe('Webhooks Library', function() {
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks/test/batch-status');
         });
+    });
+
+    it('should call the callback once', function() {
+      client.get.yields();
+      let cb = sinon.stub();
+
+      return webhooks.getBatchStatus('test', cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
     });
 
     it('should throw an error if id is missing', function() {
@@ -182,6 +245,15 @@ describe('Webhooks Library', function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks/events/documentation');
         });
     });
+
+     it('should call the callback once', function() {
+      client.get.yields();
+      let cb = sinon.stub();
+
+      return webhooks.getDocumentation(cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
+    });
   });
 
   describe('getSamples Method', function() {
@@ -201,6 +273,15 @@ describe('Webhooks Library', function() {
         .then(function() {
           expect(client.get.firstCall.args[0].qs).to.deep.equal({events: 'bounces'});
         });
+    });
+
+    it('should call the callback once', function() {
+      client.get.yields();
+      let cb = sinon.stub();
+
+      return webhooks.getSamples(cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
     });
   });
 });

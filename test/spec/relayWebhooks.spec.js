@@ -32,6 +32,15 @@ describe('Relay Webhooks Library', function() {
           expect(client.get.firstCall.args[0].uri).to.equal('relay-webhooks');
         });
     });
+
+    it('should call the callback once', function() {
+      client.get.yields();
+      let cb = sinon.stub();
+
+      return relayWebhooks.list(cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
+    });
   });
 
   describe('get Method', function() {
@@ -40,6 +49,15 @@ describe('Relay Webhooks Library', function() {
         .then(function() {
           expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'relay-webhooks/test'});
         });
+    });
+
+    it('should call the callback once', function() {
+      client.get.yields();
+      let cb = sinon.stub();
+
+      return relayWebhooks.get('test', cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
     });
 
     it('should throw an error if id is missing', function() {
@@ -59,6 +77,20 @@ describe('Relay Webhooks Library', function() {
           expect(client.post.firstCall.args[0].uri).to.equal('relay-webhooks');
           expect(client.post.firstCall.args[0].json).to.deep.equal(webhook);
         });
+    });
+
+    it('should call the callback once', function() {
+      client.post.yields();
+      let cb = sinon.stub();
+
+      let webhook = {
+        target: 'test',
+        domain: 'inbound.example.com'
+      };
+
+      return relayWebhooks.create(webhook, cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
     });
 
     it('should throw an error if webhook object is missing', function() {

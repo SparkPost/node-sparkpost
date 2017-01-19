@@ -33,6 +33,15 @@ describe('Sending Domains Library', function() {
           expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'sending-domains'});
         });
     });
+
+    it('should call the callback once', function() {
+      client.get.yields();
+      let cb = sinon.stub();
+
+      return sendingDomains.list(cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
+    });
   });
 
   describe('get', function() {
@@ -41,6 +50,15 @@ describe('Sending Domains Library', function() {
         .then(function() {
           expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'sending-domains/test'});
         });
+    });
+
+    it('should call the callback once', function() {
+      client.get.yields();
+      let cb = sinon.stub();
+
+      return sendingDomains.get('domain.com', cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
     });
 
     it('should throw an error if domain is missing', function() {
@@ -57,6 +75,15 @@ describe('Sending Domains Library', function() {
       return sendingDomains.create(sendingDomain).then(function() {
         expect(client.post.firstCall.args[0].uri).to.equal('sending-domains');
         expect(client.post.firstCall.args[0].json).to.deep.equal(sendingDomain);
+      });
+    });
+
+    it('should call the callback once', function() {
+      client.post.yields();
+      let cb = sinon.stub();
+
+      return sendingDomains.create({ domain: 'test' }, cb).then(function() {
+        expect(cb.callCount).to.equal(1);
       });
     });
 
@@ -78,6 +105,15 @@ describe('Sending Domains Library', function() {
         });
     });
 
+    it('should call the callback once', function() {
+      client.put.yields();
+      let cb = sinon.stub();
+
+      return sendingDomains.update('test', { domain: 'test' }, cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
+    });
+
     it('should throw an error if update options are missing', function() {
       return expect(sendingDomains.update('test')).to.be.rejectedWith('update options are required');
     });
@@ -93,6 +129,15 @@ describe('Sending Domains Library', function() {
         .then(function() {
           expect(client.delete.firstCall.args[0].uri).to.equal('sending-domains/test');
         });
+    });
+
+    it('should call the callback once', function() {
+      client.delete.yields();
+      let cb = sinon.stub();
+
+      return sendingDomains.delete('test', cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
     });
 
     it('should throw an error if domain is missing', function() {
@@ -112,6 +157,15 @@ describe('Sending Domains Library', function() {
           expect(client.post.firstCall.args[0].uri).to.equal('sending-domains/test/verify');
           expect(client.post.firstCall.args[0].json).to.deep.equal(_.omit(options, 'domain'));
         });
+    });
+
+    it('should call the callback once', function() {
+      client.post.yields();
+      let cb = sinon.stub();
+
+      return sendingDomains.verify('test', {}, cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
     });
 
     it('should throw an error if domain is missing', function() {

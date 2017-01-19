@@ -31,6 +31,15 @@ describe('Subaccounts Library', function() {
           expect(client.get.firstCall.args[0].uri).to.equal('subaccounts');
         });
     });
+
+    it('should call the callback once', function() {
+      client.get.yields();
+      let cb = sinon.stub();
+
+      return subaccounts.list(cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
+    });
   });
 
   describe('get Method', function() {
@@ -39,6 +48,15 @@ describe('Subaccounts Library', function() {
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('subaccounts/test');
         });
+    });
+
+    it('should call the callback once', function() {
+      client.get.yields();
+      let cb = sinon.stub();
+
+      return subaccounts.get('test', cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
     });
 
     it('should throw an error if id is missing', function() {
@@ -61,6 +79,15 @@ describe('Subaccounts Library', function() {
         });
     });
 
+    it('should call the callback once', function() {
+      client.post.yields();
+      let cb = sinon.stub();
+
+      return subaccounts.create({}, cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
+    });
+
     it('should throw an error if subaccount object is missing', function() {
       return expect(subaccounts.create()).to.be.rejectedWith('subaccount object is required');
     });
@@ -79,6 +106,15 @@ describe('Subaccounts Library', function() {
           expect(client.put.firstCall.args[0].uri).to.equal('subaccounts/test');
           expect(client.put.firstCall.args[0].json).to.deep.equal(subaccount);
         });
+    });
+
+    it('should call the callback once', function() {
+      client.put.yields();
+      let cb = sinon.stub();
+
+      return subaccounts.update('id', {}, cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
     });
 
     it('should throw an error if subaccount id is missing from options', function() {

@@ -71,5 +71,14 @@ describe('Message Events Library', function() {
           });
         });
     });
+
+    it('should call the callback once', function() {
+      client.get.yields();
+      let cb = sinon.stub();
+
+      return messageEvents.search({}, cb).then(function() {
+        expect(cb.callCount).to.equal(1);
+      });
+    });
   });
 });
