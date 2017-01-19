@@ -2,6 +2,7 @@
 
 var chai = require('chai')
   , expect = chai.expect
+  , SparkPost = require('../../lib/sparkpost')
   , sinon = require('sinon');
 
 require('sinon-as-promised');
@@ -16,7 +17,8 @@ describe('Subaccounts Library', function() {
     client = {
       get: sinon.stub().resolves({}),
       post: sinon.stub().resolves({}),
-      put: sinon.stub().resolves({})
+      put: sinon.stub().resolves({}),
+      reject: SparkPost.prototype.reject
     };
 
     subaccounts = require('../../lib/subaccounts')(client);

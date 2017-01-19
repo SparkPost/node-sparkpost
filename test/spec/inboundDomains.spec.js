@@ -2,6 +2,7 @@
 
 var chai = require('chai')
   , expect = chai.expect
+  , SparkPost = require('../../lib/sparkpost')
   , sinon = require('sinon');
 
 require('sinon-as-promised');
@@ -16,7 +17,8 @@ describe('Inbound Domains Library', function() {
     client = {
       get: sinon.stub().resolves({}),
       post: sinon.stub().resolves({}),
-      delete: sinon.stub().resolves({})
+      delete: sinon.stub().resolves({}),
+      reject: SparkPost.prototype.reject
     };
 
     inboundDomains = require('../../lib/inboundDomains')(client);

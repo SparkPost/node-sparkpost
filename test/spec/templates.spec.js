@@ -2,6 +2,7 @@
 var _ = require('lodash')
   , chai = require('chai')
   , expect = chai.expect
+  , SparkPost = require('../../lib/sparkpost')
   , sinon = require('sinon');
 
 require('sinon-as-promised');
@@ -17,7 +18,8 @@ describe('Templates Library', function() {
       get: sinon.stub().resolves({}),
       post: sinon.stub().resolves({}),
       put: sinon.stub().resolves({}),
-      delete: sinon.stub().resolves({})
+      delete: sinon.stub().resolves({}),
+      reject: SparkPost.prototype.reject
     };
 
     templates = require('../../lib/templates')(client);

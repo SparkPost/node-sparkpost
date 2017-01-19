@@ -2,6 +2,7 @@
 
 var chai = require('chai')
   , expect = chai.expect
+  , SparkPost = require('../../lib/sparkpost')
   , sinon = require('sinon');
 
 require('sinon-as-promised');
@@ -88,7 +89,8 @@ describe('Transmissions Library', function() {
   beforeEach(function() {
     client = {
       get: sinon.stub().resolves({}),
-      post: sinon.stub().resolves({})
+      post: sinon.stub().resolves({}),
+      reject: SparkPost.prototype.reject
     };
 
     transmissions = require('../../lib/transmissions')(client);

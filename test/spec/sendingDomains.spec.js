@@ -3,6 +3,7 @@
 var _ = require('lodash')
   , chai = require('chai')
   , expect = chai.expect
+  , SparkPost = require('../../lib/sparkpost')
   , sinon = require('sinon');
 
 require('sinon-as-promised');
@@ -18,7 +19,8 @@ describe('Sending Domains Library', function() {
       get: sinon.stub().resolves({}),
       post: sinon.stub().resolves({}),
       put: sinon.stub().resolves({}),
-      delete: sinon.stub().resolves({})
+      delete: sinon.stub().resolves({}),
+      reject: SparkPost.prototype.reject
     };
 
     sendingDomains = require('../../lib/sendingDomains')(client);
@@ -120,5 +122,5 @@ describe('Sending Domains Library', function() {
       return expect(sendingDomains.verify('test')).to.be.rejectedWith('verification options are required');
     });
   });
-  
+
 });
