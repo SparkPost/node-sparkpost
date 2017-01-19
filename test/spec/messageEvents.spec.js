@@ -2,8 +2,7 @@
 
 var chai = require('chai')
   , expect = chai.expect
-  , sinon = require('sinon')
-  , Promise = require('../../lib/Promise');
+  , sinon = require('sinon');
 
 require('sinon-as-promised');
 
@@ -11,12 +10,14 @@ chai.use(require('sinon-chai'));
 chai.use(require('chai-as-promised'));
 
 describe('Message Events Library', function() {
-  let client, messageEvents;
+  let client, messageEvents, callback;
 
   beforeEach(function() {
     client = {
       get: sinon.stub().resolves({})
     };
+
+    callback = function() {};
 
     messageEvents = require('../../lib/messageEvents')(client);
   });
@@ -39,11 +40,12 @@ describe('Message Events Library', function() {
         to: '2016-11-14T16:15',
         transmission_ids: '65832150921904138'
       };
-      return messageEvents.search(options)
+      return messageEvents.search(options, callback)
         .then(function() {
           Object.keys(options).forEach(function(key) {
             expect(client.get.firstCall.args[0].qs).to.have.property(key).and.equal(options[key]);
           });
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
 

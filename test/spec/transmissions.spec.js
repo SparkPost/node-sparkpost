@@ -2,13 +2,13 @@
 
 var chai = require('chai')
   , expect = chai.expect
+  , SparkPost = require('../../lib/sparkpost')
   , sinon = require('sinon');
 
 require('sinon-as-promised');
 
 chai.use(require('sinon-chai'));
 chai.use(require('chai-as-promised'));
-
 var ccTransmission = {
     recipients: [
       {
@@ -83,30 +83,27 @@ var ccTransmission = {
   , expectedCCHeader = '"John" <cc1@gmail.com>, "Jane" <cc2@gmail.com>';
 
 describe('Transmissions Library', function() {
-  var client, transmissions;
+  var client, transmissions, callback;
 
   beforeEach(function() {
     client = {
       get: sinon.stub().resolves({}),
-      post: sinon.stub().resolves({})
+      post: sinon.stub().resolves({}),
+      reject: SparkPost.prototype.reject
     };
+
+    callback = function() {};
 
     transmissions = require('../../lib/transmissions')(client);
   });
 
-  describe('all Method', function() {
+  describe('list Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return transmissions.list()
+      return transmissions.list(callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('transmissions');
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
-    });
-
-    it('should call client get method with the appropriate uri using callback', function(done) {
-      transmissions.list(function() {
-        expect(client.get.firstCall.args[0].uri).to.equal('transmissions');
-        done();
-      });
     });
 
     it('should allow campaign_id to be set in options', function() {
@@ -134,9 +131,10 @@ describe('Transmissions Library', function() {
 
   describe('find Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return transmissions.get('test')
+      return transmissions.get('test', callback)
         .then(function() {
           expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'transmissions/test'});
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -151,10 +149,11 @@ describe('Transmissions Library', function() {
         campaign_id: 'test-campaign'
       };
 
-      return transmissions.send(transmission)
+      return transmissions.send(transmission, callback)
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('transmissions');
           expect(client.post.firstCall.args[0].json).to.deep.equal(transmission);
+          expect(client.post.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -181,6 +180,9 @@ describe('Transmissions Library', function() {
         , transmission = {
           campaign_id: 'test-campaign'
         };
+
+      client.post.yields();
+
       return transmissions.send(transmission, cb).then(function() {
         expect(cb.callCount).to.equal(1);
       });

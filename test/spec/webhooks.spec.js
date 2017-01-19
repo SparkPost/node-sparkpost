@@ -3,6 +3,7 @@
 var _ = require('lodash')
   , chai = require('chai')
   , expect = chai.expect
+  , SparkPost = require('../../lib/sparkpost')
   , sinon = require('sinon');
 
 require('sinon-as-promised');
@@ -11,24 +12,28 @@ chai.use(require('sinon-chai'));
 chai.use(require('chai-as-promised'));
 
 describe('Webhooks Library', function() {
-  var client, webhooks;
+  var client, webhooks, callback;
 
   beforeEach(function() {
     client = {
       get: sinon.stub().resolves({}),
       post: sinon.stub().resolves({}),
       put: sinon.stub().resolves({}),
-      delete: sinon.stub().resolves({})
+      delete: sinon.stub().resolves({}),
+      reject: SparkPost.prototype.reject
     };
+
+    callback = function() {};
 
     webhooks = require('../../lib/webhooks')(client);
   });
 
   describe('list Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return webhooks.list()
+      return webhooks.list(callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks');
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -46,9 +51,10 @@ describe('Webhooks Library', function() {
 
   describe('get Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return webhooks.get('test')
+      return webhooks.get('test', callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks/test');
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -76,10 +82,11 @@ describe('Webhooks Library', function() {
         events: ['delivery', 'injection', 'open', 'click']
       };
 
-      return webhooks.create(webhook)
+      return webhooks.create(webhook, callback)
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('webhooks');
           expect(client.post.firstCall.args[0].json).to.deep.equal(webhook);
+          expect(client.post.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -96,10 +103,11 @@ describe('Webhooks Library', function() {
         auth_type: 'none'
       };
 
-      return webhooks.update('test', webhook)
+      return webhooks.update('test', webhook, callback)
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('webhooks/test');
           expect(client.put.firstCall.args[0].json).to.deep.equal(webhook);
+          expect(client.put.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -114,9 +122,10 @@ describe('Webhooks Library', function() {
 
   describe('delete Method', function() {
     it('should call client delete method with the appropriate uri', function() {
-      return webhooks.delete('test')
+      return webhooks.delete('test', callback)
         .then(function() {
           expect(client.delete.firstCall.args[0].uri).to.equal('webhooks/test');
+          expect(client.delete.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -133,10 +142,11 @@ describe('Webhooks Library', function() {
         }
       };
 
-      return webhooks.validate('test', options)
+      return webhooks.validate('test', options, callback)
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('webhooks/test/validate');
           expect(client.post.firstCall.args[0].json).to.deep.equal(options);
+          expect(client.post.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -151,9 +161,10 @@ describe('Webhooks Library', function() {
 
   describe('getBatchStatus Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return webhooks.getBatchStatus('test')
+      return webhooks.getBatchStatus('test', callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks/test/batch-status');
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -175,18 +186,20 @@ describe('Webhooks Library', function() {
 
   describe('getDocumentation Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return webhooks.getDocumentation()
+      return webhooks.getDocumentation(callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks/events/documentation');
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
   });
 
   describe('getSamples Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return webhooks.getSamples()
+      return webhooks.getSamples(callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('webhooks/events/samples');
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
 

@@ -2,6 +2,7 @@
 
 var chai = require('chai')
   , expect = chai.expect
+  , SparkPost = require('../../lib/sparkpost')
   , sinon = require('sinon');
 
 require('sinon-as-promised');
@@ -10,33 +11,38 @@ chai.use(require('sinon-chai'));
 chai.use(require('chai-as-promised'));
 
 describe('Relay Webhooks Library', function() {
-  let client, relayWebhooks;
+  let client, relayWebhooks, callback;
 
   beforeEach(function() {
     client = {
       get: sinon.stub().resolves({}),
       post: sinon.stub().resolves({}),
       put: sinon.stub().resolves({}),
-      delete: sinon.stub().resolves({})
+      delete: sinon.stub().resolves({}),
+      reject: SparkPost.prototype.reject
     };
+
+    callback = function() {};
 
     relayWebhooks = require('../../lib/relayWebhooks')(client);
   });
 
   describe('list Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return relayWebhooks.list()
+      return relayWebhooks.list(callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('relay-webhooks');
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
   });
 
   describe('get Method', function() {
     it('should call client get method with the appropriate uri', function() {
-      return relayWebhooks.get('test')
+      return relayWebhooks.get('test', callback)
         .then(function() {
           expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'relay-webhooks/test'});
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -52,10 +58,11 @@ describe('Relay Webhooks Library', function() {
         domain: 'inbound.example.com'
       };
 
-      return relayWebhooks.create(webhook)
+      return relayWebhooks.create(webhook, callback)
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('relay-webhooks');
           expect(client.post.firstCall.args[0].json).to.deep.equal(webhook);
+          expect(client.post.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -70,10 +77,11 @@ describe('Relay Webhooks Library', function() {
         name: 'New Replies Webhook'
       };
 
-      return relayWebhooks.update('test', webhook)
+      return relayWebhooks.update('test', webhook, callback)
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('relay-webhooks/test');
           expect(client.put.firstCall.args[0].json).to.deep.equal(webhook);
+          expect(client.put.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -88,9 +96,10 @@ describe('Relay Webhooks Library', function() {
 
   describe('delete Method', function() {
     it('should call client delete method with the appropriate uri', function() {
-      return relayWebhooks.delete('test')
+      return relayWebhooks.delete('test', callback)
         .then(function() {
           expect(client.delete.firstCall.args[0].uri).to.equal('relay-webhooks/test');
+          expect(client.delete.firstCall.args[1]).to.equal(callback);
         });
     });
 

@@ -3,6 +3,7 @@
 var _ = require('lodash')
   , chai = require('chai')
   , expect = chai.expect
+  , SparkPost = require('../../lib/sparkpost')
   , sinon = require('sinon');
 
 require('sinon-as-promised');
@@ -11,15 +12,18 @@ chai.use(require('sinon-chai'));
 chai.use(require('chai-as-promised'));
 
 describe('Recipient Lists Library', function() {
-  var client, recipientLists;
+  var client, recipientLists, callback;
 
   beforeEach(function() {
     client = {
       get: sinon.stub().resolves({}),
       post: sinon.stub().resolves({}),
       put: sinon.stub().resolves({}),
-      delete: sinon.stub().resolves({})
+      delete: sinon.stub().resolves({}),
+      reject: SparkPost.prototype.reject
     };
+
+    callback = function() {};
 
     recipientLists = require('../../lib/recipientLists')(client);
   });
@@ -27,20 +31,21 @@ describe('Recipient Lists Library', function() {
   describe('list', function() {
 
     it('should call client get method with the appropriate uri', function() {
-      return recipientLists.list()
+      return recipientLists.list(callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('recipient-lists');
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
-
   });
 
   describe('get', function() {
 
     it('should call client get method with the appropriate uri', function() {
-      return recipientLists.get('test-id')
+      return recipientLists.get('test-id', callback)
         .then(function() {
           expect(client.get.firstCall.args[0].uri).to.equal('recipient-lists/test-id');
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -50,6 +55,9 @@ describe('Recipient Lists Library', function() {
 
     it('should not throw an error if optional 2nd argument is a function (callback)', function() {
       let cb = sinon.stub();
+
+      client.get.yields();
+
       return recipientLists.get('test-id', cb).then(() => {
         expect(cb.callCount).to.equal(1);
       });
@@ -83,10 +91,11 @@ describe('Recipient Lists Library', function() {
         ]
       };
 
-      return recipientLists.create(testList)
+      return recipientLists.create(testList, callback)
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('recipient-lists');
           expect(client.post.firstCall.args[0].json).to.deep.equal(testList);
+          expect(client.post.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -135,10 +144,11 @@ describe('Recipient Lists Library', function() {
       };
       const testId = 'test-id';
 
-      return recipientLists.update(testId, testList)
+      return recipientLists.update(testId, testList, callback)
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('recipient-lists/' + testId);
           expect(client.put.firstCall.args[0].json).to.deep.equal(testList);
+          expect(client.put.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -174,9 +184,10 @@ describe('Recipient Lists Library', function() {
   describe('delete', function() {
 
     it('should call client delete method with the appropriate uri', function() {
-      return recipientLists.delete('test')
+      return recipientLists.delete('test', callback)
         .then(function() {
           expect(client.delete.firstCall.args[0].uri).to.equal('recipient-lists/test');
+          expect(client.delete.firstCall.args[1]).to.equal(callback);
         });
     });
 

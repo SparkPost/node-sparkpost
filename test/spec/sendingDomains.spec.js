@@ -3,6 +3,7 @@
 var _ = require('lodash')
   , chai = require('chai')
   , expect = chai.expect
+  , SparkPost = require('../../lib/sparkpost')
   , sinon = require('sinon');
 
 require('sinon-as-promised');
@@ -11,33 +12,38 @@ chai.use(require('sinon-chai'));
 chai.use(require('chai-as-promised'));
 
 describe('Sending Domains Library', function() {
-  var client, sendingDomains;
+  var client, sendingDomains, callback;
 
   beforeEach(function() {
     client = {
       get: sinon.stub().resolves({}),
       post: sinon.stub().resolves({}),
       put: sinon.stub().resolves({}),
-      delete: sinon.stub().resolves({})
+      delete: sinon.stub().resolves({}),
+      reject: SparkPost.prototype.reject
     };
+
+    callback = function() {};
 
     sendingDomains = require('../../lib/sendingDomains')(client);
   });
 
   describe('list', function() {
     it('should call client get method with the appropriate uri', function() {
-      return sendingDomains.list()
+      return sendingDomains.list(callback)
         .then(function() {
           expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'sending-domains'});
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
   });
 
   describe('get', function() {
     it('should call client get method with the appropriate uri', function() {
-      return sendingDomains.get('test')
+      return sendingDomains.get('test', callback)
         .then(function() {
           expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'sending-domains/test'});
+          expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -52,9 +58,10 @@ describe('Sending Domains Library', function() {
         domain: 'test'
       };
 
-      return sendingDomains.create(sendingDomain).then(function() {
+      return sendingDomains.create(sendingDomain, callback).then(function() {
         expect(client.post.firstCall.args[0].uri).to.equal('sending-domains');
         expect(client.post.firstCall.args[0].json).to.deep.equal(sendingDomain);
+        expect(client.post.firstCall.args[1]).to.equal(callback);
       });
     });
 
@@ -69,10 +76,11 @@ describe('Sending Domains Library', function() {
         tracking_domain: 'click.example1.com'
       };
 
-      return sendingDomains.update('test', sendingDomain)
+      return sendingDomains.update('test', sendingDomain, callback)
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('sending-domains/test');
           expect(client.put.firstCall.args[0].json).to.deep.equal(_.omit(sendingDomain, 'domain'));
+          expect(client.put.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -87,9 +95,10 @@ describe('Sending Domains Library', function() {
 
   describe('delete', function() {
     it('should call client delete method with the appropriate uri', function() {
-      return sendingDomains.delete('test')
+      return sendingDomains.delete('test', callback)
         .then(function() {
           expect(client.delete.firstCall.args[0].uri).to.equal('sending-domains/test');
+          expect(client.delete.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -105,10 +114,11 @@ describe('Sending Domains Library', function() {
         spf_verify: true
       };
 
-      return sendingDomains.verify('test', options)
+      return sendingDomains.verify('test', options, callback)
         .then(function() {
           expect(client.post.firstCall.args[0].uri).to.equal('sending-domains/test/verify');
           expect(client.post.firstCall.args[0].json).to.deep.equal(_.omit(options, 'domain'));
+          expect(client.post.firstCall.args[1]).to.equal(callback);
         });
     });
 
@@ -120,5 +130,5 @@ describe('Sending Domains Library', function() {
       return expect(sendingDomains.verify('test')).to.be.rejectedWith('verification options are required');
     });
   });
-  
+
 });
