@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
+## [2.1.2] - 2017-01-20
+### Fixed
+- Callbacks are no longer being called twice in some methods by @avrahamgoldman. See Issue [203](https://github.com/SparkPost/node-sparkpost/issues/203).
+
 ## [2.1.1] - 2017-01-11
 ### Changed
 - Removed our addition to the native Promise prototype in favor of a bluebird-inspired callback-wrapping function. See Issue [#199](https://github.com/SparkPost/node-sparkpost/issues/199). Thanks @danieljuhl.
@@ -156,7 +160,8 @@ With this major release, we streamlined and simplified the library making it mor
 ## 0.1.0 - 2014-11-10
 - First Release!
 
-[unreleased]: https://github.com/sparkpost/node-sparkpost/compare/v2.1.1...HEAD
+[unreleased]: https://github.com/sparkpost/node-sparkpost/compare/v2.1.2...HEAD
+[2.1.2]: https://github.com/sparkpost/node-sparkpost/compare/v2.1.1...v2.1.2
 [2.1.1]: https://github.com/sparkpost/node-sparkpost/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/sparkpost/node-sparkpost/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/sparkpost/node-sparkpost/compare/v2.0.0...v2.0.1
