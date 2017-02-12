@@ -21,7 +21,7 @@ Before using this library, you must have:
 npm install sparkpost
 ```
 
-*Note: Node.js versions 0.10 and 0.12 are no longer supported. For versions < 4, please continue using [sparkpost v1.3.8](https://github.com/SparkPost/node-sparkpost/tree/1.3.8)* 
+*Note: Node.js versions 0.10 and 0.12 are no longer supported. For versions < 4, please continue using [sparkpost v1.3.8](https://github.com/SparkPost/node-sparkpost/tree/1.3.8)*
 
 ## Initialization
 **new SparkPost(apiKey[, options])** - Initialization
@@ -111,10 +111,10 @@ client.get(options)
 ```
 
 ## Send An Email "Hello World" Example
-Below is an example of how to send a simple email. Sending an email is known as a *transmission*. By using the send 
-method on the transmissions service that's available from the SparkPost object you instantiate, you can pass in an 
-object with all the [transmission attributes](https://developers.sparkpost.com/api/transmissions#header-transmission-attributes) 
-relevant to the email being sent. The send method will return a promise that will let you know if the email was sent 
+Below is an example of how to send a simple email. Sending an email is known as a *transmission*. By using the send
+method on the transmissions service that's available from the SparkPost object you instantiate, you can pass in an
+object with all the [transmission attributes](https://developers.sparkpost.com/api/transmissions#header-transmission-attributes)
+relevant to the email being sent. The send method will return a promise that will let you know if the email was sent
 successful and if not information about the error that occurred. If a callback is passed, it will be executed.
 
 ```javascript
@@ -122,6 +122,9 @@ var SparkPost = require('sparkpost');
 var client = new SparkPost('<YOUR API KEY>');
 
 client.transmissions.send({
+    options: {
+      sandbox: true
+    },
     content: {
       from: 'testing@sparkpostbox.com',
       subject: 'Hello, World!',
