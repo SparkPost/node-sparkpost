@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
+### Added
+- Example for [sending a transmission with an inline image](/examples/transmissions/send_inline_image.js) by @aydrian.
 
 ## [2.1.2] - 2017-01-20
 ### Fixed
