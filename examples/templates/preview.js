@@ -3,12 +3,12 @@
 var key = 'YOURAPIKEY'
   , SparkPost = require('sparkpost')
   , client = new SparkPost(key)
+  , templateID = 'TEST_ID'
   , options = {
-    id: 'TEST_ID',
     substitution_data: {}
   };
 
-client.templates.preview(options)
+client.templates.preview(templateID, options)
   .then(data => {
     console.log('Congrats you can use our client library!');
     console.log(data);
@@ -19,7 +19,7 @@ client.templates.preview(options)
   });
 
 // Using a callback
-client.templates.preview(options, function(err, data) {
+client.templates.preview(templateID, options, function(err, data) {
   if (err) {
     console.log('Whoops! Something went wrong');
     console.log(err);
