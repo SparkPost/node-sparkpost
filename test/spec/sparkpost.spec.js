@@ -83,6 +83,20 @@ describe('SparkPost Library', function() {
     expect(client.debug).to.equal(true);
   });
 
+  it('should accept a retries option', function() {
+    const key = '12345678901234567890';
+    let client;
+
+    // testing default initialization
+    client = new SparkPost(key, {});
+    expect(client.retries).to.be.undefined;
+
+    // testing setting option
+    client = new SparkPost(key, { retries: 3 });
+    expect(client.retries).to.equal(3);
+
+  });
+
   function checkUserAgent(clientOptions, checkFn, done) {
     let req = {
         method: 'GET'
@@ -200,6 +214,78 @@ describe('SparkPost Library', function() {
       };
 
       client.request(options, function(err, data) {
+        expect(err).to.be.defined;
+
+        // finish async test
+        done();
+      });
+    });
+
+    it('should not retry by default', function(done) {
+      const result1 = { ok: true };
+      const result2 = { errors: [] };
+      nock('https://api.sparkpost.com')
+        .post('/api/v1/post/test')
+        .reply(200, result1)
+        .post('/api/v1/post/test')
+        .reply(200, result2);
+
+      var options = {
+        method: 'POST'
+        , uri: 'post/test'
+      };
+
+      client.request(options, function(err, data) {
+        expect(data).to.be.defined;
+        expect(data).to.equal(JSON.stringify(result1));
+        done();
+      });
+    });
+
+    it('should retry on 5xx if requested', function(done) {
+      const testResult = {results: 'goodness'};
+      nock('https://api.sparkpost.com')
+        .post('/api/v1/post/test/retries')
+        .reply(503, { errors: [] })
+        .post('/api/v1/post/test/retries')
+        .reply(200, testResult);
+
+      var options = {
+        method: 'POST'
+        , uri: 'post/test/retries'
+        , retries: 2
+      };
+
+      const key = '12345678901234567890';
+      const retryClient = new SparkPost(key, { retries: 2 });
+
+      retryClient.request(options, function(err, data) {
+        expect(err).to.be.null;
+        expect(data).to.be.defined;
+        expect(data).to.equal(JSON.stringify(testResult));
+
+        // finish async test
+        done();
+      });
+    });
+
+    it('should obey the retries option', function(done) {
+      const testResult = {errors: []};
+      nock('https://api.sparkpost.com')
+        .post('/api/v1/post/test/two-retries')
+        .thrice()
+        .reply(503, testResult);
+
+      var options = {
+        method: 'POST'
+        , uri: 'post/test/two-retries'
+        , retries: 2
+      };
+
+      const key = '12345678901234567890';
+      const retryClient = new SparkPost(key, { retries: 2 });
+
+      retryClient.request(options, function(err, data) {
         expect(err).to.be.defined;
 
         // finish async test
