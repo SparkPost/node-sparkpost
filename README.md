@@ -34,6 +34,11 @@ npm install sparkpost
     * Required: no
     * Type: `String`
     * Default: `https://api.sparkpost.com:443`
+* `options.retries`
+    * Required: no
+    * Type: `Number`
+    * Default: `0`
+    * the number of API call attempts the client makes when receiving a 5xx response
 * `options.apiVersion`
     * Required: no
     * Type: `String`
@@ -61,6 +66,7 @@ npm install sparkpost
     * `options` - [see request modules options](https://github.com/mikeal/request#requestoptions-callback)
     * `options.uri` - can either be a full url or a path that is appended to `options.origin` used at initialization ([url.resolve](http://nodejs.org/api/url.html#url_url_resolve_from_to))
     * `options.debug` - setting to `true` includes full response from request client for debugging purposes
+    * `options.retries` - the number of times the client will retry an API call after a 5xx response. Defaults to 0.
 * **get | post | put | delete(options[, callback])**
     * `options` - see request options
     * Request method will be overwritten and set to the same value as the name of these methods.
