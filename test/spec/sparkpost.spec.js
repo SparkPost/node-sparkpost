@@ -97,6 +97,13 @@ describe('SparkPost Library', function() {
 
   });
 
+  it('should limit retries', function() {
+    const bigRetries = 300;
+    const key = '12345678901234567890';
+    const client = new SparkPost(key, { retries: bigRetries });
+    expect(client.retries).to.be.below(bigRetries);
+  });
+
   function checkUserAgent(clientOptions, checkFn, done) {
     let req = {
         method: 'GET'
