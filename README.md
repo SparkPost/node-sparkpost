@@ -178,4 +178,4 @@ Once all the dependencies are installed, you can execute the unit tests using `n
 
 [See ChangeLog here](CHANGELOG.md)
 
-[sparkpost sign up]: https://app.sparkpost.com/sign-up?src=Dev-Website&sfdcid=701600000011daf
+[sparkpost sign up]: https://app.sparkpost.com/sign-up?src=Dev-Website&sfdcid=70160000000pqBb
