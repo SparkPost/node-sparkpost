@@ -69,24 +69,24 @@ npm install sparkpost
 
 Passing in an API key
 ```js
-var SparkPost = require('sparkpost');
-var client = new SparkPost('YOUR_API_KEY');
+const SparkPost = require('sparkpost');
+const client = new SparkPost('YOUR_API_KEY');
 ```
 
 Using an API key stored in an environment variable
 ```js
 //Create an env var as SPARKPOST_API_KEY
-var SparkPost = require('sparkpost');
-var client = new SparkPost();
+const SparkPost = require('sparkpost');
+const client = new SparkPost();
 ```
 
 Specifying non-default options
 ```js
-var SparkPost = require('sparkpost');
-var options = {
+const SparkPost = require('sparkpost');
+const options = {
   endpoint: 'https://dev.sparkpost.com:443'
 };
-var client = new SparkPost('YOUR_API_KEY', options);
+const client = new SparkPost('YOUR_API_KEY', options);
 ```
 
 ## Using the Node Client Library Base Object
@@ -97,7 +97,7 @@ the Metrics resource.
 
 ```js
 // Get a list of domains that the Metrics API contains data on.
-var options = {
+const options = {
   uri: 'metrics/domains'
 };
 
@@ -118,8 +118,8 @@ relevant to the email being sent. The send method will return a promise that wil
 successful and if not information about the error that occurred. If a callback is passed, it will be executed.
 
 ```javascript
-var SparkPost = require('sparkpost');
-var client = new SparkPost('<YOUR API KEY>');
+const SparkPost = require('sparkpost');
+const client = new SparkPost('<YOUR API KEY>');
 
 client.transmissions.send({
     options: {
