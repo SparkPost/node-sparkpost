@@ -178,4 +178,4 @@ Once all the dependencies are installed, you can execute the unit tests using `n
 
 [See ChangeLog here](CHANGELOG.md)
 
-[sparkpost sign up]: https://app.sparkpost.com/sign-up?src=Dev-Website&sfdcid=70160000000pqBb
+[sparkpost sign up]: https://app.sparkpost.com/join?plan=free-0817?src=Social%20Media&sfdcid=70160000000pqBb&pc=GitHubSignUp&utm_source=github&utm_medium=social-media&utm_campaign=github&utm_content=sign-up
