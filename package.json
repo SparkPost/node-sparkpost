@@ -23,6 +23,9 @@
     "url": "https://github.com/SparkPost/node-sparkpost/issues"
   },
   "homepage": "https://github.com/SparkPost/node-sparkpost",
+  "engines": {
+    "node": ">=4"
+  },
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
