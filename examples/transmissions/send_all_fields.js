@@ -6,7 +6,8 @@ var key = 'YOURAPIKEY'
   , transmission = {
     options: {
       open_tracking: true,
-      click_tracking: true
+      click_tracking: true,
+      transactional: true
     },
     campaign_id: 'christmas_campaign',
     metadata: {
