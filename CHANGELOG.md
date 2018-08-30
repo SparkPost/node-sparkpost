@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - Example for [sending a transmission with an inline image](/examples/transmissions/send_inline_image.js) by @aydrian.
+- The client can optionally retry API calls on 5xx status. Controlled by constructor `options.retries`.
 
 ## [2.1.2] - 2017-01-20
 ### Fixed
