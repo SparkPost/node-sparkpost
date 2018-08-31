@@ -33,7 +33,8 @@ npm install sparkpost
 * `options.origin` or `options.endpoint`
     * Required: no
     * Type: `String`
-    * Default: `https://api.sparkpost.com:443`
+    * Default: `https://api.sparkpost.com:443`<br/>
+    *Note: To use the SparkPost EU API you will need to set this to `https://api.eu.sparkpost.com:443`.*
 * `options.apiVersion`
     * Required: no
     * Type: `String`
@@ -120,6 +121,9 @@ successful and if not information about the error that occurred. If a callback i
 ```javascript
 const SparkPost = require('sparkpost');
 const client = new SparkPost('<YOUR API KEY>');
+
+// If you have a SparkPost EU account you will need to pass a different `origin` via the options parameter:
+// const euClient = new SparkPost('<YOUR API KEY>', { origin: 'https://api.eu.sparkpost.com:443' });
 
 client.transmissions.send({
     options: {
