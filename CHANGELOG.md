@@ -3,7 +3,10 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
+
+## [2.1.3] - 2018-10-24
 ### Fixed
+- Template preview draft option [bug](https://github.com/SparkPost/node-sparkpost/issues/233) by @jgzamora
 - Updated example for [retrieving a recipient list](/examples/recipientLists/get.js) by @WanderingBrooks.
 
 ### Added
