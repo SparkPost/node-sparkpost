@@ -183,15 +183,15 @@ describe('Templates Library', function() {
       });
     });
 
-    it('should allow draft to be set in options', function() {
+    it('should add the draft option to query params', function() {
       var id = 'test'
         , options = {
-          draft: true
+          draft: false
         };
 
       return templates.preview(id, options)
         .then(function() {
-          expect(client.post.firstCall.args[0].qs).to.deep.equal({draft: true});
+          expect(client.post.firstCall.args[0].qs).to.deep.equal({draft: false});
         });
     });
   });
