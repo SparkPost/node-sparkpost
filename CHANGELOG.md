@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
+- Security patches to dev-dependencies [#237](https://github.com/SparkPost/node-sparkpost/pull/237) by @jgzamora
 
 ## [2.1.3] - 2018-10-24
 ### Fixed
