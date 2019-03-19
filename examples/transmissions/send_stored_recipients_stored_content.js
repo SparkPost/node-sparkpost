@@ -26,7 +26,7 @@ client.transmissions.send(transmission)
   });
 
 // Callback
-client.transmissions.send(tranmission, function(err, data) {
+client.transmissions.send(transmission, function(err, data) {
   if (err) {
     console.log('Whoops! Something went wrong');
     console.log(err);
