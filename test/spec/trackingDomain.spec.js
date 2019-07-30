@@ -88,14 +88,14 @@ describe('Tracking Domains Library', function() {
 
   describe('update', function() {
     it('should call client put method with the appropriate uri and payload', function() {
-      var sendingDomain = {
+      var trackingDomain = {
         tracking_domain: 'click.example1.com'
       };
 
-      return trackingDomains.update('test', sendingDomain, callback)
+      return trackingDomains.update('test', trackingDomain, callback)
         .then(function() {
           expect(client.put.firstCall.args[0].uri).to.equal('tracking-domains/test');
-          expect(client.put.firstCall.args[0].json).to.deep.equal(_.omit(sendingDomain, 'domain'));
+          expect(client.put.firstCall.args[0].json).to.deep.equal(_.omit(trackingDomain, 'domain'));
           expect(client.put.firstCall.args[1]).to.equal(callback);
         });
     });
