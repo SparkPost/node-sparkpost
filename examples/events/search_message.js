@@ -7,7 +7,7 @@ var key = 'YOURAPIKEY'
 // Returns 1000 message events for the last hour
 
 // Promise
-client.events.message.search({})
+client.events.searchMessage({})
   .then(data => {
     console.log('Congrats you can use our client library!');
     console.log(data);
@@ -18,7 +18,7 @@ client.events.message.search({})
   });
 
 // Callback
-client.events.message.search({}, function(err, data) {
+client.events.searchMessage({}, function(err, data) {
   if (err) {
     console.log('Whoops! Something went wrong');
     console.log(err);

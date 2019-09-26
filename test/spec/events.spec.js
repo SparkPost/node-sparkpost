@@ -9,7 +9,7 @@ require('sinon-as-promised');
 chai.use(require('sinon-chai'));
 chai.use(require('chai-as-promised'));
 
-describe('Message Events Library', function() {
+describe('Events Library', function() {
   let client, events, callback;
 
   beforeEach(function() {
@@ -42,7 +42,7 @@ describe('Message Events Library', function() {
           to: '2016-11-14T16:15',
           transmission_ids: '65832150921904138'
         };
-        return events.message.search(options, callback)
+        return events.searchMessage(options, callback)
           .then(function() {
             Object.keys(options).forEach(function(key) {
               expect(client.get.firstCall.args[0].qs).to.have.property(key).and.equal(options[key]);
@@ -65,7 +65,7 @@ describe('Message Events Library', function() {
           per_page: 5,
           timezone: 'America/New_York'
         };
-        return events.message.search(arroptions)
+        return events.searchMessage(arroptions)
           .then(function() {
             Object.keys(arroptions).forEach(function(key) {
               var opt = arroptions[key]
@@ -78,58 +78,5 @@ describe('Message Events Library', function() {
       });
     });
   });
-
-  describe('Ingest Tests', function(){
-    describe('search Method', function() {
-      it('should call client get method with the appropriate parameters', function() {
-        var options = {
-          events: 'success,error',
-          event_ids: '1169451c-0958-4704-a89d-538d3ba55f09,0109c92a-1b3d-4ba2-a300-d057de905305',
-          from: '2015-11-14T16:15',
-          batch_ids: '0a0b1358-0293-410d-1b78-e6ac3922a87,38cd32c7-2677-4602-a0a5-a25312c006d4',
-          retryable: true,
-          cursor: 'initial',
-          page: 1,
-          per_page: 5,
-          timezone: 'America/New_York',
-          to: '2016-11-14T16:15',
-          subaccounts: '123,456'
-      };
-        return events.message.search(options, callback)
-          .then(function() {
-            Object.keys(options).forEach(function(key) {
-              expect(client.get.firstCall.args[0].qs).to.have.property(key).and.equal(options[key]);
-            });
-            expect(client.get.firstCall.args[1]).to.equal(callback);
-          });
-      });
-  
-      it('should accept arrays as parameters where appropriate', function() {
-        var arroptions = {
-          events: ['success','error'],
-          event_ids: ['1169451c-0958-4704-a89d-538d3ba55f09','0109c92a-1b3d-4ba2-a300-d057de905305'],
-          from: '2015-11-14T16:15',
-          batch_ids: ['0a0b1358-0293-410d-1b78-e6ac3922a87','38cd32c7-2677-4602-a0a5-a25312c006d4'],
-          retryable: true,
-          cursor: 'initial',
-          page: 1,
-          per_page: 5,
-          timezone: 'America/New_York',
-          to: '2016-11-14T16:15',
-          subaccounts: ['123','456']
-        };
-        return events.message.search(arroptions)
-          .then(function() {
-            Object.keys(arroptions).forEach(function(key) {
-              var opt = arroptions[key]
-                , firstCallQS = client.get.firstCall.args[0].qs;
-              if (Array.isArray(opt)) {
-                expect(firstCallQS).to.have.property(key).and.equal(opt.toString());
-              }
-            });
-          });
-      });
-    });
-  })
   
 });
