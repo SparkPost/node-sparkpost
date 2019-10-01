@@ -5,6 +5,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased][unreleased]
 - Security patches to dev-dependencies [#237](https://github.com/SparkPost/node-sparkpost/pull/237) by @jgzamora
 
+## [2.1.4] - 2019-10-01
+### Added
+- Events API functionality by @sstaley-sparkpost
+- Example for [searching the events/message API](/examples/events/search_message.js) by @sstaley-sparkpost.
+
 ## [2.1.3] - 2018-10-24
 ### Fixed
 - Template preview draft option [bug](https://github.com/SparkPost/node-sparkpost/issues/233) by @jgzamora
