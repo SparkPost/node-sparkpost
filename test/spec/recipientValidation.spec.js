@@ -28,17 +28,17 @@ describe('Recipient Validation Library', function() {
     recipientValidation = require('../../lib/recipientValidation')(client);
   });
 
-  describe('get', function() {
+  describe('validate', function() {
     it('should call client get method with the appropriate uri', function() {
-      return recipientValidation.get('sparkpost@yopmail.com', callback)
+      return recipientValidation.validate('test@sparkpost.com', callback)
         .then(function() {
-          expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'recipient-validation/single/sparkpost@yopmail.com'});
+          expect(client.get.firstCall.args[0]).to.deep.equal({uri: 'recipient-validation/single/test@sparkpost.com'});
           expect(client.get.firstCall.args[1]).to.equal(callback);
         });
     });
 
     it('should throw an error if domain is missing', function() {
-      return expect(recipientValidation.get()).to.be.rejectedWith('Email Address is required');
+      return expect(recipientValidation.validate()).to.be.rejectedWith('Email Address is required');
     });
   });
 
