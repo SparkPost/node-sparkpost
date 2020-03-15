@@ -6,8 +6,8 @@ This library provides easy access to the [Recipient Validation](https://develope
 
 ## Methods
 * **validate(email)**<br />
-  Retrieve information related to the email address whether the email address is valid or not.
-  * `email` - the email address that you want to validate **required**\
+  Validation of email address provided.
+  * `email` - the email address that you want to validate **required**
 
 ## Examples
 
