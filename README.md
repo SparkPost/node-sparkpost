@@ -162,6 +162,7 @@ Click on the desired API to see usage and more information
 * [Templates](/docs/resources/templates.md) - `client.templates` ([examples](/examples/templates))
 * [Transmissions](/docs/resources/transmissions.md) - `client.transmissions` ([examples](/examples/transmissions))
 * [Webhooks](/docs/resources/webhooks.md) - `client.webhooks` ([examples](/examples/webhooks))
+* [Recipient Validations](/docs/resources/recipientValidation.md) - `client.recipientValidation` ([examples](/examples/recipientValidation))
 
 
 ## Development
