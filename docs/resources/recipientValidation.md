@@ -1,4 +1,4 @@
-# Sending Domains
+# Recipient Validation
 
 This library provides easy access to the [Recipient Validation](https://developers.sparkpost.com/api/recipient-validation/) Resource.
 
