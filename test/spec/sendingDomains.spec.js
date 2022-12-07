@@ -12,7 +12,7 @@ chai.use(require('sinon-chai'))
 chai.use(require('chai-as-promised'))
 
 describe('Sending Domains Library', function () {
-  var client, sendingDomains, callback
+  var client, sendingDomains, subAccountOptions, callback
 
   beforeEach(function () {
     client = {
@@ -23,6 +23,8 @@ describe('Sending Domains Library', function () {
       reject: SparkPost.prototype.reject
     }
 
+    subAccountOptions = {}
+
     callback = function () {}
 
     sendingDomains = require('../../lib/sendingDomains')(client)
@@ -30,8 +32,8 @@ describe('Sending Domains Library', function () {
 
   describe('list', function () {
     it('should call client get method with the appropriate uri', function () {
-      return sendingDomains.list(callback).then(function () {
-        expect(client.get.firstCall.args[0]).to.deep.equal({ uri: 'sending-domains' })
+      return sendingDomains.list(subAccountOptions, callback).then(function () {
+        expect(client.get.firstCall.args[0]).to.deep.equal({ uri: 'sending-domains', headers: {} })
         expect(client.get.firstCall.args[1]).to.equal(callback)
       })
     })
@@ -39,8 +41,8 @@ describe('Sending Domains Library', function () {
 
   describe('get', function () {
     it('should call client get method with the appropriate uri', function () {
-      return sendingDomains.get('test', callback).then(function () {
-        expect(client.get.firstCall.args[0]).to.deep.equal({ uri: 'sending-domains/test' })
+      return sendingDomains.get('test', subAccountOptions, callback).then(function () {
+        expect(client.get.firstCall.args[0]).to.deep.equal({ uri: 'sending-domains/test', headers: {} })
         expect(client.get.firstCall.args[1]).to.equal(callback)
       })
     })
@@ -56,9 +58,10 @@ describe('Sending Domains Library', function () {
         domain: 'test'
       }
 
-      return sendingDomains.create(sendingDomain, callback).then(function () {
+      return sendingDomains.create(sendingDomain, subAccountOptions, callback).then(function () {
         expect(client.post.firstCall.args[0].uri).to.equal('sending-domains')
         expect(client.post.firstCall.args[0].json).to.deep.equal(sendingDomain)
+        expect(client.post.firstCall.args[0].headers).to.deep.equal({})
         expect(client.post.firstCall.args[1]).to.equal(callback)
       })
     })
@@ -74,9 +77,10 @@ describe('Sending Domains Library', function () {
         tracking_domain: 'click.example1.com'
       }
 
-      return sendingDomains.update('test', sendingDomain, callback).then(function () {
+      return sendingDomains.update('test', sendingDomain, subAccountOptions, callback).then(function () {
         expect(client.put.firstCall.args[0].uri).to.equal('sending-domains/test')
         expect(client.put.firstCall.args[0].json).to.deep.equal(_.omit(sendingDomain, 'domain'))
+        expect(client.put.firstCall.args[0].headers).to.deep.equal({})
         expect(client.put.firstCall.args[1]).to.equal(callback)
       })
     })
@@ -92,8 +96,9 @@ describe('Sending Domains Library', function () {
 
   describe('delete', function () {
     it('should call client delete method with the appropriate uri', function () {
-      return sendingDomains.delete('test', callback).then(function () {
+      return sendingDomains.delete('test', subAccountOptions, callback).then(function () {
         expect(client.delete.firstCall.args[0].uri).to.equal('sending-domains/test')
+        expect(client.delete.firstCall.args[0].headers).to.deep.equal({})
         expect(client.delete.firstCall.args[1]).to.equal(callback)
       })
     })
@@ -110,9 +115,10 @@ describe('Sending Domains Library', function () {
         spf_verify: true
       }
 
-      return sendingDomains.verify('test', options, callback).then(function () {
+      return sendingDomains.verify('test', options, subAccountOptions, callback).then(function () {
         expect(client.post.firstCall.args[0].uri).to.equal('sending-domains/test/verify')
         expect(client.post.firstCall.args[0].json).to.deep.equal(_.omit(options, 'domain'))
+        expect(client.post.firstCall.args[0].headers).to.deep.equal({})
         expect(client.post.firstCall.args[1]).to.equal(callback)
       })
     })
