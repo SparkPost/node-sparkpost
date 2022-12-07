@@ -259,7 +259,11 @@ declare class SparkPost {
     create(
       options: SparkPost.CreateSendingDomain,
       subAccountOptions: SubAccountOptions,
-      callback?: SparkPost.ResultsCallback<{ message: string; domain: string }>
+      callback?: SparkPost.ResultsCallback<{
+        message: string
+        domain: string
+        dkim?: SparkPost.DKIM
+      }>
     ): void
     /**
      * Create a sending domain by providing a sending domain object as the POST request body.
@@ -267,7 +271,11 @@ declare class SparkPost {
      * @param options The create options
      * @returns Promise The basic info results
      */
-    create(options: SparkPost.CreateSendingDomain): SparkPost.ResultsPromise<{ message: string; domain: string }>
+    create(options: SparkPost.CreateSendingDomain): SparkPost.ResultsPromise<{
+      message: string
+      domain: string
+      dkim?: SparkPost.DKIM
+    }>
     /**
      * Update the attributes of an existing sending domain by specifying its domain name in the URI path and use a sending domain object as the PUT request body.
      * @param domain The domain
