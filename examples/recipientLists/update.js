@@ -1,12 +1,12 @@
-'use strict';
+'use strict'
 
-var key = 'YOURAPIKEY'
-  , SparkPost = require('sparkpost')
-  , client = new SparkPost(key)
-  , recipientList = {
-    id: 'EXISTING_TEST_ID'
-    , name: 'Test Recipient List'
-    , recipients: [
+var key = 'YOURAPIKEY',
+  SparkPost = require('sparkpost'),
+  client = new SparkPost(key),
+  recipientList = {
+    id: 'EXISTING_TEST_ID',
+    name: 'Test Recipient List',
+    recipients: [
       {
         address: {
           email: 'test1@test.com'
@@ -23,25 +23,26 @@ var key = 'YOURAPIKEY'
         }
       }
     ]
-  };
+  }
 
 // Promise
-client.recipientLists.update(recipientList)
-  .then(data => {
-    console.log('Congrats you can use our client library!');
-    console.log(data);
+client.recipientLists
+  .update(recipientList)
+  .then((data) => {
+    console.log('Congrats you can use our client library!')
+    console.log(data)
   })
-  .catch(err => {
-    console.log(err);
-  });
+  .catch((err) => {
+    console.log(err)
+  })
 
 // Callback
-client.recipientLists.update(recipientList, function(err, data) {
+client.recipientLists.update(recipientList, function (err, data) {
   if (err) {
-    console.log('Whoops! Something went wrong');
-    console.log(err);
+    console.log('Whoops! Something went wrong')
+    console.log(err)
   } else {
-    console.log('Congrats you can use our client library!');
-    console.log(data);
+    console.log('Congrats you can use our client library!')
+    console.log(data)
   }
-});
+})

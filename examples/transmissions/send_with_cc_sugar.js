@@ -1,9 +1,9 @@
-'use strict';
+'use strict'
 
-var key = 'YOURAPIKEY'
-  , SparkPost = require('sparkpost')
-  , client = new SparkPost(key)
-  , transmission = {
+var key = 'YOURAPIKEY',
+  SparkPost = require('sparkpost'),
+  client = new SparkPost(key),
+  transmission = {
     recipients: [
       {
         address: {
@@ -13,13 +13,13 @@ var key = 'YOURAPIKEY'
         substitution_data: {
           recipient_type: 'Original'
         }
-      },
+      }
     ],
     cc: [
       {
         address: {
           email: 'cc.recipient@example.com',
-          name: 'Carbon Copy Recipient',
+          name: 'Carbon Copy Recipient'
         },
         substitution_data: {
           recipient_type: 'CC'
@@ -35,26 +35,27 @@ var key = 'YOURAPIKEY'
       text: 'An example email using cc with SparkPost to the {{recipient_type}} recipient.',
       html: '<p>An example email using cc with SparkPost to the {{recipient_type}} recipient.</p>'
     }
-  };
+  }
 
 // Promise
-client.transmissions.send(transmission)
-  .then(data => {
-    console.log('Congrats! You sent an email with cc using SparkPost!');
-    console.log(data);
+client.transmissions
+  .send(transmission)
+  .then((data) => {
+    console.log('Congrats! You sent an email with cc using SparkPost!')
+    console.log(data)
   })
-  .catch(err => {
-    console.log('Whoops! Something went wrong');
-    console.log(err);
-  });
+  .catch((err) => {
+    console.log('Whoops! Something went wrong')
+    console.log(err)
+  })
 
 // Callback
-client.transmissions.send(transmission, function(err, data) {
+client.transmissions.send(transmission, function (err, data) {
   if (err) {
-    console.log('Whoops! Something went wrong');
-    console.log(err);
+    console.log('Whoops! Something went wrong')
+    console.log(err)
   } else {
-    console.log('Congrats! You sent an email with cc using SparkPost!');
-    console.log(data);
+    console.log('Congrats! You sent an email with cc using SparkPost!')
+    console.log(data)
   }
-});
+})

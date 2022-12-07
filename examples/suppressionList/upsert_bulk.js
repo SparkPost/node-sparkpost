@@ -1,9 +1,9 @@
-'use strict';
+'use strict'
 
-var key = 'YOURAPIKEY'
-  , SparkPost = require('sparkpost')
-  , client = new SparkPost(key)
-  , listEntries = [
+var key = 'YOURAPIKEY',
+  SparkPost = require('sparkpost'),
+  client = new SparkPost(key),
+  listEntries = [
     {
       recipient: 'test1@test.com',
       transactional: false,
@@ -22,26 +22,27 @@ var key = 'YOURAPIKEY'
       non_transactional: false,
       description: 'Test description 3'
     }
-  ];
+  ]
 
 // Promise
-client.suppressionList.upsert(listEntries)
-  .then(data => {
-    console.log('Congrats you can use our client library!');
-    console.log(data);
+client.suppressionList
+  .upsert(listEntries)
+  .then((data) => {
+    console.log('Congrats you can use our client library!')
+    console.log(data)
   })
-  .catch(err => {
-    console.log('Whoops! Something went wrong');
-    console.log(err);
-  });
+  .catch((err) => {
+    console.log('Whoops! Something went wrong')
+    console.log(err)
+  })
 
 // Callback
-client.suppressionList.upsert(listEntries, function(err, data) {
+client.suppressionList.upsert(listEntries, function (err, data) {
   if (err) {
-    console.log('Whoops! Something went wrong');
-    console.log(err);
+    console.log('Whoops! Something went wrong')
+    console.log(err)
   } else {
-    console.log('Congrats you can use our client library!');
-    console.log(data);
+    console.log('Congrats you can use our client library!')
+    console.log(data)
   }
-});
+})

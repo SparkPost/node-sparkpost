@@ -1,9 +1,9 @@
-'use strict';
+'use strict'
 
-var key = 'YOURAPIKEY'
-  , SparkPost = require('sparkpost')
-  , client = new SparkPost(key)
-  , transmission = {
+var key = 'YOURAPIKEY',
+  SparkPost = require('sparkpost'),
+  client = new SparkPost(key),
+  transmission = {
     recipients: [{ address: { email: 'john.doe@example.com' } }],
     content: {
       from: 'From Envelope <from@example.com>',
@@ -15,26 +15,27 @@ var key = 'YOURAPIKEY'
       open_tracking: true,
       click_tracking: true
     }
-  };
+  }
 
 // Promise
-client.transmissions.send(transmission)
-  .then(data => {
-    console.log('Congrats you can use our client library!');
-    console.log(data);
+client.transmissions
+  .send(transmission)
+  .then((data) => {
+    console.log('Congrats you can use our client library!')
+    console.log(data)
   })
-  .catch(err => {
-    console.log('Whoops! Something went wrong');
-    console.log(err);
-  });
+  .catch((err) => {
+    console.log('Whoops! Something went wrong')
+    console.log(err)
+  })
 
 // Callback
-client.transmissions.send(transmission, function(err, data) {
+client.transmissions.send(transmission, function (err, data) {
   if (err) {
-    console.log('Whoops! Something went wrong');
-    console.log(err);
+    console.log('Whoops! Something went wrong')
+    console.log(err)
   } else {
-    console.log('Congrats you can use our client library!');
-    console.log(data);
+    console.log('Congrats you can use our client library!')
+    console.log(data)
   }
-});
+})

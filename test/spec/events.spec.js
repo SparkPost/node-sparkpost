@@ -1,30 +1,30 @@
-'use strict';
+'use strict'
 
-var chai = require('chai')
-  , expect = chai.expect
-  , sinon = require('sinon');
+var chai = require('chai'),
+  expect = chai.expect,
+  sinon = require('sinon')
 
-require('sinon-as-promised');
+require('sinon-as-promised')
 
-chai.use(require('sinon-chai'));
-chai.use(require('chai-as-promised'));
+chai.use(require('sinon-chai'))
+chai.use(require('chai-as-promised'))
 
-describe('Events Library', function() {
-  let client, events, callback;
+describe('Events Library', function () {
+  let client, events, callback
 
-  beforeEach(function() {
+  beforeEach(function () {
     client = {
       get: sinon.stub().resolves({})
-    };
+    }
 
-    callback = function() {};
+    callback = function () {}
 
-    events = require('../../lib/events')(client);
-  });
+    events = require('../../lib/events')(client)
+  })
 
-  describe('Message Tests', function(){
-    describe('search Method', function() {
-      it('should call client get method with the appropriate parameters', function() {
+  describe('Message Tests', function () {
+    describe('search Method', function () {
+      it('should call client get method with the appropriate parameters', function () {
         var options = {
           bounce_classes: '10,50',
           campaign_ids: 'test_campaign',
@@ -41,19 +41,18 @@ describe('Events Library', function() {
           timezone: 'America/New_York',
           to: '2016-11-14T16:15',
           transmission_ids: '65832150921904138'
-        };
-        return events.searchMessage(options, callback)
-          .then(function() {
-            Object.keys(options).forEach(function(key) {
-              expect(client.get.firstCall.args[0].qs).to.have.property(key).and.equal(options[key]);
-            });
-            expect(client.get.firstCall.args[1]).to.equal(callback);
-          });
-      });
-  
-      it('should accept arrays as parameters where appropriate', function() {
+        }
+        return events.searchMessage(options, callback).then(function () {
+          Object.keys(options).forEach(function (key) {
+            expect(client.get.firstCall.args[0].qs).to.have.property(key).and.equal(options[key])
+          })
+          expect(client.get.firstCall.args[1]).to.equal(callback)
+        })
+      })
+
+      it('should accept arrays as parameters where appropriate', function () {
         var arroptions = {
-          bounce_classes: [10,50],
+          bounce_classes: [10, 50],
           campaign_ids: ['campaign1', 'campaignTwo'],
           events: ['bounce', 'out_of_band'],
           friendly_froms: ['bob@example.com', 'jim@example.com'],
@@ -64,19 +63,17 @@ describe('Events Library', function() {
           page: 1,
           per_page: 5,
           timezone: 'America/New_York'
-        };
-        return events.searchMessage(arroptions)
-          .then(function() {
-            Object.keys(arroptions).forEach(function(key) {
-              var opt = arroptions[key]
-                , firstCallQS = client.get.firstCall.args[0].qs;
-              if (Array.isArray(opt)) {
-                expect(firstCallQS).to.have.property(key).and.equal(opt.toString());
-              }
-            });
-          });
-      });
-    });
-  });
-  
-});
+        }
+        return events.searchMessage(arroptions).then(function () {
+          Object.keys(arroptions).forEach(function (key) {
+            var opt = arroptions[key],
+              firstCallQS = client.get.firstCall.args[0].qs
+            if (Array.isArray(opt)) {
+              expect(firstCallQS).to.have.property(key).and.equal(opt.toString())
+            }
+          })
+        })
+      })
+    })
+  })
+})

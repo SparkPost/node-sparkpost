@@ -1,14 +1,16 @@
 # Code Style Guide for SparkPost Node SDK
 
-Please make sure that your editor is properly reading from the .editorconfig file located at the base of the repository. 
+Please make sure that your editor is properly reading from the .editorconfig file located at the base of the repository.
 
-Please take a few minutes and review our style guide: 
+Please take a few minutes and review our style guide:
 
 The following provide a reasonable style and formatting guide for all Javascript produced at Message Systems. The most important take-away from this guide is: be consistent.
 A lot of effort has been made to keep this guide focused on style and formatting. However, conventions and techniques are inevitably part of things as well. These have been minimized as much as possible, as other documents are better suited to handle them.
 
 ## Naming Conventions
+
 Avoid single letter names outside of loops. Offer descriptive names.
+
 ```
   // Bad
   function q() {...}
@@ -19,7 +21,9 @@ Avoid single letter names outside of loops. Offer descriptive names.
     ...
   }
 ```
+
 Use camelCase when naming objects, functions, and instances.
+
 ```
   // Bad
   var MYObject = {};
@@ -32,7 +36,9 @@ Use camelCase when naming objects, functions, and instances.
   var myStringVariable = '';
   var myObjectVariable = {};
 ```
+
 Use PascalCase for class names.
+
 ```
   // Bad
   var superHero = function (options) {
@@ -47,7 +53,9 @@ Use PascalCase for class names.
   };
   var reed = new SuperHero({ name:'Reed Richards' });
 ```
+
 Do not treat "private" object properties as special with something like an underscore. If you need private properties, obtain them by closing over them in the constructor.
+
 ```
   // Bad
   this._ccNumber = '4111111111111111';
@@ -63,7 +71,9 @@ Do not treat "private" object properties as special with something like an under
 
   var acct = new AccountInfo('4111111111111111');
 ```
+
 If you are making a reference to this, use self (assuming a bind() function isn't used).
+
 ```
   // Bad
   function () {
@@ -77,7 +87,9 @@ If you are making a reference to this, use self (assuming a bind() function isn'
     return function () { console.log(self); };
   }
 ```
+
 You're not a minifier. Save yourself the headache of trying to be one.
+
 ```
   // Bad
   var q = function q(s) {
@@ -86,8 +98,11 @@ You're not a minifier. Save yourself the headache of trying to be one.
   var i,a=[],els=q('#test');
   for(i=0;i<els.length;i++){a.push(els[i]);}
 ```
+
 ## Variables
+
 Always use var to declare variables. Not doing so will result in global variables. Unintentional global variables lead to unexpected program behavior. Even if a new variable is meant to be global, you should still use var.
+
 ```
   // Bad
   food = 'pickle';
@@ -103,7 +118,9 @@ Always use var to declare variables. Not doing so will result in global variable
   }();
   // food = 'pickle'
 ```
+
 When declaring multiple variables, use a single var declaration in the comma-first style. Improve readability by using line comments to break out groups of related variables.
+
 ```
   // Bad
   var buffer = [];
@@ -130,7 +147,9 @@ When declaring multiple variables, use a single var declaration in the comma-fir
     , hasResults = false
     , isMutable = false;
 ```
+
 Declare unassigned variables last. (If you're splitting out groups of variables with line comments, declare unassigned variables at the end of whichever group they're in.)
+
 ```
   // Bad
   var ref, len,
@@ -141,7 +160,9 @@ Declare unassigned variables last. (If you're splitting out groups of variables 
     , len
     , ref;
 ```
+
 Initialize each variable as you declare it, if its value is available at declaration time and either is of primitive type, or can be expressed in a single (ideally short) line of code. If a variable needs to be initialized with the result of an expression spanning multiple lines, declare the variable without a definition and assign its value afterward.
+
 ```
   // Bad
   var ref
@@ -155,27 +176,29 @@ Initialize each variable as you declare it, if its value is available at declara
 
   // Bad
   var ref = things[0]
-      .map(function(item){ 
-        return item * 2; 
+      .map(function(item){
+        return item * 2;
       })
-      .filter(function(item){ 
-        return (item % 2 === 0); 
-      })    
+      .filter(function(item){
+        return (item % 2 === 0);
+      })
     , len = ref.length;
 
   // Good
   var ref
     , len;
   ref = things[0]
-      .map(function(item){ 
-        return item * 2; 
+      .map(function(item){
+        return item * 2;
       })
-      .filter(function(item){ 
-        return (item % 2 === 0); 
+      .filter(function(item){
+        return (item % 2 === 0);
       });
   len = ref.length;
 ```
+
 Avoid variable hoisting: Declare variables at the top of their scope.
+
 ```
   // Bad
   var InsertRecord = function (data) {
@@ -199,7 +222,7 @@ Avoid variable hoisting: Declare variables at the top of their scope.
     validate();
     notify.info('Inserting record');
 
-    
+
 
     if (name === 'test') {
       return false;
@@ -208,9 +231,12 @@ Avoid variable hoisting: Declare variables at the top of their scope.
     }
   };
 ```
+
 ## Hoisting
+
 Variable declarations get hoisted to the top of a scope by the Javascript interpreter. Assignments do not. This can lead to unexpected situations. More information about this can be found at Adequately Good (http://www.adequatelygood.com/2010/2/JavaScript-Scoping-and-Hoisting); below is an example from that article.
 The takeaway is: Declare your variables early. If you are in the habit of putting them at the top of their scope, you can avoid the problem.
+
 ```
   function test() {
     foo();  // TypeError "foo is not a function"
@@ -228,21 +254,25 @@ The takeaway is: Declare your variables early. If you are in the habit of puttin
   }
   test();
 ```
+
 ## Types
+
 There are two categories of data types:
 
-* Primitives: string, number, boolean, null, undefined
-* Complex: object, array (really an object), function (also an object)
+- Primitives: string, number, boolean, null, undefined
+- Complex: object, array (really an object), function (also an object)
 
 Primitive types are assigned and passed by value; complex types, by reference.
 
 ### Strings
+
 Use only single-quoted strings. (If you slip up and wrap a string in double quotes, never fear – JSHint will remind you.)
 Strings longer than 80 characters should be written across multiple lines using string concatenation.
 When building strings programmatically, use Array.join() instead of string concatenation.
 Don't build strings of HTML. Instead, just manipulate the DOM directly.
 
 ### Arrays
+
 ```
 Use the literal syntax for array creation.
   // Bad
@@ -251,7 +281,9 @@ Use the literal syntax for array creation.
   // Good
   var items = [];
 ```
+
 Use Array.push() to add elements to the end of an array whose length you don't know.
+
 ```
   // Bad
   stack[stack.length] = 'element';
@@ -259,7 +291,9 @@ Use Array.push() to add elements to the end of an array whose length you don't k
   // Good
   stack.push('element');
 ```
+
 Clone arrays with Array.slice().
+
 ```
   // Bad
   var src = [1,2,3],
@@ -278,7 +312,9 @@ Clone arrays with Array.slice().
   var src = [1,2,3]
     , dst = src.slice();
 ```
+
 Don't use "associative" Arrays. Use an Object, or hashes/maps.
+
 ```
   // Bad
   var items = [];
@@ -291,8 +327,11 @@ Don't use "associative" Arrays. Use an Object, or hashes/maps.
   items.animal = 'dog';
   items.mineral = 'shale';
 ```
+
 ### Objects
+
 Use the literal syntax for object creation.
+
 ```
   // Bad
   var obj = new Object();
@@ -300,7 +339,9 @@ Use the literal syntax for object creation.
   // Good
   var obj = {};
 ```
+
 Don't use reserved words as keys, even if you quote them.
+
 ```
   // Bad
   var Fig = {
@@ -316,9 +357,11 @@ Don't use reserved words as keys, even if you quote them.
     hidden: true
   };
 ```
+
 It's completely acceptable to modify native object prototypes as long as the following rule is observed: Don't be stupid. Browsers with older versions of Javascript interpreters can often be augmented (in limited ways) to be compatible with newer flavors of the language through native object modification. Great care must be exercised however not to break or overwrite current or future functionality.
 Future functionality? Yes: Object.create().
 An easy way not to break native objects is to add functionality conditionally:
+
 ```
   if (typeof Object.create == 'undefined') {
     Object.create = function (...) {
@@ -326,8 +369,11 @@ An easy way not to break native objects is to add functionality conditionally:
     }
   }
 ```
+
 ## Properties
+
 When accessing object properties by literal name, use the dot notation. Reserve the bracket notation for when the property you're accessing is named by a variable's value.
+
 ```
   var carrot = {
     category: 'plant',
@@ -349,7 +395,9 @@ When accessing object properties by literal name, use the dot notation. Reserve 
     return this[prop];
   }
 ```
+
 ## Comments
+
 ```
 Use /* ... */ for multiline comments.
   // Bad
@@ -362,7 +410,7 @@ Use /* ... */ for multiline comments.
 
   // Good
 
-  /* 
+  /*
    * No updates can be made to the resource during this operation as the
    * bookkeepping for it will NOT be performed because of possible race
    * conditions.  All updates during this period will be ignored, so be
@@ -370,7 +418,9 @@ Use /* ... */ for multiline comments.
    */
   model.lock();
 ```
+
 Use JSDoc to document functions, methods, &c.
+
 ```
 // Good
 
@@ -393,7 +443,9 @@ function invert(list) {
 };
 
 ```
+
 Use // for single line comments. Place them on a newline above the subject of the comment with a blank line above that. The blank line may be omitted when the comment directly follows a control structure. Capitalize the first letter of a comment.
+
 ```
   // Bad
   try {
@@ -416,7 +468,7 @@ Use // for single line comments. Place them on a newline above the subject of th
     // Get the module to execute and its partner output module
     exe = options && require('./main-' + options.main);
     out = options && require('./output/main-' + options.main + '-output').create(sysUtil, options.debug, options.quiet);
-    
+
     // Only execute with a proper pairing
     if (exe && out) {
       exe.exec(options, out, complete.bind(null, out, callback))
@@ -427,7 +479,9 @@ Use // for single line comments. Place them on a newline above the subject of th
     complete(out, callback, ex)
   }
 ```
+
 End line comments should only be used when documenting long lists of variables or simple object properties.
+
 ```
   // Good
   var lock = false,     // Mandatory lock indicator
@@ -445,8 +499,11 @@ End line comments should only be used when documenting long lists of variables o
     current: null    // Used for iterators
   };
 ```
+
 ## Whitespace
+
 Use soft tabs set to 2 spaces (illustrated with dots, below).
+
 ```
   // Bad
   var fn = () {
@@ -458,7 +515,9 @@ Use soft tabs set to 2 spaces (illustrated with dots, below).
   ..console.log('test');
   };
 ```
+
 Place one space before the leading brace.
+
 ```
   // Bad
   var fn = (){
@@ -482,9 +541,12 @@ Place one space before the leading brace.
     job: JOB_SECURITY
   });
 ```
+
 ## Semicolons
+
 Javascript's semantics include optional automatic semicolon insertion. In theory, this allows less experienced programmers to more quickly get to grips with the language. In practice, this allows programmers of all experience levels the opportunity to discover the joy of seeing their code misbehave in various fashions both subtle and bizarre.
 When in doubt, insert a semicolon; if one doesn't belong there, JSHint will let you know.
+
 ```
   // Bad
   (function () {
@@ -498,8 +560,11 @@ When in doubt, insert a semicolon; if one doesn't belong there, JSHint will let 
     return name;
   })();
 ```
+
 ## Blocks
+
 Use braces with multi-line blocks. Ensure leading brace is on the same line.
+
 ```
   // Bad
   if (test)
@@ -516,9 +581,11 @@ Use braces with multi-line blocks. Ensure leading brace is on the same line.
   // Good
   var fn = function() {
     return false;
-  }; 
+  };
 ```
+
 In a statement with multiple clauses (e.g. if/else if/else or try/catch/finally), introduce clauses following the first on the same line as the prior clause's closing brace.
+
 ```
 // Bad
 if (test) {
@@ -548,8 +615,11 @@ try {
   console.log('Thing couldn\'t do thing: ' + e);
 }
 ```
+
 ## Functions
+
 Use these expressions when declaring functions. The "!" of an immediately invoked function ensures that if a semicolon wasn't included on the previous statement, no execution error will occur.
+
 ```
   // Anonymous function expression
   var anonymous = function () {
@@ -573,7 +643,9 @@ Use these expressions when declaring functions. The "!" of an immediately invoke
     console.log('Page Initialized');
   }();
 ```
+
 Never declare a function in a non-function block (if, while, etc). Instead, assign a function to a variable.
+
 ```
   // Bad
   if (enabled) {
@@ -589,7 +661,9 @@ Never declare a function in a non-function block (if, while, etc). Instead, assi
     };
   }
 ```
+
 Never name a parameter arguments, as it will take precedence of the arguments object that is implicitly declared in every function scope.
+
 ```
   // Bad
   var fn = function nope(name, opts, arguments) { ... };
@@ -599,8 +673,10 @@ Never name a parameter arguments, as it will take precedence of the arguments ob
 ```
 
 ## Conditions and Equality
+
 Favor explicit equality checks over normal ones. That means using === and !== over == and !=.
 When comparing a return value against a constant, place the constant on the right-hand side of the comparison operator.
+
 ```
 // Bad: implicit "falsy" comparison
 if (! thing.doThing()) {
@@ -617,16 +693,18 @@ if (thing.doThing() === false) {
   // ...
 }
 ```
+
 Boolean evaluation of variables follows these rules:
 
-* Objects evaluate to true.
-* Undefined evaluates to false.
-* Null evaluates to false.
-* Booleans evaluate to the value of the boolean.
-* Numbers evaluate to false if +/-0 or NaN, otherwise to true.
-* Strings evaluate to false when empty (''), otherwise to true.
+- Objects evaluate to true.
+- Undefined evaluates to false.
+- Null evaluates to false.
+- Booleans evaluate to the value of the boolean.
+- Numbers evaluate to false if +/-0 or NaN, otherwise to true.
+- Strings evaluate to false when empty (''), otherwise to true.
 
 Use conditional evaluation shortcuts.
+
 ```
 // Bad
 if (name !== '') {
@@ -640,8 +718,10 @@ if (name) {
 ```
 
 ## Libraries
+
 Used in moderation, libraries make our lives easier. Used profligately, they complicate life for everyone. Here follow some rules of thumb to help guide your judgment on the matter.
 Some things, such as checking types, testing whether an array is empty, or foreaching across an object's keys, can be trivially accomplished in native Javascript. Don't pull in a library just to do these things.
+
 ```
 // Bad
 var _ = require('lodash')
@@ -668,6 +748,7 @@ Object.keys(thing.things).forEach(function(key) {
 
 On the other hand, don't be afraid to pull in a library to do complex things, such as deep-cloning an object, or testing emptiness of a variable whose value might be an object, an array, or undefined – ideally, of course, avoid proliferating such special cases by writing your code so that you can rely on value types; but, in cases where that's not possible, or where you're dealing with a value coming from code outside your control, bring in Lo-dash or another library, rather than spending your precious time reinventing the wheel.
 When you think about using a method from a library already present for other reasons, consider whether native Javascript can perform the same task without undue extra effort. If so, prefer the native Javascript method over that provided by the library; this promotes better modularity and, where possible to do so, helps avoid tight coupling with a given library. This makes it easier to replace that library later, if and when it becomes necessary to do so, and also reduces cognitive overhead for other developers working with your code.
+
 ```
 var _ require('lodash')
   , anArray = [1, 2, 3, 4, 5]
@@ -700,7 +781,9 @@ Object.keys(anObject).map(function(key) {
 ```
 
 ## Composition
+
 In general, avoid jQuery-style method chaining for readability reasons. Instead, use temporary variables to store intermediate results.
+
 ```
 // Bad
 anArray

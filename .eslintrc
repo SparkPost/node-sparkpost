@@ -1,5 +1,5 @@
 {
-  "extends": "sparkpost/api",
+  "extends": ["sparkpost/api", "prettier"],
   "globals": {
     "Promise": true
   }

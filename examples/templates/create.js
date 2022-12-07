@@ -1,9 +1,9 @@
-'use strict';
+'use strict'
 
-var key = 'YOURAPIKEY'
-  , SparkPost = require('sparkpost')
-  , client = new SparkPost(key)
-  , template = {
+var key = 'YOURAPIKEY',
+  SparkPost = require('sparkpost'),
+  client = new SparkPost(key),
+  template = {
     id: 'TEST_ID',
     name: 'Test Template',
     content: {
@@ -11,26 +11,27 @@ var key = 'YOURAPIKEY'
       subject: 'Test email template!',
       html: '<b>This is a test email template!</b>'
     }
-  };
+  }
 
 // Promise
-client.templates.create(template)
-  .then(data => {
-    console.log('Congrats you can use our client library!');
-    console.log(data);
+client.templates
+  .create(template)
+  .then((data) => {
+    console.log('Congrats you can use our client library!')
+    console.log(data)
   })
-  .catch(err => {
-    console.log('Whoops! Something went wrong');
-    console.log(err);
-  });
+  .catch((err) => {
+    console.log('Whoops! Something went wrong')
+    console.log(err)
+  })
 
 // Callback
-client.templates.create(template, function(err, data) {
+client.templates.create(template, function (err, data) {
   if (err) {
-    console.log('Whoops! Something went wrong');
-    console.log(err);
+    console.log('Whoops! Something went wrong')
+    console.log(err)
   } else {
-    console.log('Congrats you can use our client library!');
-    console.log(data);
+    console.log('Congrats you can use our client library!')
+    console.log(data)
   }
-});
+})
