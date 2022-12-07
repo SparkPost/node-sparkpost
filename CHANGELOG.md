@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.1.5] - 2022-12-07
+
+- Added types
+- Added subAccountOptions to all sending domains functions
+- Added DKIM types to SendingDomains.create response
+
 ## [Unreleased][unreleased]
 
 - Security patches to dev-dependencies [#237](https://github.com/SparkPost/node-sparkpost/pull/237) by @jgzamora
