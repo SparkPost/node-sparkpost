@@ -1289,10 +1289,12 @@ declare namespace SparkPost {
   interface CreateSubaccount {
     /** user-friendly name */
     name: string
+    /** whether or not to create an API key */
+    setup_api_key?: boolean
     /** user-friendly identifier for subaccount API key */
-    key_label: string
+    key_label?: string
     /** list of grants to give the subaccount API key */
-    key_grants: string[]
+    key_grants?: string[]
     /** list of IPs the subaccount may be used from */
     key_valid_ips?: string[] | undefined
     /** id of the default IP pool assigned to subaccount"s transmissions */
@@ -1301,8 +1303,8 @@ declare namespace SparkPost {
 
   interface CreateSubaccountResponse {
     subaccount_id: number
-    key: string
-    label: string
+    key?: string
+    label?: string
     short_key: string
   }
 
