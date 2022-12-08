@@ -229,21 +229,10 @@ declare class SparkPost {
   sendingDomains: {
     /**
      * List an overview of all sending domains in the system.
-     * @param callback The request callback with SendingDomain results array
-     */
-    list(subAccountOptions: SparkPost.SubAccountOptions, callback: SparkPost.ResultsCallback<SparkPost.SendingDomain[]>): void
-    /**
-     * List an overview of all sending domains in the system.
      *
      * @returns The SendingDomain results array
      */
     list(subAccountOptions?: SparkPost.SubAccountOptions): SparkPost.ResultsPromise<SparkPost.SendingDomain[]>
-    /**
-     * Retrieve a sending domain by specifying its domain name in the URI path. The response includes details about its DKIM key configuration.
-     * @param domain The domain
-     * @param callback The request callback with SendingDomain results
-     */
-    get(domain: string, subAccountOptions: SparkPost.SubAccountOptions, callback: SparkPost.ResultsCallback<SparkPost.SendingDomain>): void
     /**
      * Retrieve a sending domain by specifying its domain name in the URI path. The response includes details about its DKIM key configuration.
      *
@@ -251,20 +240,6 @@ declare class SparkPost {
      * @returns Promise The SendingDomain results
      */
     get(domain: string, subAccountOptions?: SparkPost.SubAccountOptions): SparkPost.ResultsPromise<SparkPost.SendingDomain>
-    /**
-     * Create a sending domain by providing a sending domain object as the POST request body.
-     * @param options The create options
-     * @param callback The request callback with basic info results
-     */
-    create(
-      options: SparkPost.CreateSendingDomain,
-      subAccountOptions: SparkPost.SubAccountOptions,
-      callback: SparkPost.ResultsCallback<{
-        message: string
-        domain: string
-        dkim?: SparkPost.DKIM
-      }>
-    ): void
     /**
      * Create a sending domain by providing a sending domain object as the POST request body.
      *
@@ -281,18 +256,6 @@ declare class SparkPost {
     }>
     /**
      * Update the attributes of an existing sending domain by specifying its domain name in the URI path and use a sending domain object as the PUT request body.
-     * @param domain The domain
-     * @param updateOpts The update options
-     * @param callback The request callback with basic info results
-     */
-    update(
-      domain: string,
-      updateOpts: SparkPost.UpdateSendingDomain,
-      subAccountOptions: SparkPost.SubAccountOptions,
-      callback: SparkPost.ResultsCallback<{ message: string; domain: string }>
-    ): void
-    /**
-     * Update the attributes of an existing sending domain by specifying its domain name in the URI path and use a sending domain object as the PUT request body.
      *
      * @param domain The domain
      * @param updateOpts The update options
@@ -305,29 +268,11 @@ declare class SparkPost {
     ): SparkPost.ResultsPromise<{ message: string; domain: string }>
     /**
      * Delete an existing sending domain.
-     * @param domain The domain
-     * @param callback The request callback
-     */
-    delete(domain: string, subAccountOptions: SparkPost.SubAccountOptions, callback: SparkPost.Callback<void>): void
-    /**
-     * Delete an existing sending domain.
      *
      * @param domain The domain
      * @returns Promise void
      */
     delete(domain: string, subAccountOptions?: SparkPost.SubAccountOptions): Promise<void>
-    /**
-     * Verify a Sending Domain
-     * @param domain The domain
-     * @param options a hash of [verify attributes]{@link https://developers.sparkpost.com/api/sending-domains#header-verify-attributes}
-     * @param callback The request callback with verify results
-     */
-    verify(
-      domain: string,
-      options: SparkPost.VerifyOptions,
-      subAccountOptions: SparkPost.SubAccountOptions,
-      callback: SparkPost.ResultsCallback<SparkPost.VerifyResults>
-    ): void
     /**
      * Verify a Sending Domain
      *
@@ -599,74 +544,22 @@ declare class SparkPost {
     /**
      * List an overview of all transmissions in the account
      *
-     * @param callback The request callback with Transmission results array
-     */
-    list(callback: SparkPost.ResultsCallback<SparkPost.TransmissionSummary[]>): void
-    /**
-     * List an overview of all transmissions in the account
-     *
-     * @param callback The request callback with Transmission results array
+     * @returns The Transmission results array
      */
     list(
-      options: {
+      options?: {
         campaign_id?: string | undefined
         template_id?: string | undefined
       },
-      callback: SparkPost.ResultsCallback<SparkPost.TransmissionSummary[]>
-    ): void
-    /**
-     * List an overview of all transmissions in the account
-     *
-     * @returns The Transmission results array
-     */
-    list(options?: {
-      campaign_id?: string | undefined
-      template_id?: string | undefined
-    }): SparkPost.ResultsPromise<SparkPost.TransmissionSummary[]>
-    /**
-     * Retrieve the details about a transmission by its ID
-     *
-     * @param id The id of the transmission you want to look up
-     * @param callback The request callback with Transmission results
-     */
-    get(transmissionID: string, callback: SparkPost.ResultsCallback<SparkPost.Transmission>): void
+      subAccountOptions?: SparkPost.SubAccountOptions
+    ): SparkPost.ResultsPromise<SparkPost.TransmissionSummary[]>
     /**
      * Retrieve the details about a transmission by its ID
      *
      * @param id The id of the transmission you want to look up
      * @returns The Transmission results
      */
-    get(id: string): SparkPost.ResultsPromise<SparkPost.Transmission>
-    /**
-     * Sends a message by creating a new transmission
-     *
-     * @param transmission an object of [transmission attributes]{@link https://developers.sparkpost.com/api/transmissions#header-transmission-attributes}
-     * @param options The create options. Specify maximum number of recipient errors returned
-     * @param callback The request callback with metadata and id results
-     */
-    send(
-      transmission: SparkPost.CreateTransmission,
-      options: { num_rcpt_errors?: number | undefined },
-      callback: SparkPost.ResultsCallback<{
-        total_rejected_recipients: number
-        total_accepted_recipients: number
-        id: string
-      }>
-    ): void
-    /**
-     *
-     *
-     * @param transmission an object of [transmission attributes]{@link https://developers.sparkpost.com/api/transmissions#header-transmission-attributes}
-     * @param callback The request callback with metadata and id results
-     */
-    send(
-      transmission: SparkPost.CreateTransmission,
-      callback: SparkPost.ResultsCallback<{
-        total_rejected_recipients: number
-        total_accepted_recipients: number
-        id: string
-      }>
-    ): void
+    get(id: string, subAccountOptions?: SparkPost.SubAccountOptions): SparkPost.ResultsPromise<SparkPost.Transmission>
     /**
      * Sends a message by creating a new transmission
      *
@@ -676,7 +569,8 @@ declare class SparkPost {
      */
     send(
       transmission: SparkPost.CreateTransmission,
-      options?: { num_rcpt_errors?: number | undefined }
+      options?: { num_rcpt_errors?: number | undefined },
+      subAccountOptions?: SparkPost.SubAccountOptions
     ): SparkPost.ResultsPromise<{
       total_rejected_recipients: number
       total_accepted_recipients: number
