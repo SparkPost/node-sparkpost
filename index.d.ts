@@ -231,26 +231,26 @@ declare class SparkPost {
      * List an overview of all sending domains in the system.
      * @param callback The request callback with SendingDomain results array
      */
-    list(subAccountOptions: SubAccountOptions, callback?: SparkPost.ResultsCallback<SparkPost.SendingDomain[]>): void
+    list(subAccountOptions: SparkPost.SubAccountOptions, callback: SparkPost.ResultsCallback<SparkPost.SendingDomain[]>): void
     /**
      * List an overview of all sending domains in the system.
      *
      * @returns The SendingDomain results array
      */
-    list(): SparkPost.ResultsPromise<SparkPost.SendingDomain[]>
+    list(subAccountOptions?: SparkPost.SubAccountOptions): SparkPost.ResultsPromise<SparkPost.SendingDomain[]>
     /**
      * Retrieve a sending domain by specifying its domain name in the URI path. The response includes details about its DKIM key configuration.
      * @param domain The domain
      * @param callback The request callback with SendingDomain results
      */
-    get(domain: string, subAccountOptions: SubAccountOptions, callback?: SparkPost.ResultsCallback<SparkPost.SendingDomain>): void
+    get(domain: string, subAccountOptions: SparkPost.SubAccountOptions, callback: SparkPost.ResultsCallback<SparkPost.SendingDomain>): void
     /**
      * Retrieve a sending domain by specifying its domain name in the URI path. The response includes details about its DKIM key configuration.
      *
      * @param domain The domain
      * @returns Promise The SendingDomain results
      */
-    get(domain: string): SparkPost.ResultsPromise<SparkPost.SendingDomain>
+    get(domain: string, subAccountOptions?: SparkPost.SubAccountOptions): SparkPost.ResultsPromise<SparkPost.SendingDomain>
     /**
      * Create a sending domain by providing a sending domain object as the POST request body.
      * @param options The create options
@@ -258,8 +258,8 @@ declare class SparkPost {
      */
     create(
       options: SparkPost.CreateSendingDomain,
-      subAccountOptions: SubAccountOptions,
-      callback?: SparkPost.ResultsCallback<{
+      subAccountOptions: SparkPost.SubAccountOptions,
+      callback: SparkPost.ResultsCallback<{
         message: string
         domain: string
         dkim?: SparkPost.DKIM
@@ -271,7 +271,10 @@ declare class SparkPost {
      * @param options The create options
      * @returns Promise The basic info results
      */
-    create(options: SparkPost.CreateSendingDomain): SparkPost.ResultsPromise<{
+    create(
+      options: SparkPost.CreateSendingDomain,
+      subAccountOptions?: SparkPost.SubAccountOptions
+    ): SparkPost.ResultsPromise<{
       message: string
       domain: string
       dkim?: SparkPost.DKIM
@@ -285,8 +288,8 @@ declare class SparkPost {
     update(
       domain: string,
       updateOpts: SparkPost.UpdateSendingDomain,
-      subAccountOptions: SubAccountOptions,
-      callback?: SparkPost.ResultsCallback<{ message: string; domain: string }>
+      subAccountOptions: SparkPost.SubAccountOptions,
+      callback: SparkPost.ResultsCallback<{ message: string; domain: string }>
     ): void
     /**
      * Update the attributes of an existing sending domain by specifying its domain name in the URI path and use a sending domain object as the PUT request body.
@@ -295,20 +298,24 @@ declare class SparkPost {
      * @param updateOpts The update options
      * @returns Promise The basic info results
      */
-    update(domain: string, updateOpts: SparkPost.UpdateSendingDomain): SparkPost.ResultsPromise<{ message: string; domain: string }>
+    update(
+      domain: string,
+      updateOpts: SparkPost.UpdateSendingDomain,
+      subAccountOptions?: SparkPost.SubAccountOptions
+    ): SparkPost.ResultsPromise<{ message: string; domain: string }>
     /**
      * Delete an existing sending domain.
      * @param domain The domain
      * @param callback The request callback
      */
-    delete(domain: string, subAccountOptions: SubAccountOptions, callback?: SparkPost.Callback<void>): void
+    delete(domain: string, subAccountOptions: SparkPost.SubAccountOptions, callback: SparkPost.Callback<void>): void
     /**
      * Delete an existing sending domain.
      *
      * @param domain The domain
      * @returns Promise void
      */
-    delete(domain: string): Promise<void>
+    delete(domain: string, subAccountOptions?: SparkPost.SubAccountOptions): Promise<void>
     /**
      * Verify a Sending Domain
      * @param domain The domain
@@ -318,8 +325,8 @@ declare class SparkPost {
     verify(
       domain: string,
       options: SparkPost.VerifyOptions,
-      subAccountOptions: SubAccountOptions,
-      callback?: SparkPost.ResultsCallback<SparkPost.VerifyResults>
+      subAccountOptions: SparkPost.SubAccountOptions,
+      callback: SparkPost.ResultsCallback<SparkPost.VerifyResults>
     ): void
     /**
      * Verify a Sending Domain
@@ -328,7 +335,11 @@ declare class SparkPost {
      * @param options a hash of [verify attributes]{@link https://developers.sparkpost.com/api/sending-domains#header-verify-attributes}
      * @returns Promise The verify results
      */
-    verify(domain: string, options: SparkPost.VerifyOptions): SparkPost.ResultsPromise<SparkPost.VerifyResults>
+    verify(
+      domain: string,
+      options: SparkPost.VerifyOptions,
+      subAccountOptions?: SparkPost.SubAccountOptions
+    ): SparkPost.ResultsPromise<SparkPost.VerifyResults>
   }
   subaccounts: {
     /**
