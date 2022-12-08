@@ -83,7 +83,7 @@ var ccTransmission = {
   expectedCCHeader = '"John" <cc1@gmail.com>, "Jane" <cc2@gmail.com>'
 
 describe('Transmissions Library', function () {
-  var client, transmissions, callback
+  var client, transmissions, subAccountOptions, callback
 
   beforeEach(function () {
     client = {
@@ -91,6 +91,8 @@ describe('Transmissions Library', function () {
       post: sinon.stub().resolves({}),
       reject: SparkPost.prototype.reject
     }
+
+    subAccountOptions = {}
 
     callback = function () {}
 
@@ -101,6 +103,7 @@ describe('Transmissions Library', function () {
     it('should call client get method with the appropriate uri', function () {
       return transmissions.list(callback).then(function () {
         expect(client.get.firstCall.args[0].uri).to.equal('transmissions')
+        expect(client.get.firstCall.args[0].headers).to.deep.equal({})
         expect(client.get.firstCall.args[1]).to.equal(callback)
       })
     })
@@ -128,8 +131,8 @@ describe('Transmissions Library', function () {
 
   describe('find Method', function () {
     it('should call client get method with the appropriate uri', function () {
-      return transmissions.get('test', callback).then(function () {
-        expect(client.get.firstCall.args[0]).to.deep.equal({ uri: 'transmissions/test' })
+      return transmissions.get('test', {}, callback).then(function () {
+        expect(client.get.firstCall.args[0]).to.deep.equal({ uri: 'transmissions/test', headers: {} })
         expect(client.get.firstCall.args[1]).to.equal(callback)
       })
     })
@@ -148,6 +151,7 @@ describe('Transmissions Library', function () {
       return transmissions.send(transmission, callback).then(function () {
         expect(client.post.firstCall.args[0].uri).to.equal('transmissions')
         expect(client.post.firstCall.args[0].json).to.deep.equal(transmission)
+        expect(client.post.firstCall.args[0].headers).to.deep.equal({})
         expect(client.post.firstCall.args[1]).to.equal(callback)
       })
     })
